@@ -1,0 +1,14 @@
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\bin\Debug\ArknightsRoguelikeRec.exe.config
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\bin\Debug\ArknightsRoguelikeRec.exe
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\bin\Debug\ArknightsRoguelikeRec.pdb
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.csproj.AssemblyReference.cache
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.csproj.SuggestedBindingRedirects.cache
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.Form1.resources
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.Properties.Resources.resources
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.csproj.GenerateResource.cache
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.csproj.CoreCompileInputs.cache
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.exe
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.pdb
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\bin\Debug\Newtonsoft.Json.dll
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\bin\Debug\Newtonsoft.Json.xml
+G:\Unity\CSharpProject\ArknightsRoguelikeRec\ArknightsRoguelikeRec\obj\Debug\ArknightsRoguelikeRec.csproj.CopyComplete
