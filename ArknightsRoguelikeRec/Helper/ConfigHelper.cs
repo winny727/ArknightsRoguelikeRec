@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ArknightsRoguelikeRec.Config;
 
 namespace ArknightsRoguelikeRec.Helper
 {
@@ -14,7 +15,7 @@ namespace ArknightsRoguelikeRec.Helper
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
 
             return null;
@@ -41,6 +42,19 @@ namespace ArknightsRoguelikeRec.Helper
             }
 
             return list;
+        }
+
+        public static LayerConfig GetLayerConfigByName(string layerName)
+        {
+            var layerList = DefineConfig.LayerConfigDict.AsList();
+            for (int i = 0; i < layerList.Count; i++)
+            {
+                if (layerList[i].Name == layerName)
+                {
+                    return layerList[i];
+                }
+            }
+            return null;
         }
     }
 }

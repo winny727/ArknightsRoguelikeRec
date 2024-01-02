@@ -28,211 +28,71 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.openSaveFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelTitleLayer = new System.Windows.Forms.Label();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panelLayer = new System.Windows.Forms.Panel();
             this.btnAddLayer = new System.Windows.Forms.Button();
-            this.contextMenuStripLayer = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.panelCurLayer = new System.Windows.Forms.Panel();
+            this.panelLayer = new System.Windows.Forms.Panel();
             this.panelInfo = new System.Windows.Forms.Panel();
-            this.panelLayerView = new System.Windows.Forms.Panel();
-            this.labelUserID = new System.Windows.Forms.Label();
-            this.textBoxUserID = new System.Windows.Forms.TextBox();
             this.labelNumber = new System.Windows.Forms.Label();
             this.textBoxNumber = new System.Windows.Forms.TextBox();
+            this.labelUserID = new System.Windows.Forms.Label();
+            this.textBoxUserID = new System.Windows.Forms.TextBox();
+            this.linkLabelOpenSaveFolder = new System.Windows.Forms.LinkLabel();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnNew = new System.Windows.Forms.Button();
+            this.panelCurLayer = new System.Windows.Forms.Panel();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.panelNodeView = new System.Windows.Forms.Panel();
             this.labelNode = new System.Windows.Forms.Label();
             this.textBoxNode = new System.Windows.Forms.TextBox();
-            this.btnApply = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnNew = new System.Windows.Forms.Button();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.linkLabelOpenSaveFolder = new System.Windows.Forms.LinkLabel();
-            this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.panelCurLayer.SuspendLayout();
+            this.panelAllLayer = new System.Windows.Forms.Panel();
+            this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.panelInfo.SuspendLayout();
+            this.panelCurLayer.SuspendLayout();
+            this.panelAllLayer.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(10, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(1309, 36);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // menuToolStripMenuItem
-            // 
-            this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.openSaveFolderToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.exitToolStripMenuItem});
-            this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            this.menuToolStripMenuItem.Size = new System.Drawing.Size(76, 28);
-            this.menuToolStripMenuItem.Text = "&Menu";
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.openToolStripMenuItem.Text = "&Open";
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.saveToolStripMenuItem.Text = "&Save";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(267, 6);
-            // 
-            // openSaveFolderToolStripMenuItem
-            // 
-            this.openSaveFolderToolStripMenuItem.Name = "openSaveFolderToolStripMenuItem";
-            this.openSaveFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.openSaveFolderToolStripMenuItem.Text = "Open Save Folder";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(267, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.exitToolStripMenuItem.Text = "&Exit";
             // 
             // labelTitleLayer
             // 
             this.labelTitleLayer.AutoSize = true;
             this.labelTitleLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.labelTitleLayer.Location = new System.Drawing.Point(17, 22);
+            this.labelTitleLayer.Location = new System.Drawing.Point(3, 17);
             this.labelTitleLayer.Name = "labelTitleLayer";
             this.labelTitleLayer.Size = new System.Drawing.Size(68, 28);
             this.labelTitleLayer.TabIndex = 1;
             this.labelTitleLayer.Text = "层数";
             // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Location = new System.Drawing.Point(13, 39);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.btnAddLayer);
-            this.splitContainer1.Panel1.Controls.Add(this.panelLayer);
-            this.splitContainer1.Panel1.Controls.Add(this.labelTitleLayer);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.panelInfo);
-            this.splitContainer1.Panel2.Controls.Add(this.panelCurLayer);
-            this.splitContainer1.Size = new System.Drawing.Size(1282, 886);
-            this.splitContainer1.SplitterDistance = 427;
-            this.splitContainer1.TabIndex = 2;
-            // 
-            // panelLayer
-            // 
-            this.panelLayer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelLayer.Location = new System.Drawing.Point(3, 68);
-            this.panelLayer.Name = "panelLayer";
-            this.panelLayer.Size = new System.Drawing.Size(420, 814);
-            this.panelLayer.TabIndex = 2;
-            // 
             // btnAddLayer
             // 
             this.btnAddLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.btnAddLayer.Location = new System.Drawing.Point(364, 7);
+            this.btnAddLayer.Location = new System.Drawing.Point(305, 3);
             this.btnAddLayer.Name = "btnAddLayer";
             this.btnAddLayer.Size = new System.Drawing.Size(56, 56);
             this.btnAddLayer.TabIndex = 3;
             this.btnAddLayer.Text = "+";
             this.btnAddLayer.UseVisualStyleBackColor = true;
+            this.btnAddLayer.Click += new System.EventHandler(this.btnAddLayer_Click);
             // 
-            // contextMenuStripLayer
+            // panelLayer
             // 
-            this.contextMenuStripLayer.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStripLayer.Name = "contextMenuStripLayer";
-            this.contextMenuStripLayer.Size = new System.Drawing.Size(61, 4);
-            // 
-            // panelCurLayer
-            // 
-            this.panelCurLayer.Controls.Add(this.btnCancel);
-            this.panelCurLayer.Controls.Add(this.btnApply);
-            this.panelCurLayer.Controls.Add(this.panelLayerView);
-            this.panelCurLayer.Controls.Add(this.labelNode);
-            this.panelCurLayer.Controls.Add(this.textBoxNode);
-            this.panelCurLayer.Location = new System.Drawing.Point(3, 213);
-            this.panelCurLayer.Name = "panelCurLayer";
-            this.panelCurLayer.Size = new System.Drawing.Size(844, 667);
-            this.panelCurLayer.TabIndex = 0;
+            this.panelLayer.AutoScroll = true;
+            this.panelLayer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelLayer.Location = new System.Drawing.Point(3, 65);
+            this.panelLayer.Name = "panelLayer";
+            this.panelLayer.Size = new System.Drawing.Size(420, 846);
+            this.panelLayer.TabIndex = 2;
             // 
             // panelInfo
             // 
-            this.panelInfo.Controls.Add(this.linkLabelOpenSaveFolder);
-            this.panelInfo.Controls.Add(this.btnSave);
-            this.panelInfo.Controls.Add(this.btnLoad);
-            this.panelInfo.Controls.Add(this.btnNew);
             this.panelInfo.Controls.Add(this.labelNumber);
             this.panelInfo.Controls.Add(this.textBoxNumber);
             this.panelInfo.Controls.Add(this.labelUserID);
             this.panelInfo.Controls.Add(this.textBoxUserID);
-            this.panelInfo.Location = new System.Drawing.Point(3, 3);
+            this.panelInfo.Location = new System.Drawing.Point(444, 12);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(844, 203);
+            this.panelInfo.Size = new System.Drawing.Size(586, 169);
             this.panelInfo.TabIndex = 1;
-            // 
-            // panelLayerView
-            // 
-            this.panelLayerView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelLayerView.Location = new System.Drawing.Point(3, 59);
-            this.panelLayerView.Name = "panelLayerView";
-            this.panelLayerView.Size = new System.Drawing.Size(838, 604);
-            this.panelLayerView.TabIndex = 0;
-            // 
-            // labelUserID
-            // 
-            this.labelUserID.AutoSize = true;
-            this.labelUserID.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelUserID.Location = new System.Drawing.Point(36, 22);
-            this.labelUserID.Name = "labelUserID";
-            this.labelUserID.Size = new System.Drawing.Size(89, 20);
-            this.labelUserID.TabIndex = 0;
-            this.labelUserID.Text = "探索者ID";
-            // 
-            // textBoxUserID
-            // 
-            this.textBoxUserID.Font = new System.Drawing.Font("黑体", 10F);
-            this.textBoxUserID.Location = new System.Drawing.Point(141, 19);
-            this.textBoxUserID.Name = "textBoxUserID";
-            this.textBoxUserID.Size = new System.Drawing.Size(354, 30);
-            this.textBoxUserID.TabIndex = 1;
             // 
             // labelNumber
             // 
@@ -251,6 +111,115 @@
             this.textBoxNumber.Name = "textBoxNumber";
             this.textBoxNumber.Size = new System.Drawing.Size(354, 30);
             this.textBoxNumber.TabIndex = 3;
+            this.textBoxNumber.TextChanged += new System.EventHandler(this.textBoxNumber_TextChanged);
+            // 
+            // labelUserID
+            // 
+            this.labelUserID.AutoSize = true;
+            this.labelUserID.Font = new System.Drawing.Font("黑体", 10F);
+            this.labelUserID.Location = new System.Drawing.Point(36, 22);
+            this.labelUserID.Name = "labelUserID";
+            this.labelUserID.Size = new System.Drawing.Size(89, 20);
+            this.labelUserID.TabIndex = 0;
+            this.labelUserID.Text = "探索者ID";
+            // 
+            // textBoxUserID
+            // 
+            this.textBoxUserID.Font = new System.Drawing.Font("黑体", 10F);
+            this.textBoxUserID.Location = new System.Drawing.Point(141, 19);
+            this.textBoxUserID.Name = "textBoxUserID";
+            this.textBoxUserID.Size = new System.Drawing.Size(354, 30);
+            this.textBoxUserID.TabIndex = 1;
+            this.textBoxUserID.TextChanged += new System.EventHandler(this.textBoxUserID_TextChanged);
+            // 
+            // linkLabelOpenSaveFolder
+            // 
+            this.linkLabelOpenSaveFolder.AutoSize = true;
+            this.linkLabelOpenSaveFolder.Font = new System.Drawing.Font("黑体", 9F);
+            this.linkLabelOpenSaveFolder.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(1145, 60);
+            this.linkLabelOpenSaveFolder.Name = "linkLabelOpenSaveFolder";
+            this.linkLabelOpenSaveFolder.Size = new System.Drawing.Size(152, 18);
+            this.linkLabelOpenSaveFolder.TabIndex = 11;
+            this.linkLabelOpenSaveFolder.TabStop = true;
+            this.linkLabelOpenSaveFolder.Text = "打开文件保存位置";
+            this.linkLabelOpenSaveFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelOpenSaveFolder_LinkClicked);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Font = new System.Drawing.Font("黑体", 9F);
+            this.btnSave.Location = new System.Drawing.Point(1214, 12);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(83, 30);
+            this.btnSave.TabIndex = 9;
+            this.btnSave.Text = "保存";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Font = new System.Drawing.Font("黑体", 9F);
+            this.btnLoad.Location = new System.Drawing.Point(1125, 12);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(83, 30);
+            this.btnLoad.TabIndex = 8;
+            this.btnLoad.Text = "读取";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // btnNew
+            // 
+            this.btnNew.Font = new System.Drawing.Font("黑体", 9F);
+            this.btnNew.Location = new System.Drawing.Point(1036, 12);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(83, 30);
+            this.btnNew.TabIndex = 7;
+            this.btnNew.Text = "新建";
+            this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // panelCurLayer
+            // 
+            this.panelCurLayer.Controls.Add(this.btnCancel);
+            this.panelCurLayer.Controls.Add(this.btnApply);
+            this.panelCurLayer.Controls.Add(this.panelNodeView);
+            this.panelCurLayer.Controls.Add(this.labelNode);
+            this.panelCurLayer.Controls.Add(this.textBoxNode);
+            this.panelCurLayer.Location = new System.Drawing.Point(444, 259);
+            this.panelCurLayer.Name = "panelCurLayer";
+            this.panelCurLayer.Size = new System.Drawing.Size(853, 667);
+            this.panelCurLayer.TabIndex = 0;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Font = new System.Drawing.Font("黑体", 9F);
+            this.btnCancel.Location = new System.Drawing.Point(590, 19);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(83, 30);
+            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Text = "取消";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnApply
+            // 
+            this.btnApply.Font = new System.Drawing.Font("黑体", 9F);
+            this.btnApply.Location = new System.Drawing.Point(501, 19);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(83, 30);
+            this.btnApply.TabIndex = 6;
+            this.btnApply.Text = "确定";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // panelNodeView
+            // 
+            this.panelNodeView.AutoScroll = true;
+            this.panelNodeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelNodeView.Location = new System.Drawing.Point(3, 59);
+            this.panelNodeView.Name = "panelNodeView";
+            this.panelNodeView.Size = new System.Drawing.Size(847, 604);
+            this.panelNodeView.TabIndex = 0;
             // 
             // labelNode
             // 
@@ -266,127 +235,73 @@
             // 
             this.textBoxNode.Font = new System.Drawing.Font("黑体", 10F);
             this.textBoxNode.Location = new System.Drawing.Point(141, 19);
+            this.textBoxNode.MaxLength = 16;
             this.textBoxNode.Name = "textBoxNode";
             this.textBoxNode.Size = new System.Drawing.Size(354, 30);
             this.textBoxNode.TabIndex = 5;
+            this.textBoxNode.TextChanged += new System.EventHandler(this.textBoxNode_TextChanged);
+            this.textBoxNode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNode_KeyPress);
             // 
-            // btnApply
+            // panelAllLayer
             // 
-            this.btnApply.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnApply.Location = new System.Drawing.Point(501, 19);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(83, 30);
-            this.btnApply.TabIndex = 6;
-            this.btnApply.Text = "确定";
-            this.btnApply.UseVisualStyleBackColor = true;
+            this.panelAllLayer.Controls.Add(this.btnRemoveLayer);
+            this.panelAllLayer.Controls.Add(this.labelTitleLayer);
+            this.panelAllLayer.Controls.Add(this.panelLayer);
+            this.panelAllLayer.Controls.Add(this.btnAddLayer);
+            this.panelAllLayer.Location = new System.Drawing.Point(12, 12);
+            this.panelAllLayer.Name = "panelAllLayer";
+            this.panelAllLayer.Size = new System.Drawing.Size(426, 914);
+            this.panelAllLayer.TabIndex = 12;
             // 
-            // btnCancel
+            // btnRemoveLayer
             // 
-            this.btnCancel.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnCancel.Location = new System.Drawing.Point(590, 19);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(83, 30);
-            this.btnCancel.TabIndex = 7;
-            this.btnCancel.Text = "取消";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnNew
-            // 
-            this.btnNew.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnNew.Location = new System.Drawing.Point(569, 59);
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(83, 30);
-            this.btnNew.TabIndex = 7;
-            this.btnNew.Text = "新建";
-            this.btnNew.UseVisualStyleBackColor = true;
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.newToolStripMenuItem.Text = "&New";
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnLoad.Location = new System.Drawing.Point(658, 59);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(83, 30);
-            this.btnLoad.TabIndex = 8;
-            this.btnLoad.Text = "读取";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            // 
-            // btnSave
-            // 
-            this.btnSave.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnSave.Location = new System.Drawing.Point(747, 59);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(83, 30);
-            this.btnSave.TabIndex = 9;
-            this.btnSave.Text = "保存";
-            this.btnSave.UseVisualStyleBackColor = true;
-            // 
-            // linkLabelOpenSaveFolder
-            // 
-            this.linkLabelOpenSaveFolder.AutoSize = true;
-            this.linkLabelOpenSaveFolder.Font = new System.Drawing.Font("黑体", 9F);
-            this.linkLabelOpenSaveFolder.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(678, 24);
-            this.linkLabelOpenSaveFolder.Name = "linkLabelOpenSaveFolder";
-            this.linkLabelOpenSaveFolder.Size = new System.Drawing.Size(152, 18);
-            this.linkLabelOpenSaveFolder.TabIndex = 11;
-            this.linkLabelOpenSaveFolder.TabStop = true;
-            this.linkLabelOpenSaveFolder.Text = "打开文件保存位置";
+            this.btnRemoveLayer.Font = new System.Drawing.Font("黑体", 14F);
+            this.btnRemoveLayer.Location = new System.Drawing.Point(367, 3);
+            this.btnRemoveLayer.Name = "btnRemoveLayer";
+            this.btnRemoveLayer.Size = new System.Drawing.Size(56, 56);
+            this.btnRemoveLayer.TabIndex = 4;
+            this.btnRemoveLayer.Text = "-";
+            this.btnRemoveLayer.UseVisualStyleBackColor = true;
+            this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1309, 938);
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.panelAllLayer);
+            this.Controls.Add(this.panelCurLayer);
+            this.Controls.Add(this.linkLabelOpenSaveFolder);
+            this.Controls.Add(this.btnNew);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.panelInfo);
+            this.Controls.Add(this.btnLoad);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("黑体", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "明日方舟肉鸽节点记录工具";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.panelCurLayer.ResumeLayout(false);
-            this.panelCurLayer.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
+            this.panelCurLayer.ResumeLayout(false);
+            this.panelCurLayer.PerformLayout();
+            this.panelAllLayer.ResumeLayout(false);
+            this.panelAllLayer.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem openSaveFolderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Label labelTitleLayer;
-        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panelLayer;
         private System.Windows.Forms.Button btnAddLayer;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripLayer;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Panel panelCurLayer;
-        private System.Windows.Forms.Panel panelLayerView;
+        private System.Windows.Forms.Panel panelNodeView;
         private System.Windows.Forms.Label labelUserID;
         private System.Windows.Forms.TextBox textBoxUserID;
         private System.Windows.Forms.Label labelNumber;
@@ -395,11 +310,12 @@
         private System.Windows.Forms.TextBox textBoxNode;
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.LinkLabel linkLabelOpenSaveFolder;
+        private System.Windows.Forms.Panel panelAllLayer;
+        private System.Windows.Forms.Button btnRemoveLayer;
     }
 }
 

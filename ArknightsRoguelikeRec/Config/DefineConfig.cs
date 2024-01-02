@@ -64,6 +64,7 @@ namespace ArknightsRoguelikeRec.Config
                 int nodeID = line.GetValue<int>("nodeID");
                 string nodeType = line.GetValue("nodeType");
                 string subTypes = line.GetValue("subTypes");
+                int extraLayer = line.GetValue<int>("extraLayer");
                 List<string> subTypesList = ConfigHelper.ParseList<string>(subTypes);
 
                 NodeConfig nodeConfig = new NodeConfig()
@@ -71,6 +72,7 @@ namespace ArknightsRoguelikeRec.Config
                     ID = nodeID,
                     Type = nodeType,
                     SubTypes = subTypesList,
+                    ExtraLayer = extraLayer,
                 };
 
                 if (!NodeConfigDict.ContainsKey(nodeID))

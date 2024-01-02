@@ -8,5 +8,6 @@ namespace ArknightsRoguelikeRec.DataModel
     {
         public string Type { get; set; }
         public string SubType { get; set; }
-}
+        public int ExtraLayer { get; set; }
+    }
 }

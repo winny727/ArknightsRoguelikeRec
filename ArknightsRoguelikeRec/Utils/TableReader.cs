@@ -47,7 +47,7 @@ public class TableReader
         public T GetValue<T>(string title, T defaultValue = default)
         {
             string data = GetValue(title);
-            return data != null ? data.ConvertTo(defaultValue) : defaultValue;
+            return !string.IsNullOrEmpty(data) ? data.ConvertTo(defaultValue) : defaultValue;
         }
 
         public object Clone()
@@ -106,6 +106,7 @@ public class TableReader
         List<string> lines = new List<string>();
         using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) //FileShare.ReadWrite参数表示可以与其他进程共享读写权限
         {
+            //中文编码Encoding.GetEncoding("GB2312")
             using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
             {
                 string line;

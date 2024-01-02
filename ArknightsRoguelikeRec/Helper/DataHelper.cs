@@ -8,19 +8,19 @@ namespace ArknightsRoguelikeRec.Helper
 {
     public static class DataHelper
     {
-        public static Data CreateData(string userName, int dataID)
+        public static SaveData CreateData(string userName, string dataID)
         {
-            Data data = new Data()
+            SaveData saveData = new SaveData()
             {
                 UserName = userName,
                 DataID = dataID,
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now,
             };
-            return data;
+            return saveData;
         }
 
-        public static Data LoadData(string path)
+        public static SaveData LoadData(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -35,8 +35,8 @@ namespace ArknightsRoguelikeRec.Helper
             try
             {
                 string fileText = File.ReadAllText(path);
-                Data data = JsonConvert.DeserializeObject<Data>(fileText);
-                return data;
+                SaveData saveData = JsonConvert.DeserializeObject<SaveData>(fileText);
+                return saveData;
             }
             catch (Exception ex)
             {
@@ -46,27 +46,29 @@ namespace ArknightsRoguelikeRec.Helper
             return null;
         }
 
-        public static void SaveData(Data data, string path)
+        public static string SaveData(SaveData saveData, string path)
         {
-            if (data == null)
+            if (saveData == null)
             {
-                return;
+                return null;
             }
 
             if (string.IsNullOrEmpty(path))
             {
-                return;
+                return null;
             }
 
-            data.UpdateTime = DateTime.Now;
-            string fileText = JsonConvert.SerializeObject(data, Formatting.Indented);
-            string fullPath = Path.Combine(path, data.UserName + "_" + data.DataID);
+            saveData.UpdateTime = DateTime.Now;
+            string fileText = JsonConvert.SerializeObject(saveData, Formatting.Indented);
+            string fileName = $"{saveData.UserName}_data{saveData.DataID}_{saveData.CreateTime:yyyyMMddHHmmss}.json";
+            string fullPath = Path.Combine(path, fileName);
             File.WriteAllText(fullPath, fileText);
+            return fullPath;
         }
 
-        public static void AddLayer(Data data, string layerName)
+        public static void AddLayer(SaveData saveData, string layerName)
         {
-            if (data == null)
+            if (saveData == null)
             {
                 return;
             }
@@ -75,7 +77,7 @@ namespace ArknightsRoguelikeRec.Helper
             {
                 Name = layerName,
             };
-            data.Layers.Add(layer);
+            saveData.Layers.Add(layer);
         }
 
         public static void AddColume(Layer layer)
