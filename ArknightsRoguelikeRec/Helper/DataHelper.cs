@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using ArknightsRoguelikeRec.DataModel;
+using ArknightsRoguelikeRec.Config;
 
 namespace ArknightsRoguelikeRec.Helper
 {
@@ -17,6 +18,14 @@ namespace ArknightsRoguelikeRec.Helper
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now,
             };
+
+            //预设，自动添加一层到五层
+            var layerList = DefineConfig.LayerConfigDict.AsList();
+            for (int i = 0; i < 5; i++)
+            {
+                AddLayer(saveData, layerList[i].Name);
+            }
+
             return saveData;
         }
 

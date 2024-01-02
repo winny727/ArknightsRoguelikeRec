@@ -41,16 +41,19 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
+            this.panelNodeView = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.panelNodeView = new System.Windows.Forms.Panel();
             this.labelNode = new System.Windows.Forms.Label();
             this.textBoxNode = new System.Windows.Forms.TextBox();
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
+            this.pictureBoxNode = new BtnPictureBox();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
+            this.panelNodeView.SuspendLayout();
             this.panelAllLayer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).BeginInit();
             this.SuspendLayout();
             // 
             // labelTitleLayer
@@ -180,15 +183,24 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.panelNodeView);
             this.panelCurLayer.Controls.Add(this.btnCancel);
             this.panelCurLayer.Controls.Add(this.btnApply);
-            this.panelCurLayer.Controls.Add(this.panelNodeView);
             this.panelCurLayer.Controls.Add(this.labelNode);
             this.panelCurLayer.Controls.Add(this.textBoxNode);
-            this.panelCurLayer.Location = new System.Drawing.Point(444, 259);
+            this.panelCurLayer.Location = new System.Drawing.Point(444, 187);
             this.panelCurLayer.Name = "panelCurLayer";
-            this.panelCurLayer.Size = new System.Drawing.Size(853, 667);
+            this.panelCurLayer.Size = new System.Drawing.Size(853, 739);
             this.panelCurLayer.TabIndex = 0;
+            // 
+            // panelNodeView
+            // 
+            this.panelNodeView.AutoScroll = true;
+            this.panelNodeView.Controls.Add(this.pictureBoxNode);
+            this.panelNodeView.Location = new System.Drawing.Point(3, 55);
+            this.panelNodeView.Name = "panelNodeView";
+            this.panelNodeView.Size = new System.Drawing.Size(847, 681);
+            this.panelNodeView.TabIndex = 9;
             // 
             // btnCancel
             // 
@@ -211,15 +223,6 @@
             this.btnApply.Text = "确定";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
-            // panelNodeView
-            // 
-            this.panelNodeView.AutoScroll = true;
-            this.panelNodeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelNodeView.Location = new System.Drawing.Point(3, 59);
-            this.panelNodeView.Name = "panelNodeView";
-            this.panelNodeView.Size = new System.Drawing.Size(847, 604);
-            this.panelNodeView.TabIndex = 0;
             // 
             // labelNode
             // 
@@ -264,6 +267,15 @@
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
             this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
             // 
+            // pictureBoxNode
+            // 
+            this.pictureBoxNode.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxNode.Name = "pictureBoxNode";
+            this.pictureBoxNode.Size = new System.Drawing.Size(841, 675);
+            this.pictureBoxNode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxNode.TabIndex = 8;
+            this.pictureBoxNode.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -288,8 +300,11 @@
             this.panelInfo.PerformLayout();
             this.panelCurLayer.ResumeLayout(false);
             this.panelCurLayer.PerformLayout();
+            this.panelNodeView.ResumeLayout(false);
+            this.panelNodeView.PerformLayout();
             this.panelAllLayer.ResumeLayout(false);
             this.panelAllLayer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,7 +316,6 @@
         private System.Windows.Forms.Button btnAddLayer;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Panel panelCurLayer;
-        private System.Windows.Forms.Panel panelNodeView;
         private System.Windows.Forms.Label labelUserID;
         private System.Windows.Forms.TextBox textBoxUserID;
         private System.Windows.Forms.Label labelNumber;
@@ -316,6 +330,8 @@
         private System.Windows.Forms.LinkLabel linkLabelOpenSaveFolder;
         private System.Windows.Forms.Panel panelAllLayer;
         private System.Windows.Forms.Button btnRemoveLayer;
+        private System.Windows.Forms.Panel panelNodeView;
+        private BtnPictureBox pictureBoxNode;
     }
 }
 

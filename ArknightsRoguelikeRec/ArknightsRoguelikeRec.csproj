@@ -9,6 +9,7 @@
     <RootNamespace>ArknightsRoguelikeRec</RootNamespace>
     <AssemblyName>ArknightsRoguelikeRec</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -69,6 +70,10 @@
     <Compile Include="DataModel\Layer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\BtnPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\DrawUtil.cs" />
     <Compile Include="Utils\MapList.cs" />
     <Compile Include="Utils\TableReader.cs" />
     <Compile Include="Utils\TypeUtility.cs" />

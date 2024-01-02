@@ -44,6 +44,7 @@ namespace ArknightsRoguelikeRec
             //Console.WriteLine(layerConfig);
             //Console.WriteLine(nodeConfig);
 
+            pictureBoxNode.Visible = false;
             UpdateViewState();
         }
 
@@ -62,7 +63,7 @@ namespace ArknightsRoguelikeRec
             panelLayer.Enabled = isEnabled;
             panelInfo.Enabled = isEnabled;
             panelCurLayer.Enabled = isEnabled;
-            panelNodeView.Enabled = isEnabled;
+            pictureBoxNode.Enabled = isEnabled;
             btnSave.Enabled = isEnabled;
 
             UpdateInfoView();
@@ -158,6 +159,8 @@ namespace ArknightsRoguelikeRec
         private void UpdateNodeView()
         {
             panelNodeView.Controls.Clear();
+            pictureBoxNode.Items.Clear();
+            pictureBoxNode.UpdateView();
 
             if (SaveData == null)
             {
@@ -177,6 +180,7 @@ namespace ArknightsRoguelikeRec
                 for (int j = 0; j < layer.Nodes[i].Count; j++)
                 {
                     Node node = layer.Nodes[i][j];
+                    //UIHelper.AddNodeBtn(pictureBoxNode, i, j, rowCount, panel1.Height, node, layerConfig);
                     UIHelper.AddNodeBtn(panelNodeView, i, j, rowCount, node, layerConfig);
                 }
             }
