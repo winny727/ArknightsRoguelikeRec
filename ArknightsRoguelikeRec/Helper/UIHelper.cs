@@ -25,6 +25,28 @@ namespace ArknightsRoguelikeRec.Helper
             btn.Location = new Point(gap, gap + (panel.Controls.Count - 1) * height);
         }
 
+        public static void DrawGrid(Panel panel)
+        {
+            int step = 25;
+            Graphics graphics = panel.CreateGraphics();
+            Color color = Color.DarkGray;
+            Pen pen = new Pen(color);
+
+            for (int x = 0; x <= panel.Width; x += step)
+            {
+                PointF p1 = new PointF(x, 0);
+                PointF p2 = new PointF(x, panel.Height);
+                graphics.DrawLine(pen, p1, p2);
+            }
+
+            for (int y = 0; y <= panel.Height; y += step)
+            {
+                PointF p1 = new PointF(0, y);
+                PointF p2 = new PointF(panel.Width, y);
+                graphics.DrawLine(pen, p1, p2);
+            }
+        }
+
         /// <summary>
         /// 将节点绘制为按钮
         /// </summary>
@@ -209,7 +231,8 @@ namespace ArknightsRoguelikeRec.Helper
             int height = 80;
 
             int nodeX = gap + colIndex * (width + gap);
-            int nodeY = (int)((panelHeight - 2 * gap) * ((float)(rowIndex + 1) / (rowCount + 1))) - height / 2;
+            //int nodeY = (int)((panelHeight - 2 * gap) * ((float)(rowIndex + 1) / (rowCount + 1))) - height / 2;
+            int nodeY = panelHeight / 2 - rowCount * gap + rowIndex * (height + gap) - height / 2;
             BtnPictureBox.Item nodeView = new BtnPictureBox.Item()
             {
                 Size = new Size(width, height),

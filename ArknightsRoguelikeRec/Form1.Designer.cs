@@ -62,7 +62,7 @@
             this.labelTitleLayer.Font = new System.Drawing.Font("黑体", 14F);
             this.labelTitleLayer.Location = new System.Drawing.Point(3, 17);
             this.labelTitleLayer.Name = "labelTitleLayer";
-            this.labelTitleLayer.Size = new System.Drawing.Size(68, 28);
+            this.labelTitleLayer.Size = new System.Drawing.Size(49, 19);
             this.labelTitleLayer.TabIndex = 1;
             this.labelTitleLayer.Text = "层数";
             // 
@@ -103,7 +103,7 @@
             this.labelNumber.Font = new System.Drawing.Font("黑体", 10F);
             this.labelNumber.Location = new System.Drawing.Point(36, 62);
             this.labelNumber.Name = "labelNumber";
-            this.labelNumber.Size = new System.Drawing.Size(89, 20);
+            this.labelNumber.Size = new System.Drawing.Size(63, 14);
             this.labelNumber.TabIndex = 2;
             this.labelNumber.Text = "记录编号";
             // 
@@ -112,7 +112,7 @@
             this.textBoxNumber.Font = new System.Drawing.Font("黑体", 10F);
             this.textBoxNumber.Location = new System.Drawing.Point(141, 59);
             this.textBoxNumber.Name = "textBoxNumber";
-            this.textBoxNumber.Size = new System.Drawing.Size(354, 30);
+            this.textBoxNumber.Size = new System.Drawing.Size(354, 23);
             this.textBoxNumber.TabIndex = 3;
             this.textBoxNumber.TextChanged += new System.EventHandler(this.textBoxNumber_TextChanged);
             // 
@@ -122,7 +122,7 @@
             this.labelUserID.Font = new System.Drawing.Font("黑体", 10F);
             this.labelUserID.Location = new System.Drawing.Point(36, 22);
             this.labelUserID.Name = "labelUserID";
-            this.labelUserID.Size = new System.Drawing.Size(89, 20);
+            this.labelUserID.Size = new System.Drawing.Size(63, 14);
             this.labelUserID.TabIndex = 0;
             this.labelUserID.Text = "探索者ID";
             // 
@@ -131,7 +131,7 @@
             this.textBoxUserID.Font = new System.Drawing.Font("黑体", 10F);
             this.textBoxUserID.Location = new System.Drawing.Point(141, 19);
             this.textBoxUserID.Name = "textBoxUserID";
-            this.textBoxUserID.Size = new System.Drawing.Size(354, 30);
+            this.textBoxUserID.Size = new System.Drawing.Size(354, 23);
             this.textBoxUserID.TabIndex = 1;
             this.textBoxUserID.TextChanged += new System.EventHandler(this.textBoxUserID_TextChanged);
             // 
@@ -142,7 +142,7 @@
             this.linkLabelOpenSaveFolder.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(1145, 60);
             this.linkLabelOpenSaveFolder.Name = "linkLabelOpenSaveFolder";
-            this.linkLabelOpenSaveFolder.Size = new System.Drawing.Size(152, 18);
+            this.linkLabelOpenSaveFolder.Size = new System.Drawing.Size(101, 12);
             this.linkLabelOpenSaveFolder.TabIndex = 11;
             this.linkLabelOpenSaveFolder.TabStop = true;
             this.linkLabelOpenSaveFolder.Text = "打开文件保存位置";
@@ -196,11 +196,14 @@
             // panelNodeView
             // 
             this.panelNodeView.AutoScroll = true;
+            this.panelNodeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelNodeView.Controls.Add(this.pictureBoxNode);
             this.panelNodeView.Location = new System.Drawing.Point(3, 55);
             this.panelNodeView.Name = "panelNodeView";
             this.panelNodeView.Size = new System.Drawing.Size(847, 681);
             this.panelNodeView.TabIndex = 9;
+            this.panelNodeView.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelNodeView_Scroll);
+            this.panelNodeView.Paint += new System.Windows.Forms.PaintEventHandler(this.panelNodeView_Paint);
             // 
             // btnCancel
             // 
@@ -230,7 +233,7 @@
             this.labelNode.Font = new System.Drawing.Font("黑体", 10F);
             this.labelNode.Location = new System.Drawing.Point(36, 22);
             this.labelNode.Name = "labelNode";
-            this.labelNode.Size = new System.Drawing.Size(89, 20);
+            this.labelNode.Size = new System.Drawing.Size(63, 14);
             this.labelNode.TabIndex = 4;
             this.labelNode.Text = "节点分布";
             // 
@@ -240,7 +243,7 @@
             this.textBoxNode.Location = new System.Drawing.Point(141, 19);
             this.textBoxNode.MaxLength = 16;
             this.textBoxNode.Name = "textBoxNode";
-            this.textBoxNode.Size = new System.Drawing.Size(354, 30);
+            this.textBoxNode.Size = new System.Drawing.Size(354, 23);
             this.textBoxNode.TabIndex = 5;
             this.textBoxNode.TextChanged += new System.EventHandler(this.textBoxNode_TextChanged);
             this.textBoxNode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNode_KeyPress);
@@ -278,8 +281,7 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1309, 938);
             this.Controls.Add(this.panelAllLayer);
             this.Controls.Add(this.panelCurLayer);

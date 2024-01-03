@@ -402,5 +402,15 @@ namespace ArknightsRoguelikeRec
 
             UpdateNodeView();
         }
+
+        private void panelNodeView_Paint(object sender, PaintEventArgs e)
+        {
+            //UIHelper.DrawGrid(panelNodeView);
+        }
+
+        private void panelNodeView_Scroll(object sender, ScrollEventArgs e)
+        {
+            panelNodeView.Refresh();
+        }
     }
 }
