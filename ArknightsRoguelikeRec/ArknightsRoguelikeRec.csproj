@@ -56,6 +56,7 @@
     <Compile Include="Config\LayerConfig.cs" />
     <Compile Include="Config\NodeConfig.cs" />
     <Compile Include="Config\DefineConfig.cs" />
+    <Compile Include="DataModel\Connection.cs" />
     <Compile Include="Global\GlobalDefine.cs" />
     <Compile Include="Helper\UIHelper.cs" />
     <Compile Include="Helper\ConfigHelper.cs" />

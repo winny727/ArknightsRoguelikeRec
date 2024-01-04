@@ -8,6 +8,6 @@ namespace ArknightsRoguelikeRec.DataModel
     {
         public string Name { get; set; }
         public List<List<Node>> Nodes { get; set;} = new List<List<Node>>();
-        public List<KeyValuePair<int, int>> Connections { get; set; } = new List<KeyValuePair<int, int>>();
+        public List<Connection> Connections { get; set; } = new List<Connection>();
     }
 }

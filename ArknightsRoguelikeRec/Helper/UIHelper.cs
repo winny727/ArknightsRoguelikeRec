@@ -4,13 +4,19 @@ using System.Windows.Forms;
 using System.Drawing;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Config;
+using ArknightsRoguelikeRec.ViewModel;
 
 namespace ArknightsRoguelikeRec.Helper
 {
     public static class UIHelper
     {
-
-        public static void AddLayerBtn(Panel panel, string layerName, EventHandler onClick)
+        /// <summary>
+        /// 添加层数按钮
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <param name="layerName"></param>
+        /// <param name="onClick"></param>
+        public static void CreateLayerBtn(Panel panel, string layerName, Action onClick)
         {
             int gap = GlobalDefine.LAYER_BTN_GAP;
             int height = GlobalDefine.LAYER_BTN_HEIGHT;
@@ -18,13 +24,17 @@ namespace ArknightsRoguelikeRec.Helper
             Button btn = new Button();
             btn.Text = layerName;
             btn.Font = GlobalDefine.TEXT_FONT;
-            btn.Click += onClick;
+            btn.Click += (sender, e) => onClick?.Invoke();
             panel.Controls.Add(btn);
 
             btn.Size = new Size(panel.Width - 2 * gap, height);
             btn.Location = new Point(gap, gap + (panel.Controls.Count - 1) * height);
         }
 
+        /// <summary>
+        /// 绘制背景网格
+        /// </summary>
+        /// <param name="pictureBox"></param>
         public static void DrawGrid(PictureBox pictureBox)
         {
             Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
@@ -56,48 +66,52 @@ namespace ArknightsRoguelikeRec.Helper
         /// <param name="rowCount"></param>
         /// <param name="node"></param>
         /// <param name="layerConfig"></param>
-        public static void AddNodeBtn(Panel panel, int colIndex, int rowIndex, int rowCount, Node node, LayerConfig layerConfig)
+        public static NodeView CreateNodeView(Panel panel, int colIndex, int rowIndex, int rowCount, Node node, List<int> nodeTypes)
         {
             int gap = GlobalDefine.NODE_VIEW_GAP;
             int width = GlobalDefine.NODE_VIEW_WIDTH;
             int height = GlobalDefine.NODE_VIEW_HEIGHT;
 
+            //初始化节点
             int nodeX = gap + colIndex * (width + gap);
             int nodeY = panel.Height / 2 - rowCount * gap + rowIndex * (height + gap) - height / 2;
-            Panel nodeView = new Panel();
-            panel.Controls.Add(nodeView);
-            nodeView.BorderStyle = BorderStyle.FixedSingle;
-            nodeView.Size = new Size(width, height);
-            nodeView.Location = new Point(nodeX, nodeY);
+            Panel viewPanel = new Panel();
+            panel.Controls.Add(viewPanel);
+            viewPanel.BorderStyle = BorderStyle.FixedSingle;
+            viewPanel.Size = new Size(width, height);
+            viewPanel.Location = new Point(nodeX, nodeY);
 
             int btnGap = GlobalDefine.NODE_VIEW_BTN_GAP;
             int btnWidth = width - 2 * btnGap;
             int btnHeight = (height - 3 * btnGap) / 2;
 
-            //Init Type
+            //初始化节点类型选择按钮
             Button btnType = new Button();
-            nodeView.Controls.Add(btnType);
+            panel.Controls.Add(btnType);
             btnType.Font = GlobalDefine.TEXT_FONT;
             btnType.Text = node.Type;
             btnType.Size = new Size(btnWidth, btnHeight);
-            btnType.Location = new Point(btnGap, btnGap);
+            btnType.Location = new Point(nodeX + btnGap, nodeY + btnGap);
+            btnType.BringToFront();
 
-            //Init SubType
+            //初始化节点次级类型选择按钮
             Button btnSubType = new Button();
-            nodeView.Controls.Add(btnSubType);
+            panel.Controls.Add(btnSubType);
             btnSubType.Font = GlobalDefine.TEXT_FONT;
             btnSubType.Text = node.SubType;
             btnSubType.Size = new Size(btnWidth, btnHeight);
-            btnSubType.Location = new Point(btnGap, 2 * btnGap + btnHeight);
+            btnSubType.Location = new Point(nodeX + btnGap, nodeY + 2 * btnGap + btnHeight);
+            btnSubType.BringToFront();
 
+            //选择节点类型
             btnType.Click += (sender, e) =>
             {
                 ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                if (layerConfig != null)
+                if (nodeTypes != null)
                 {
-                    for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
+                    for (int i = 0; i < nodeTypes.Count; i++)
                     {
-                        int nodeID = layerConfig.NodeTypes[i];
+                        int nodeID = nodeTypes[i];
                         NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
                         if (nodeConfig == null)
                         {
@@ -114,11 +128,12 @@ namespace ArknightsRoguelikeRec.Helper
 
                             node.Type = nodeConfig.Type;
                             btnType.Text = nodeConfig.Type;
-                            btnType.Tag = nodeConfig;
+                            viewPanel.Tag = nodeConfig;
                         });
                     }
                 }
 
+                //显示清除选项
                 if (!string.IsNullOrEmpty(btnType.Text) || !string.IsNullOrEmpty(btnSubType.Text))
                 {
                     if (contextMenuStrip.Items.Count > 0)
@@ -130,7 +145,7 @@ namespace ArknightsRoguelikeRec.Helper
                     {
                         node.Type = string.Empty;
                         btnType.Text = string.Empty;
-                        btnType.Tag = null;
+                        viewPanel.Tag = null;
 
                         node.SubType = string.Empty;
                         btnSubType.Text = string.Empty;
@@ -143,23 +158,25 @@ namespace ArknightsRoguelikeRec.Helper
                 }
             };
 
-            if (layerConfig != null)
+            //初始化节点Tag
+            if (nodeTypes != null)
             {
-                for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
+                for (int i = 0; i < nodeTypes.Count; i++)
                 {
-                    int nodeID = layerConfig.NodeTypes[i];
+                    int nodeID = nodeTypes[i];
                     NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
                     if (nodeConfig != null && nodeConfig.Type == node.Type)
                     {
-                        btnType.Tag = nodeConfig;
+                        viewPanel.Tag = nodeConfig;
                         break;
                     }
                 }
             }
 
+            //选择节点次级类型
             btnSubType.Click += (sender, e) =>
             {
-                if (btnType.Tag is NodeConfig nodeConfig)
+                if (viewPanel.Tag is NodeConfig nodeConfig)
                 {
                     ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
                     for (int i = 0; i < nodeConfig.SubTypes.Count; i++)
@@ -172,6 +189,7 @@ namespace ArknightsRoguelikeRec.Helper
                         });
                     }
 
+                    //显示清除选项
                     if (!string.IsNullOrEmpty(btnSubType.Text))
                     {
                         if (contextMenuStrip.Items.Count > 0)
@@ -193,24 +211,51 @@ namespace ArknightsRoguelikeRec.Helper
                 }
             };
 
-            //InitPort
+            return new NodeView(node, colIndex, rowIndex, viewPanel);
+        }
+
+        public static Control CreateNodePort(Panel panel, NodeView nodeView, Direction direction)
+        {
             int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
-            Button btnPort1 = new Button();
-            Button btnPort2 = new Button();
-            Button btnPort3 = new Button();
-            Button btnPort4 = new Button();
-            panel.Controls.Add(btnPort1);
-            panel.Controls.Add(btnPort2);
-            panel.Controls.Add(btnPort3);
-            panel.Controls.Add(btnPort4);
-            btnPort1.Size = new Size(portSize, portSize);
-            btnPort2.Size = new Size(portSize, portSize);
-            btnPort3.Size = new Size(portSize, portSize);
-            btnPort4.Size = new Size(portSize, portSize);
-            btnPort1.Location = new Point(nodeX + nodeView.Size.Width / 2 - portSize / 2, nodeY - portSize);
-            btnPort2.Location = new Point(nodeX - portSize, nodeY + nodeView.Size.Height / 2 - portSize / 2);
-            btnPort3.Location = new Point(nodeX + nodeView.Size.Width, nodeY + nodeView.Size.Height / 2 - portSize / 2);
-            btnPort4.Location = new Point(nodeX + nodeView.Size.Width / 2 - portSize / 2, nodeY + nodeView.Size.Height);
+            Button btnPort = new Button();
+            panel.Controls.Add(btnPort);
+            btnPort.Size = new Size(portSize, portSize);
+            Point offset = GetPortOffset(direction);
+            Point nodeViewLocation = nodeView.View.Location;
+            btnPort.Location = new Point(nodeViewLocation.X + offset.X, nodeViewLocation.Y + offset.Y);
+
+            nodeView.Ports.Add(direction, btnPort);
+
+            return btnPort;
+        }
+
+        private static Point GetPortOffset(Direction direction)
+        {
+            int nodeWidth = GlobalDefine.NODE_VIEW_WIDTH;
+            int nodeHeight = GlobalDefine.NODE_VIEW_HEIGHT;
+            int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
+            switch (direction)
+            {
+                case Direction.Top:
+                    return new Point(nodeWidth / 2 - portSize / 2, -portSize);
+                case Direction.Bottom:
+                    return new Point(nodeWidth / 2 - portSize / 2, nodeHeight);
+                case Direction.Left:
+                    return new Point(-portSize, nodeHeight / 2 - portSize / 2);
+                case Direction.Right:
+                    return new Point(nodeWidth, nodeHeight / 2 - portSize / 2);
+            }
+            return default;
+        }
+
+        public static void DrawConnection(PictureBox pictureBox, NodeView nodeView1, NodeView nodeView2)
+        {
+
+        }
+
+        public static void DrawConnectionPreview(PictureBox pictureBox, Control port)
+        {
+
         }
     }
 }

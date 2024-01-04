@@ -16,7 +16,7 @@ namespace ArknightsRoguelikeRec
         public const int NODE_VIEW_HEIGHT = 80;
         public const int NODE_VIEW_BTN_GAP = 2;
 
-        public const int NODE_VIEW_PORT_SIZE = 20;
+        public const int NODE_VIEW_PORT_SIZE = 15;
 
         public static readonly Font TEXT_FONT = new Font("黑体", 10.0f);
     }

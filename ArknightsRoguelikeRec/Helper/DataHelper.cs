@@ -129,17 +129,18 @@ namespace ArknightsRoguelikeRec.Helper
             return -1;
         }
 
-        public static void AddConnection(Layer layer, Node startNode, Node endNode)
+
+        public static void AddConnection(Layer layer, Node node1, Node node2)
         {
             if (layer == null)
             {
                 return;
             }
 
-            int startIndex = IndexOfNode(layer, startNode);
-            int endIndex = IndexOfNode(layer, endNode);
+            int nodeIndex1 = IndexOfNode(layer, node1);
+            int nodeIndex2 = IndexOfNode(layer, node2);
 
-            if (startIndex == endIndex)
+            if (nodeIndex1 == nodeIndex2)
             {
                 return;
             }
@@ -147,13 +148,17 @@ namespace ArknightsRoguelikeRec.Helper
             for (int i = 0; i < layer.Connections.Count; i++)
             {
                 var connection = layer.Connections[i];
-                if ((connection.Key == startIndex && connection.Value == endIndex) || (connection.Key == endIndex && connection.Value == startIndex))
+                if ((connection.NodeIndex1 == nodeIndex1 && connection.NodeIndex2 == nodeIndex2) || (connection.NodeIndex1 == nodeIndex2 && connection.NodeIndex2 == nodeIndex1))
                 {
                     return;
                 }
             }
 
-            layer.Connections.Add(new KeyValuePair<int, int>(endIndex, startIndex));
+            layer.Connections.Add(new Connection()
+            {
+                NodeIndex1 = nodeIndex1,
+                NodeIndex2 = nodeIndex2,
+            });
         }
     }
 }
