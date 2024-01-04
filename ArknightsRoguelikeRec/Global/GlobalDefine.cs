@@ -11,10 +11,12 @@ namespace ArknightsRoguelikeRec
 
         public const int BACKGROUND_GRID_STEP = 20;
 
-        public const int NODE_VIEW_GAP = 60;
+        public const int NODE_VIEW_H_GAP = 80;
+        public const int NODE_VIEW_V_GAP = 60;
         public const int NODE_VIEW_WIDTH = 150;
         public const int NODE_VIEW_HEIGHT = 80;
         public const int NODE_VIEW_BTN_GAP = 2;
+        public const int NODE_VIEW_SCROLL_GAP = 20;
 
         public const int NODE_VIEW_PORT_SIZE = 15;
 

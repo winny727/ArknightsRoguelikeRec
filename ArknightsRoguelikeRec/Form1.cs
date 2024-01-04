@@ -184,8 +184,9 @@ namespace ArknightsRoguelikeRec
             Layer layer = SaveData.Layers[SelectedLayer];
             LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);
 
-            int width = layer.Nodes.Count * (GlobalDefine.NODE_VIEW_GAP + GlobalDefine.NODE_VIEW_WIDTH) + GlobalDefine.NODE_VIEW_GAP;
+            int width = layer.Nodes.Count * (GlobalDefine.NODE_VIEW_H_GAP + GlobalDefine.NODE_VIEW_WIDTH) + GlobalDefine.NODE_VIEW_H_GAP;
             pictureBoxNode.Width = Math.Max(width, panelNodeView.Width - 2);
+            pictureBoxNode.Height = panelNodeView.HorizontalScroll.Visible ? panelNodeView.Height - GlobalDefine.NODE_VIEW_SCROLL_GAP : panelNodeView.Height - 2;
             pictureBoxNode.BackgroundImage = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
             pictureBoxNode.Image = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
 

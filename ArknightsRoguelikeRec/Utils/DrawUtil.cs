@@ -55,6 +55,13 @@ public static class DrawUtil
         TextRenderer.DrawText(graphics, text, font, rectangle, color ?? Color.Black, textFormatFlags);
     }
 
+    public static void DrawBezier(Bitmap bitmap, Point pt1, Point pt2, Point pt3, Point pt4, Color? color = null, float width = 1)
+    {
+        using Pen pen = GetPen(color, width);
+        using Graphics graphics = GetGraphics(bitmap);
+        graphics.DrawBezier(pen, pt1, pt2, pt3, pt4);
+    }
+
     private static Graphics GetGraphics(Bitmap bitmap)
     {
         Graphics graphics = Graphics.FromImage(bitmap);

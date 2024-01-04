@@ -208,6 +208,7 @@
             // 
             this.pictureBoxNode.BackColor = System.Drawing.SystemColors.Window;
             this.pictureBoxNode.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxNode.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBoxNode.Name = "pictureBoxNode";
             this.pictureBoxNode.Size = new System.Drawing.Size(845, 679);
             this.pictureBoxNode.TabIndex = 8;
