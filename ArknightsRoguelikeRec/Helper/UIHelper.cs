@@ -12,12 +12,12 @@ namespace ArknightsRoguelikeRec.Helper
 
         public static void AddLayerBtn(Panel panel, string layerName, EventHandler onClick)
         {
-            int gap = 5;
-            int height = 50;
+            int gap = GlobalDefine.LAYER_BTN_GAP;
+            int height = GlobalDefine.LAYER_BTN_HEIGHT;
 
             Button btn = new Button();
             btn.Text = layerName;
-            btn.Font = new Font("黑体", 10.0f);
+            btn.Font = GlobalDefine.TEXT_FONT;
             btn.Click += onClick;
             panel.Controls.Add(btn);
 
@@ -25,25 +25,25 @@ namespace ArknightsRoguelikeRec.Helper
             btn.Location = new Point(gap, gap + (panel.Controls.Count - 1) * height);
         }
 
-        public static void DrawGrid(Panel panel)
+        public static void DrawGrid(PictureBox pictureBox)
         {
-            int step = 25;
-            Graphics graphics = panel.CreateGraphics();
-            Color color = Color.DarkGray;
-            Pen pen = new Pen(color);
+            Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
 
-            for (int x = 0; x <= panel.Width; x += step)
+            int step = GlobalDefine.BACKGROUND_GRID_STEP;
+            Color color = Color.DarkGray;
+
+            for (int x = 0; x <= pictureBox.Width; x += step)
             {
-                PointF p1 = new PointF(x, 0);
-                PointF p2 = new PointF(x, panel.Height);
-                graphics.DrawLine(pen, p1, p2);
+                Point p1 = new Point(x, 0);
+                Point p2 = new Point(x, pictureBox.Height);
+                DrawUtil.DrawLine(bitmap, p1, p2, color);
             }
 
-            for (int y = 0; y <= panel.Height; y += step)
+            for (int y = 0; y <= pictureBox.Height; y += step)
             {
-                PointF p1 = new PointF(0, y);
-                PointF p2 = new PointF(panel.Width, y);
-                graphics.DrawLine(pen, p1, p2);
+                Point p1 = new Point(0, y);
+                Point p2 = new Point(pictureBox.Width, y);
+                DrawUtil.DrawLine(bitmap, p1, p2, color);
             }
         }
 
@@ -58,12 +58,11 @@ namespace ArknightsRoguelikeRec.Helper
         /// <param name="layerConfig"></param>
         public static void AddNodeBtn(Panel panel, int colIndex, int rowIndex, int rowCount, Node node, LayerConfig layerConfig)
         {
-            int gap = 60;
-            int width = 150;
-            int height = 80;
+            int gap = GlobalDefine.NODE_VIEW_GAP;
+            int width = GlobalDefine.NODE_VIEW_WIDTH;
+            int height = GlobalDefine.NODE_VIEW_HEIGHT;
 
             int nodeX = gap + colIndex * (width + gap);
-            //int nodeY = (int)(panel.Height * ((float)(rowIndex + 1) / (rowCount + 1))) - height / 2;
             int nodeY = panel.Height / 2 - rowCount * gap + rowIndex * (height + gap) - height / 2;
             Panel nodeView = new Panel();
             panel.Controls.Add(nodeView);
@@ -71,14 +70,14 @@ namespace ArknightsRoguelikeRec.Helper
             nodeView.Size = new Size(width, height);
             nodeView.Location = new Point(nodeX, nodeY);
 
-            int btnGap = 2;
+            int btnGap = GlobalDefine.NODE_VIEW_BTN_GAP;
             int btnWidth = width - 2 * btnGap;
             int btnHeight = (height - 3 * btnGap) / 2;
 
             //Init Type
             Button btnType = new Button();
             nodeView.Controls.Add(btnType);
-            btnType.Font = new Font("黑体", 10.0f);
+            btnType.Font = GlobalDefine.TEXT_FONT;
             btnType.Text = node.Type;
             btnType.Size = new Size(btnWidth, btnHeight);
             btnType.Location = new Point(btnGap, btnGap);
@@ -86,7 +85,7 @@ namespace ArknightsRoguelikeRec.Helper
             //Init SubType
             Button btnSubType = new Button();
             nodeView.Controls.Add(btnSubType);
-            btnSubType.Font = new Font("黑体", 10.0f);
+            btnSubType.Font = GlobalDefine.TEXT_FONT;
             btnSubType.Text = node.SubType;
             btnSubType.Size = new Size(btnWidth, btnHeight);
             btnSubType.Location = new Point(btnGap, 2 * btnGap + btnHeight);
@@ -195,7 +194,7 @@ namespace ArknightsRoguelikeRec.Helper
             };
 
             //InitPort
-            int portSize = 20;
+            int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
             Button btnPort1 = new Button();
             Button btnPort2 = new Button();
             Button btnPort3 = new Button();
@@ -212,201 +211,6 @@ namespace ArknightsRoguelikeRec.Helper
             btnPort2.Location = new Point(nodeX - portSize, nodeY + nodeView.Size.Height / 2 - portSize / 2);
             btnPort3.Location = new Point(nodeX + nodeView.Size.Width, nodeY + nodeView.Size.Height / 2 - portSize / 2);
             btnPort4.Location = new Point(nodeX + nodeView.Size.Width / 2 - portSize / 2, nodeY + nodeView.Size.Height);
-        }
-
-        /// <summary>
-        /// 在PictureBox中绘制节点
-        /// </summary>
-        /// <param name="btnPictureBox"></param>
-        /// <param name="colIndex"></param>
-        /// <param name="rowIndex"></param>
-        /// <param name="rowCount"></param>
-        /// <param name="panelHeight"></param>
-        /// <param name="node"></param>
-        /// <param name="layerConfig"></param>
-        public static void AddNodeBtn(BtnPictureBox btnPictureBox, int colIndex, int rowIndex, int rowCount, int panelHeight, Node node, LayerConfig layerConfig)
-        {
-            int gap = 50;
-            int width = 150;
-            int height = 80;
-
-            int nodeX = gap + colIndex * (width + gap);
-            //int nodeY = (int)((panelHeight - 2 * gap) * ((float)(rowIndex + 1) / (rowCount + 1))) - height / 2;
-            int nodeY = panelHeight / 2 - rowCount * gap + rowIndex * (height + gap) - height / 2;
-            BtnPictureBox.Item nodeView = new BtnPictureBox.Item()
-            {
-                Size = new Size(width, height),
-                Location = new Point(nodeX, nodeY),
-            };
-
-            int btnGap = 2;
-            int btnWidth = width - 2 * btnGap;
-            int btnHeight = (height - 3 * btnGap) / 2;
-
-            //Init Type
-            BtnPictureBox.Item typeView = new BtnPictureBox.Item()
-            {
-                Text = node.Type,
-                Size = new Size(btnWidth, btnHeight),
-                Location = new Point(nodeX + btnGap, nodeY + btnGap),
-            };
-
-            //Init SubType
-            BtnPictureBox.Item subTypeView = new BtnPictureBox.Item()
-            {
-                Text = node.SubType,
-                Size = new Size(btnWidth, btnHeight),
-                Location = new Point(nodeX + btnGap, nodeY + 2 * btnGap + btnHeight),
-            };
-
-            typeView.OnClick += () =>
-            {
-                ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                if (layerConfig != null)
-                {
-                    for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
-                    {
-                        int nodeID = layerConfig.NodeTypes[i];
-                        NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                        if (nodeConfig == null)
-                        {
-                            continue;
-                        }
-
-                        contextMenuStrip.Items.Add(nodeConfig.Type, null, (_sender, _e) =>
-                        {
-                            if (typeView.Text != nodeConfig.Type)
-                            {
-                                subTypeView.Text = string.Empty;
-                                node.SubType = string.Empty;
-                            }
-
-                            node.Type = nodeConfig.Type;
-                            typeView.Text = nodeConfig.Type;
-                            typeView.Tag = nodeConfig;
-                            btnPictureBox.UpdateView();
-                        });
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(typeView.Text) || !string.IsNullOrEmpty(subTypeView.Text))
-                {
-                    if (contextMenuStrip.Items.Count > 0)
-                    {
-                        contextMenuStrip.Items.Add(new ToolStripSeparator());
-                    }
-
-                    contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
-                    {
-                        node.Type = string.Empty;
-                        typeView.Text = string.Empty;
-                        typeView.Tag = null;
-
-                        node.SubType = string.Empty;
-                        subTypeView.Text = string.Empty;
-                        btnPictureBox.UpdateView();
-                    });
-                }
-
-                if (contextMenuStrip.Items.Count > 0)
-                {
-                    contextMenuStrip.Show(Cursor.Position);
-                }
-            };
-
-            if (layerConfig != null)
-            {
-                for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
-                {
-                    int nodeID = layerConfig.NodeTypes[i];
-                    NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                    if (nodeConfig != null && nodeConfig.Type == node.Type)
-                    {
-                        typeView.Tag = nodeConfig;
-                        break;
-                    }
-                }
-            }
-
-            subTypeView.OnClick += () =>
-            {
-                if (typeView.Tag is NodeConfig nodeConfig)
-                {
-                    ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                    for (int i = 0; i < nodeConfig.SubTypes.Count; i++)
-                    {
-                        string subType = nodeConfig.SubTypes[i];
-                        contextMenuStrip.Items.Add(subType, null, (_sender, _e) =>
-                        {
-                            node.SubType = subType;
-                            subTypeView.Text = subType;
-                            btnPictureBox.UpdateView();
-                        });
-                    }
-
-                    if (!string.IsNullOrEmpty(subTypeView.Text))
-                    {
-                        if (contextMenuStrip.Items.Count > 0)
-                        {
-                            contextMenuStrip.Items.Add(new ToolStripSeparator());
-                        }
-
-                        contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
-                        {
-                            node.SubType = string.Empty;
-                            subTypeView.Text = string.Empty;
-                            btnPictureBox.UpdateView();
-                        });
-                    }
-
-                    if (contextMenuStrip.Items.Count > 0)
-                    {
-                        contextMenuStrip.Show(Cursor.Position);
-                    }
-                }
-            };
-
-            void AddConnect()
-            {
-                //TODO
-            }
-
-            //Init Port
-            int portSize = 20;
-            BtnPictureBox.Item portView1 = new BtnPictureBox.Item()
-            {
-                Size = new Size(portSize, portSize),
-                Location = new Point(nodeX + nodeView.Size.Width / 2 - portSize / 2, nodeY - portSize),
-            };
-            BtnPictureBox.Item portView2 = new BtnPictureBox.Item()
-            {
-                Size = new Size(portSize, portSize),
-                Location = new Point(nodeX - portSize, nodeY + nodeView.Size.Height / 2 - portSize / 2),
-            };
-            BtnPictureBox.Item portView3 = new BtnPictureBox.Item()
-            {
-                Size = new Size(portSize, portSize),
-                Location = new Point(nodeX + nodeView.Size.Width, nodeY + nodeView.Size.Height / 2 - portSize / 2),
-            };
-            BtnPictureBox.Item portView4 = new BtnPictureBox.Item()
-            {
-                Size = new Size(portSize, portSize),
-                Location = new Point(nodeX + nodeView.Size.Width / 2 - portSize / 2, nodeY + nodeView.Size.Height),
-            };
-            portView1.OnClick += AddConnect;
-            portView2.OnClick += AddConnect;
-            portView3.OnClick += AddConnect;
-            portView4.OnClick += AddConnect;
-
-            btnPictureBox.Items.Add(nodeView);
-            btnPictureBox.Items.Add(typeView);
-            btnPictureBox.Items.Add(subTypeView);
-            btnPictureBox.Items.Add(portView1);
-            btnPictureBox.Items.Add(portView2);
-            btnPictureBox.Items.Add(portView3);
-            btnPictureBox.Items.Add(portView4);
-
-            btnPictureBox.UpdateView();
         }
     }
 }

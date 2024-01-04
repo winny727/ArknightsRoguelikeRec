@@ -42,18 +42,18 @@
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
             this.panelNodeView = new System.Windows.Forms.Panel();
+            this.pictureBoxNode = new System.Windows.Forms.PictureBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.labelNode = new System.Windows.Forms.Label();
             this.textBoxNode = new System.Windows.Forms.TextBox();
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
-            this.pictureBoxNode = new BtnPictureBox();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelNodeView.SuspendLayout();
-            this.panelAllLayer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).BeginInit();
+            this.panelAllLayer.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTitleLayer
@@ -203,7 +203,15 @@
             this.panelNodeView.Size = new System.Drawing.Size(847, 681);
             this.panelNodeView.TabIndex = 9;
             this.panelNodeView.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelNodeView_Scroll);
-            this.panelNodeView.Paint += new System.Windows.Forms.PaintEventHandler(this.panelNodeView_Paint);
+            // 
+            // pictureBoxNode
+            // 
+            this.pictureBoxNode.BackColor = System.Drawing.SystemColors.Window;
+            this.pictureBoxNode.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxNode.Name = "pictureBoxNode";
+            this.pictureBoxNode.Size = new System.Drawing.Size(845, 679);
+            this.pictureBoxNode.TabIndex = 8;
+            this.pictureBoxNode.TabStop = false;
             // 
             // btnCancel
             // 
@@ -270,15 +278,6 @@
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
             this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
             // 
-            // pictureBoxNode
-            // 
-            this.pictureBoxNode.Location = new System.Drawing.Point(3, 3);
-            this.pictureBoxNode.Name = "pictureBoxNode";
-            this.pictureBoxNode.Size = new System.Drawing.Size(841, 675);
-            this.pictureBoxNode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxNode.TabIndex = 8;
-            this.pictureBoxNode.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -296,17 +295,16 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "明日方舟肉鸽节点记录工具";
+            this.Text = "s";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
             this.panelCurLayer.ResumeLayout(false);
             this.panelCurLayer.PerformLayout();
             this.panelNodeView.ResumeLayout(false);
-            this.panelNodeView.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).EndInit();
             this.panelAllLayer.ResumeLayout(false);
             this.panelAllLayer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -333,7 +331,7 @@
         private System.Windows.Forms.Panel panelAllLayer;
         private System.Windows.Forms.Button btnRemoveLayer;
         private System.Windows.Forms.Panel panelNodeView;
-        private BtnPictureBox pictureBoxNode;
+        private System.Windows.Forms.PictureBox pictureBoxNode;
     }
 }
 

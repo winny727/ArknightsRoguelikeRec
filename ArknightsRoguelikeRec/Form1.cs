@@ -44,7 +44,6 @@ namespace ArknightsRoguelikeRec
             //Console.WriteLine(layerConfig);
             //Console.WriteLine(nodeConfig);
 
-            pictureBoxNode.Visible = false;
             UpdateViewState();
         }
 
@@ -158,9 +157,18 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateNodeView()
         {
-            panelNodeView.Controls.Clear();
-            pictureBoxNode.Items.Clear();
-            pictureBoxNode.UpdateView();
+            for (int i = panelNodeView.Controls.Count - 1; i >= 0; i--)
+            {
+                if (panelNodeView.Controls[i] != pictureBoxNode)
+                {
+                    panelNodeView.Controls.RemoveAt(i);
+                }
+            }
+
+            pictureBoxNode.BackgroundImage?.Dispose();
+            pictureBoxNode.Image?.Dispose();
+            pictureBoxNode.BackgroundImage = null;
+            pictureBoxNode.Image = null;
 
             if (SaveData == null)
             {
@@ -174,16 +182,25 @@ namespace ArknightsRoguelikeRec
 
             Layer layer = SaveData.Layers[SelectedLayer];
             LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);
+
+            int width = layer.Nodes.Count * (GlobalDefine.NODE_VIEW_GAP + GlobalDefine.NODE_VIEW_WIDTH) + GlobalDefine.NODE_VIEW_GAP;
+            pictureBoxNode.Width = Math.Max(width, panelNodeView.Width - 2);
+            pictureBoxNode.BackgroundImage = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
+            pictureBoxNode.Image = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
+            UIHelper.DrawGrid(pictureBoxNode);
+
             for (int i = 0; i < layer.Nodes.Count; i++)
             {
                 int rowCount = layer.Nodes[i].Count;
                 for (int j = 0; j < layer.Nodes[i].Count; j++)
                 {
                     Node node = layer.Nodes[i][j];
-                    //UIHelper.AddNodeBtn(pictureBoxNode, i, j, rowCount, panel1.Height, node, layerConfig);
                     UIHelper.AddNodeBtn(panelNodeView, i, j, rowCount, node, layerConfig);
                 }
             }
+
+            pictureBoxNode.SendToBack();
+            pictureBoxNode.Refresh();
         }
 
         private bool CheckSaveData()
@@ -401,11 +418,6 @@ namespace ArknightsRoguelikeRec
             }
 
             UpdateNodeView();
-        }
-
-        private void panelNodeView_Paint(object sender, PaintEventArgs e)
-        {
-            //UIHelper.DrawGrid(panelNodeView);
         }
 
         private void panelNodeView_Scroll(object sender, ScrollEventArgs e)
