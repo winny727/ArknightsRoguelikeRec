@@ -76,7 +76,6 @@
     <Compile Include="Utils\MapList.cs" />
     <Compile Include="Utils\TableReader.cs" />
     <Compile Include="Utils\TypeUtility.cs" />
-    <Compile Include="ViewModel\Direction.cs" />
     <Compile Include="ViewModel\NodeView.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

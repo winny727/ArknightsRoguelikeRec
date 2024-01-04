@@ -5,6 +5,7 @@ using System.Drawing;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.ViewModel;
+using System.Drawing.Drawing2D;
 
 namespace ArknightsRoguelikeRec.Helper
 {
@@ -16,7 +17,7 @@ namespace ArknightsRoguelikeRec.Helper
         /// <param name="panel"></param>
         /// <param name="layerName"></param>
         /// <param name="onClick"></param>
-        public static void CreateLayerBtn(Panel panel, string layerName, Action onClick)
+        public static void CreateLayerBtn(Panel panel, string layerName, Action onClick = null)
         {
             int gap = GlobalDefine.LAYER_BTN_GAP;
             int height = GlobalDefine.LAYER_BTN_HEIGHT;
@@ -215,105 +216,44 @@ namespace ArknightsRoguelikeRec.Helper
             return new NodeView(node, colIndex, rowIndex, viewPanel);
         }
 
-        public static Control CreateNodePort(Panel panel, NodeView nodeView, Direction direction)
+        public static void DrawConnection(Panel panel, PictureBox pictureBox, NodeView nodeView1, NodeView nodeView2)
         {
-            int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
-            Button btnPort = new Button();
-            panel.Controls.Add(btnPort);
-            btnPort.Size = new Size(portSize, portSize);
-            Point offset = GetPortOffset(direction);
-            Point nodeViewLocation = nodeView.View.Location;
-            btnPort.Location = new Point(nodeViewLocation.X + offset.X, nodeViewLocation.Y + offset.Y);
-
-            nodeView.Ports.Add(direction, btnPort);
-
-            return btnPort;
-        }
-
-        private static Point GetPortOffset(Direction direction)
-        {
-            int nodeWidth = GlobalDefine.NODE_VIEW_WIDTH;
-            int nodeHeight = GlobalDefine.NODE_VIEW_HEIGHT;
-            int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
-            switch (direction)
-            {
-                case Direction.Top:
-                    return new Point(nodeWidth / 2 - portSize / 2, -portSize);
-                case Direction.Bottom:
-                    return new Point(nodeWidth / 2 - portSize / 2, nodeHeight);
-                case Direction.Left:
-                    return new Point(-portSize, nodeHeight / 2 - portSize / 2);
-                case Direction.Right:
-                    return new Point(nodeWidth, nodeHeight / 2 - portSize / 2);
-            }
-            return default;
-        }
-
-        public static void DrawConnection(PictureBox pictureBox, NodeView nodeView1, NodeView nodeView2)
-        {
-            Control port1 = null;
-            Control port2 = null;
-            if (nodeView1.ColIndex == nodeView2.ColIndex)
-            {
-                if (nodeView1.RowIndex > nodeView2.RowIndex)
-                {
-                    port1 = nodeView1.Ports[Direction.Bottom];
-                    port2 = nodeView2.Ports[Direction.Top];
-                }
-                else if (nodeView1.RowIndex < nodeView2.RowIndex)
-                {
-                    port1 = nodeView1.Ports[Direction.Top];
-                    port2 = nodeView2.Ports[Direction.Bottom];
-                }
-            }
-            else if (nodeView1.ColIndex < nodeView2.ColIndex)
-            {
-                port1 = nodeView1.Ports[Direction.Right];
-                port2 = nodeView2.Ports[Direction.Left];
-            }
-            else if (nodeView1.ColIndex > nodeView2.ColIndex)
-            {
-                port1 = nodeView1.Ports[Direction.Left];
-                port2 = nodeView2.Ports[Direction.Right];
-            }
-
-            if (port1 == null || port2 == null)
-            {
-                return;
-            }
-
             Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
-            int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
 
-            int x1 = port1.Location.X + portSize / 2;
-            int y1 = port1.Location.Y + portSize / 2;
-            int x2 = port2.Location.X + portSize / 2;
-            int y2 = port2.Location.Y + portSize / 2;
+            int x1 = nodeView1.View.Location.X + nodeView1.View.Width / 2;
+            int y1 = nodeView1.View.Location.Y + nodeView1.View.Height / 2;
+            int x2 = nodeView2.View.Location.X + nodeView2.View.Width / 2;
+            int y2 = nodeView2.View.Location.Y + nodeView2.View.Height / 2;
 
             Point pt1 = new Point(x1, y1);
-            Point pt2 = new Point(x1 + (x2 - x1) / 2, y1);
-            Point pt3 = new Point(x2 - (x2 - x1) / 2, y2);
+            Point pt2 = new Point(x2, y1);
+            Point pt3 = new Point(x1, y2);
             Point pt4 = new Point(x2, y2);
 
             DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);
         }
 
-        public static void DrawConnectionPreview(PictureBox pictureBox, Control port)
+        public static void ClearConnectionPreview(PictureBox pictureBox)
         {
-            Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
-            int portSize = GlobalDefine.NODE_VIEW_PORT_SIZE;
+            pictureBox.Image?.Dispose();
+            pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
+        }
+
+        public static void DrawConnectionPreview(PictureBox pictureBox, NodeView nodeView)
+        {
+            Bitmap bitmap = (Bitmap)pictureBox.Image;
 
             Point mousePos = Cursor.Position;
             Point locaction = pictureBox.PointToClient(mousePos);
 
-            int x1 = port.Location.X + portSize / 2;
-            int y1 = port.Location.Y + portSize / 2;
+            int x1 = nodeView.View.Location.X + nodeView.View.Width / 2;
+            int y1 = nodeView.View.Location.Y + nodeView.View.Height / 2;
             int x2 = locaction.X;
             int y2 = locaction.Y;
 
             Point pt1 = new Point(x1, y1);
-            Point pt2 = new Point(x1 + (x2 - x1) / 2, y1);
-            Point pt3 = new Point(x2 - (x2 - x1) / 2, y2);
+            Point pt2 = new Point(x2, y1);
+            Point pt3 = new Point(x1, y2);
             Point pt4 = new Point(x2, y2);
 
             DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);

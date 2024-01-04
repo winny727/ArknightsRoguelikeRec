@@ -15,9 +15,11 @@ namespace ArknightsRoguelikeRec
     {
         public string SavePath = Environment.CurrentDirectory + "\\SaveData";
 
-        public SaveData SaveData { get; set; }
-        public int SelectedLayer { get; set; }
-        public bool IsDirty { get; set; }
+        public SaveData SaveData { get; private set; }
+        public int SelectedLayer { get; private set; }
+        public bool IsDirty { get; private set; }
+
+        public NodeView CurNodeView { get; private set; }
 
         public Form1()
         {
@@ -188,7 +190,6 @@ namespace ArknightsRoguelikeRec
             pictureBoxNode.Width = Math.Max(width, panelNodeView.Width - 2);
             pictureBoxNode.Height = panelNodeView.HorizontalScroll.Visible ? panelNodeView.Height - GlobalDefine.NODE_VIEW_SCROLL_GAP : panelNodeView.Height - 2;
             pictureBoxNode.BackgroundImage = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
-            pictureBoxNode.Image = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
 
             UIHelper.DrawGrid(pictureBoxNode); //绘制背景网格
 
@@ -202,23 +203,22 @@ namespace ArknightsRoguelikeRec
                     Node node = layer.Nodes[i][j];
                     NodeView nodeView = UIHelper.CreateNodeView(panelNodeView, i, j, rowCount, node, layerConfig.NodeTypes);
 
-                    //创建节点端口
-                    foreach (Direction direction in Enum.GetValues(typeof(Direction)))
-                    {
-                        UIHelper.CreateNodePort(panelNodeView, nodeView, direction);
-                    }
-
                     nodeViews.Add(nodeView);
                 }
             }
 
-            for (int i = 0; i < layer.Connections.Count; i++)
+            void UpdateConnections()
             {
-                var connection = layer.Connections[i];
-                NodeView nodeView1 = nodeViews[connection.NodeIndex1];
-                NodeView nodeView2 = nodeViews[connection.NodeIndex2];
-                UIHelper.DrawConnection(pictureBoxNode, nodeView1, nodeView2);
+                for (int i = 0; i < layer.Connections.Count; i++)
+                {
+                    var connection = layer.Connections[i];
+                    NodeView nodeView1 = nodeViews[connection.NodeIndex1];
+                    NodeView nodeView2 = nodeViews[connection.NodeIndex2];
+                    UIHelper.DrawConnection(panelNodeView, pictureBoxNode, nodeView1, nodeView2);
+                }
             }
+
+            UpdateConnections();
 
             pictureBoxNode.SendToBack(); //置于底层
             pictureBoxNode.Refresh();

@@ -160,5 +160,15 @@ namespace ArknightsRoguelikeRec.Helper
                 NodeIndex2 = nodeIndex2,
             });
         }
+
+        public static void RemoveConnection(Layer layer, Connection connection)
+        {
+            if (layer == null || connection == null)
+            {
+                return;
+            }
+
+            layer.Connections.Remove(connection);
+        }
     }
 }

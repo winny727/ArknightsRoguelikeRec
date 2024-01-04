@@ -11,7 +11,6 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Control View { get; private set; }
         public int ColIndex { get; private set; }
         public int RowIndex { get; private set; }
-        public Dictionary<Direction, Control> Ports { get; private set; }
 
         public NodeView(Node node, int colIndex, int rowIndex, Control view)
         {
@@ -19,7 +18,6 @@ namespace ArknightsRoguelikeRec.ViewModel
             View = view;
             ColIndex = colIndex;
             RowIndex = rowIndex;
-            Ports = new Dictionary<Direction, Control>();
         }
     }
 }
