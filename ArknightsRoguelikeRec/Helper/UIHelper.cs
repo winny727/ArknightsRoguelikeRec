@@ -79,7 +79,7 @@ namespace ArknightsRoguelikeRec.Helper
 
             //初始化节点
             int nodeX = hGap + colIndex * (width + hGap);
-            int nodeY = panel.Height / 2 - rowCount * vGap + rowIndex * (height + vGap) - height / 2;
+            int nodeY = panel.Height / 2 - (rowCount * height + (rowCount - 1) * vGap) / 2 + rowIndex * (height + vGap) - GlobalDefine.NODE_VIEW_SCROLL_GAP;
             Button btnView = new Button();
             panel.Controls.Add(btnView);
             btnView.Size = new Size(width, height);
