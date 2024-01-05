@@ -8,7 +8,6 @@ using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.ViewModel;
 using ArknightsRoguelikeRec.Helper;
-using System.Drawing.Drawing2D;
 
 namespace ArknightsRoguelikeRec
 {
