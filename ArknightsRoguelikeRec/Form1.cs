@@ -670,6 +670,25 @@ namespace ArknightsRoguelikeRec
                 }
             }
 
+            //初始化部分固定连接
+            for (int i = 0; i < layer.Nodes.Count - 1; i++)
+            {
+                var curColNodes = layer.Nodes[i];
+                var nextColNodes = layer.Nodes[i + 1];
+
+                if (curColNodes.Count <= 0 || nextColNodes.Count <= 0)
+                {
+                    continue;
+                }
+
+                Node curColFirstNode = curColNodes[0];
+                Node curColLastNode = curColNodes[curColNodes.Count - 1];
+                Node nextColFirstNode = nextColNodes[0];
+                Node nextColLastNode = nextColNodes[nextColNodes.Count - 1];
+                DataHelper.AddConnection(layer, curColFirstNode, nextColFirstNode); //已去重
+                DataHelper.AddConnection(layer, curColLastNode, nextColLastNode);
+            }
+
             UpdateNodeView();
         }
 
