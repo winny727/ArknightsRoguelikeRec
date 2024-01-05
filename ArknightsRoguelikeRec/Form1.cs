@@ -23,8 +23,8 @@ namespace ArknightsRoguelikeRec
         public NodeView CurNodeView { get; private set; }
         public bool IsEditMode { get; private set; }
 
-        public List<NodeView> nodeViews = new List<NodeView>();
-        public List<Button> delConnectionBtns = new List<Button>();
+        private List<NodeView> nodeViews = new List<NodeView>();
+        private List<Button> delConnectionBtns = new List<Button>();
 
 
         public Form1()
