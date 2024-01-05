@@ -468,6 +468,7 @@ namespace ArknightsRoguelikeRec
                 delConnectionBtns[i].Dispose();
             }
             delConnectionBtns.Clear();
+            UIHelper.ClearConnectionPreview(pictureBoxNode);
 
             if (IsEditMode)
             {
