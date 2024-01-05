@@ -318,7 +318,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "s";
+            this.Text = "明日方舟肉鸽节点记录工具";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();

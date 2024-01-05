@@ -491,6 +491,7 @@ namespace ArknightsRoguelikeRec
                             UIHelper.DrawGrid(pictureBoxNode); //绘制背景网格
 
                             UpdateConnection();
+                            pictureBoxNode.Refresh();
                         });
                         delConnectionBtns.Add(btnDel);
                     }
