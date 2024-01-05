@@ -757,5 +757,13 @@ namespace ArknightsRoguelikeRec
         {
             isDragging = false;
         }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                btnSave_Click(sender, e);
+            }
+        }
     }
 }
