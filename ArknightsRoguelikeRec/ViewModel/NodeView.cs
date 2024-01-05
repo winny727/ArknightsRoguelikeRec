@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ArknightsRoguelikeRec.DataModel;
+using ArknightsRoguelikeRec.Config;
 using System.Windows.Forms;
 
 namespace ArknightsRoguelikeRec.ViewModel
@@ -13,6 +14,9 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Control SubTypeView { get; private set; }
         public int ColIndex { get; private set; }
         public int RowIndex { get; private set; }
+
+        public NodeConfig NodeConfig { get; set; }
+
 
         public NodeView(Node node, int colIndex, int rowIndex, Control view, Control typeView, Control subTypeView)
         {

@@ -228,6 +228,7 @@
             this.pictureBoxNode.Size = new System.Drawing.Size(845, 679);
             this.pictureBoxNode.TabIndex = 8;
             this.pictureBoxNode.TabStop = false;
+            this.pictureBoxNode.Click += new System.EventHandler(this.pictureBoxNode_Click);
             // 
             // btnCancel
             // 

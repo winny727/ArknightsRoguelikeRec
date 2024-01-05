@@ -8,6 +8,7 @@ using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.ViewModel;
 using ArknightsRoguelikeRec.Helper;
+using System.Drawing.Drawing2D;
 
 namespace ArknightsRoguelikeRec
 {
@@ -166,6 +167,8 @@ namespace ArknightsRoguelikeRec
                 }
             }
 
+            //TODO Scroll复位
+
             nodeViews.Clear();
             pictureBoxNode.BackgroundImage?.Dispose();
             pictureBoxNode.Image?.Dispose();
@@ -194,10 +197,11 @@ namespace ArknightsRoguelikeRec
                 {
                     //创建节点
                     Node node = layer.Nodes[i][j];
-                    NodeView nodeView = UIHelper.CreateNodeView(panelNodeView, i, j, rowCount, node, layerConfig.NodeTypes);
+                    NodeView nodeView = UIHelper.CreateNodeView(panelNodeView, i, j, rowCount, node);
 
-                    nodeView.View.Click += (sender, e) =>
+                    void OnNodeClick(object sender, EventArgs e)
                     {
+                        nodeView.View.Focus();
                         if (!IsEditMode)
                         {
                             return;
@@ -220,7 +224,131 @@ namespace ArknightsRoguelikeRec
                                 UpdateEditMode();
                             }
                         }
-                    };
+                    }
+
+                    void OnNodeTypeClick(object sender, EventArgs e)
+                    {
+                        if (IsEditMode)
+                        {
+                            return;
+                        }
+
+                        //选择节点类型
+                        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+                        if (layerConfig.NodeTypes != null)
+                        {
+                            for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
+                            {
+                                int nodeID = layerConfig.NodeTypes[i];
+                                NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
+                                if (nodeConfig == null)
+                                {
+                                    continue;
+                                }
+
+                                contextMenuStrip.Items.Add(nodeConfig.Type, null, (_sender, _e) =>
+                                {
+                                    if (nodeView.TypeView.Text != nodeConfig.Type)
+                                    {
+                                        nodeView.SubTypeView.Text = string.Empty;
+                                        node.SubType = string.Empty;
+                                    }
+
+                                    node.Type = nodeConfig.Type;
+                                    nodeView.TypeView.Text = nodeConfig.Type;
+                                    nodeView.NodeConfig = nodeConfig;
+                                });
+                            }
+                        }
+
+                        //显示清除选项
+                        if (!string.IsNullOrEmpty(nodeView.TypeView.Text) || !string.IsNullOrEmpty(nodeView.SubTypeView.Text))
+                        {
+                            if (contextMenuStrip.Items.Count > 0)
+                            {
+                                contextMenuStrip.Items.Add(new ToolStripSeparator());
+                            }
+
+                            contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
+                            {
+                                node.Type = string.Empty;
+                                nodeView.TypeView.Text = string.Empty;
+                                nodeView.NodeConfig = null;
+
+                                node.SubType = string.Empty;
+                                nodeView.SubTypeView.Text = string.Empty;
+                            });
+                        }
+
+                        if (contextMenuStrip.Items.Count > 0)
+                        {
+                            contextMenuStrip.Show(Cursor.Position);
+                        }
+                    }
+
+                    void OnNodeSubTypeClick(object sender, EventArgs e)
+                    {
+                        if (IsEditMode)
+                        {
+                            return;
+                        }
+
+                        //选择节点次级类型
+                        if (nodeView.NodeConfig != null)
+                        {
+                            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+                            for (int i = 0; i < nodeView.NodeConfig.SubTypes.Count; i++)
+                            {
+                                string subType = nodeView.NodeConfig.SubTypes[i];
+                                contextMenuStrip.Items.Add(subType, null, (_sender, _e) =>
+                                {
+                                    node.SubType = subType;
+                                    nodeView.SubTypeView.Text = subType;
+                                });
+                            }
+
+                            //显示清除选项
+                            if (!string.IsNullOrEmpty(nodeView.SubTypeView.Text))
+                            {
+                                if (contextMenuStrip.Items.Count > 0)
+                                {
+                                    contextMenuStrip.Items.Add(new ToolStripSeparator());
+                                }
+
+                                contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
+                                {
+                                    node.SubType = string.Empty;
+                                    nodeView.SubTypeView.Text = string.Empty;
+                                });
+                            }
+
+                            if (contextMenuStrip.Items.Count > 0)
+                            {
+                                contextMenuStrip.Show(Cursor.Position);
+                            }
+                        }
+                    }
+
+                    nodeView.View.Click += OnNodeClick;
+                    nodeView.TypeView.Click += OnNodeClick;
+                    nodeView.SubTypeView.Click += OnNodeClick;
+                    nodeView.TypeView.Click += OnNodeTypeClick;
+                    nodeView.SubTypeView.Click += OnNodeSubTypeClick;
+
+                    //初始化NodeConfig
+                    if (layerConfig.NodeTypes != null)
+                    {
+                        for (int k = 0; k < layerConfig.NodeTypes.Count; k++)
+                        {
+                            int nodeID = layerConfig.NodeTypes[k];
+                            NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
+                            if (nodeConfig != null && nodeConfig.Type == node.Type)
+                            {
+                                nodeView.NodeConfig = nodeConfig;
+                                break;
+                            }
+                        }
+                    }
 
                     nodeViews.Add(nodeView);
                 }
@@ -373,13 +501,13 @@ namespace ArknightsRoguelikeRec
                 btnEditConnection.Text = "编辑连接";
             }
 
-            //隐藏类型选择按钮
-            for (int i = 0; i < nodeViews.Count; i++)
-            {
-                NodeView nodeView = nodeViews[i];
-                nodeView.TypeView.Visible = !IsEditMode;
-                nodeView.SubTypeView.Visible = !IsEditMode;
-            }
+            ////隐藏类型选择按钮
+            //for (int i = 0; i < nodeViews.Count; i++)
+            //{
+            //    NodeView nodeView = nodeViews[i];
+            //    nodeView.TypeView.Visible = !IsEditMode;
+            //    nodeView.SubTypeView.Visible = !IsEditMode;
+            //}
         }
 
         private void btnAddLayer_Click(object sender, EventArgs e)
@@ -565,6 +693,17 @@ namespace ArknightsRoguelikeRec
 
             UIHelper.ClearConnectionPreview(pictureBoxNode);
             UIHelper.DrawConnectionPreview(pictureBoxNode, CurNodeView);
+        }
+
+        private void pictureBoxNode_Click(object sender, EventArgs e)
+        {
+            if (!IsEditMode)
+            {
+                return;
+            }
+
+            CurNodeView = null;
+            UIHelper.ClearConnectionPreview(pictureBoxNode);
         }
     }
 }

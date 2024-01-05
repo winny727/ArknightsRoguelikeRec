@@ -70,7 +70,7 @@ namespace ArknightsRoguelikeRec.Helper
         /// <param name="rowCount"></param>
         /// <param name="node"></param>
         /// <param name="layerConfig"></param>
-        public static NodeView CreateNodeView(Panel panel, int colIndex, int rowIndex, int rowCount, Node node, List<int> nodeTypes)
+        public static NodeView CreateNodeView(Panel panel, int colIndex, int rowIndex, int rowCount, Node node)
         {
             int hGap = GlobalDefine.NODE_VIEW_H_GAP;
             int vGap = GlobalDefine.NODE_VIEW_V_GAP;
@@ -106,114 +106,6 @@ namespace ArknightsRoguelikeRec.Helper
             btnSubType.Size = new Size(btnWidth, btnHeight);
             btnSubType.Location = new Point(nodeX + btnGap, nodeY + 2 * btnGap + btnHeight);
             btnSubType.BringToFront();
-
-            //选择节点类型
-            btnType.Click += (sender, e) =>
-            {
-                ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                if (nodeTypes != null)
-                {
-                    for (int i = 0; i < nodeTypes.Count; i++)
-                    {
-                        int nodeID = nodeTypes[i];
-                        NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                        if (nodeConfig == null)
-                        {
-                            continue;
-                        }
-
-                        contextMenuStrip.Items.Add(nodeConfig.Type, null, (_sender, _e) =>
-                        {
-                            if (btnType.Text != nodeConfig.Type)
-                            {
-                                btnSubType.Text = string.Empty;
-                                node.SubType = string.Empty;
-                            }
-
-                            node.Type = nodeConfig.Type;
-                            btnType.Text = nodeConfig.Type;
-                            btnView.Tag = nodeConfig;
-                        });
-                    }
-                }
-
-                //显示清除选项
-                if (!string.IsNullOrEmpty(btnType.Text) || !string.IsNullOrEmpty(btnSubType.Text))
-                {
-                    if (contextMenuStrip.Items.Count > 0)
-                    {
-                        contextMenuStrip.Items.Add(new ToolStripSeparator());
-                    }
-
-                    contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
-                    {
-                        node.Type = string.Empty;
-                        btnType.Text = string.Empty;
-                        btnView.Tag = null;
-
-                        node.SubType = string.Empty;
-                        btnSubType.Text = string.Empty;
-                    });
-                }
-
-                if (contextMenuStrip.Items.Count > 0)
-                {
-                    contextMenuStrip.Show(Cursor.Position);
-                }
-            };
-
-            //初始化节点Tag
-            if (nodeTypes != null)
-            {
-                for (int i = 0; i < nodeTypes.Count; i++)
-                {
-                    int nodeID = nodeTypes[i];
-                    NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                    if (nodeConfig != null && nodeConfig.Type == node.Type)
-                    {
-                        btnView.Tag = nodeConfig;
-                        break;
-                    }
-                }
-            }
-
-            //选择节点次级类型
-            btnSubType.Click += (sender, e) =>
-            {
-                if (btnView.Tag is NodeConfig nodeConfig)
-                {
-                    ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                    for (int i = 0; i < nodeConfig.SubTypes.Count; i++)
-                    {
-                        string subType = nodeConfig.SubTypes[i];
-                        contextMenuStrip.Items.Add(subType, null, (_sender, _e) =>
-                        {
-                            node.SubType = subType;
-                            btnSubType.Text = subType;
-                        });
-                    }
-
-                    //显示清除选项
-                    if (!string.IsNullOrEmpty(btnSubType.Text))
-                    {
-                        if (contextMenuStrip.Items.Count > 0)
-                        {
-                            contextMenuStrip.Items.Add(new ToolStripSeparator());
-                        }
-
-                        contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
-                        {
-                            node.SubType = string.Empty;
-                            btnSubType.Text = string.Empty;
-                        });
-                    }
-
-                    if (contextMenuStrip.Items.Count > 0)
-                    {
-                        contextMenuStrip.Show(Cursor.Position);
-                    }
-                }
-            };
 
             return new NodeView(node, colIndex, rowIndex, btnView, btnType, btnSubType);
         }
