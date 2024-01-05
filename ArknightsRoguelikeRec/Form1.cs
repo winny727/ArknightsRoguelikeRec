@@ -26,6 +26,8 @@ namespace ArknightsRoguelikeRec
         private List<NodeView> nodeViews = new List<NodeView>();
         private List<Button> delConnectionBtns = new List<Button>();
 
+        private bool isDragging = false;
+        private Point lastMousePos;
 
         public Form1()
         {
@@ -728,6 +730,32 @@ namespace ArknightsRoguelikeRec
 
             CurNodeView = null;
             UIHelper.ClearConnectionPreview(pictureBoxNode);
+        }
+
+        private void pictureBoxNode_MouseDown(object sender, MouseEventArgs e)
+        {
+            lastMousePos = pictureBoxNode.PointToScreen(e.Location);
+            isDragging = true;
+        }
+
+        private void pictureBoxNode_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!isDragging)
+            {
+                return;
+            }
+
+            Point curMousePos = pictureBoxNode.PointToScreen(e.Location);
+            int deltaX = curMousePos.X - lastMousePos.X;
+            int deltaY = curMousePos.Y - lastMousePos.Y;
+            panelNodeView.AutoScrollPosition = new Point(-(panelNodeView.AutoScrollPosition.X + deltaX), -(panelNodeView.AutoScrollPosition.Y + deltaY));
+            lastMousePos = curMousePos;
+            panelNodeView.Refresh();
+        }
+
+        private void pictureBoxNode_MouseUp(object sender, MouseEventArgs e)
+        {
+            isDragging = false;
         }
     }
 }

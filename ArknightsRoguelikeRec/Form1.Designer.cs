@@ -229,6 +229,9 @@
             this.pictureBoxNode.TabIndex = 8;
             this.pictureBoxNode.TabStop = false;
             this.pictureBoxNode.Click += new System.EventHandler(this.pictureBoxNode_Click);
+            this.pictureBoxNode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseDown);
+            this.pictureBoxNode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseMove);
+            this.pictureBoxNode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseUp);
             // 
             // btnCancel
             // 
