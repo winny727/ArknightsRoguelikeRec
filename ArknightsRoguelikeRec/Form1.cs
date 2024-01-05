@@ -20,6 +20,11 @@ namespace ArknightsRoguelikeRec
         public bool IsDirty { get; private set; }
 
         public NodeView CurNodeView { get; private set; }
+        public bool IsEditMode { get; private set; }
+
+        public List<NodeView> nodeViews = new List<NodeView>();
+        public List<Button> delConnectionBtns = new List<Button>();
+
 
         public Form1()
         {
@@ -111,21 +116,20 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateCurLayerView()
         {
-            panelCurLayer.Enabled = false;
             UpdateNodeText();
             UpdateNodeView();
 
-            if (SaveData == null)
-            {
-                return;
-            }
+            Layer layer = GetCurLayer();
+            panelCurLayer.Enabled = layer != null;
+        }
 
-            if (SelectedLayer < 0 || SelectedLayer >= SaveData.Layers.Count)
+        private Layer GetCurLayer()
+        {
+            if (SaveData != null && SelectedLayer >= 0 && SelectedLayer < SaveData.Layers.Count)
             {
-                return;
+                return SaveData.Layers[SelectedLayer];
             }
-
-            panelCurLayer.Enabled = true;
+            return null;
         }
 
         private void UpdateNodeText()
@@ -134,17 +138,11 @@ namespace ArknightsRoguelikeRec
             btnApply.Visible = false;
             btnCancel.Visible = false;
 
-            if (SaveData == null)
+            Layer layer = GetCurLayer();
+            if (layer == null)
             {
                 return;
             }
-
-            if (SelectedLayer < 0 || SelectedLayer >= SaveData.Layers.Count)
-            {
-                return;
-            }
-
-            Layer layer = SaveData.Layers[SelectedLayer];
 
             //节点分布数字
             string nodeText = string.Empty;
@@ -168,22 +166,18 @@ namespace ArknightsRoguelikeRec
                 }
             }
 
+            nodeViews.Clear();
             pictureBoxNode.BackgroundImage?.Dispose();
             pictureBoxNode.Image?.Dispose();
             pictureBoxNode.BackgroundImage = null;
             pictureBoxNode.Image = null;
 
-            if (SaveData == null)
+            Layer layer = GetCurLayer();
+            if (layer == null)
             {
                 return;
             }
 
-            if (SelectedLayer < 0 || SelectedLayer >= SaveData.Layers.Count)
-            {
-                return;
-            }
-
-            Layer layer = SaveData.Layers[SelectedLayer];
             LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);
 
             int width = layer.Nodes.Count * (GlobalDefine.NODE_VIEW_H_GAP + GlobalDefine.NODE_VIEW_WIDTH) + GlobalDefine.NODE_VIEW_H_GAP;
@@ -193,7 +187,6 @@ namespace ArknightsRoguelikeRec
 
             UIHelper.DrawGrid(pictureBoxNode); //绘制背景网格
 
-            List<NodeView> nodeViews = new List<NodeView>();
             for (int i = 0; i < layer.Nodes.Count; i++)
             {
                 int rowCount = layer.Nodes[i].Count;
@@ -203,25 +196,97 @@ namespace ArknightsRoguelikeRec
                     Node node = layer.Nodes[i][j];
                     NodeView nodeView = UIHelper.CreateNodeView(panelNodeView, i, j, rowCount, node, layerConfig.NodeTypes);
 
+                    nodeView.View.Click += (sender, e) =>
+                    {
+                        if (!IsEditMode)
+                        {
+                            return;
+                        }
+
+                        UIHelper.ClearConnectionPreview(pictureBoxNode);
+                        if (CurNodeView == null)
+                        {
+                            CurNodeView = nodeView;
+                            UIHelper.DrawConnectionPreview(pictureBoxNode, nodeView);
+                        }
+                        else
+                        {
+                            NodeView tempNodeView = CurNodeView;
+                            CurNodeView = null;
+                            if (CheckConnectionValid(layer, tempNodeView, nodeView))
+                            {
+                                DataHelper.AddConnection(layer, tempNodeView.Node, nodeView.Node);
+                                UpdateConnection();
+                                UpdateEditMode();
+                            }
+                        }
+                    };
+
                     nodeViews.Add(nodeView);
                 }
             }
 
-            void UpdateConnections()
-            {
-                for (int i = 0; i < layer.Connections.Count; i++)
-                {
-                    var connection = layer.Connections[i];
-                    NodeView nodeView1 = nodeViews[connection.NodeIndex1];
-                    NodeView nodeView2 = nodeViews[connection.NodeIndex2];
-                    UIHelper.DrawConnection(panelNodeView, pictureBoxNode, nodeView1, nodeView2);
-                }
-            }
+            //绘制连接
+            UpdateConnection();
 
-            UpdateConnections();
+            //编辑模式状态更新
+            UpdateEditMode();
 
             pictureBoxNode.SendToBack(); //置于底层
             pictureBoxNode.Refresh();
+        }
+
+        private void UpdateConnection()
+        {
+            Layer layer = GetCurLayer();
+            if (layer == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < layer.Connections.Count; i++)
+            {
+                var connection = layer.Connections[i];
+                NodeView nodeView1 = nodeViews[connection.NodeIndex1];
+                NodeView nodeView2 = nodeViews[connection.NodeIndex2];
+                UIHelper.DrawConnection(pictureBoxNode, nodeView1, nodeView2);
+            }
+        }
+
+        private bool CheckConnectionValid(Layer layer, NodeView nodeView1, NodeView nodeView2)
+        {
+            if (nodeView1.ColIndex == nodeView2.ColIndex && nodeView1.RowIndex == nodeView2.RowIndex)
+            {
+                return false;
+            }
+
+            int nodeIndex1 = nodeViews.IndexOf(nodeView1);
+            int nodeIndex2 = nodeViews.IndexOf(nodeView2);
+
+            if (nodeIndex1 < 0 || nodeIndex2 < 0)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < layer.Connections.Count; i++)
+            {
+                var connection = layer.Connections[i];
+                if ((connection.NodeIndex1 == nodeIndex1 && connection.NodeIndex2 == nodeIndex2) || (connection.NodeIndex1 == nodeIndex2 && connection.NodeIndex2 == nodeIndex1))
+                {
+                    MessageBox.Show("选中节点间已存在连接", "连接失败");
+                    return false;
+                }
+            }
+
+            int colDelta = Math.Abs(nodeView1.ColIndex - nodeView2.ColIndex);
+            int rowDelta = Math.Abs(nodeView1.RowIndex - nodeView2.RowIndex);
+            if ((colDelta == 0 && rowDelta > 1) || colDelta > 1)
+            {
+                MessageBox.Show("选中节点无法连接", "连接失败");
+                return false;
+            }
+
+            return true;
         }
 
         private bool CheckSaveData()
@@ -266,6 +331,57 @@ namespace ArknightsRoguelikeRec
             return savePath;
         }
 
+        private void UpdateEditMode()
+        {
+            CurNodeView = null;
+            for (int i = 0; i < delConnectionBtns.Count; i++)
+            {
+                delConnectionBtns[i].Dispose();
+            }
+            delConnectionBtns.Clear();
+
+            if (IsEditMode)
+            {
+                btnEditConnection.Text = "退出编辑";
+                Layer layer = GetCurLayer();
+                if (layer != null)
+                {
+                    for (int i = 0; i < layer.Connections.Count; i++)
+                    {
+                        var connection = layer.Connections[i];
+                        NodeView nodeView1 = nodeViews[connection.NodeIndex1];
+                        NodeView nodeView2 = nodeViews[connection.NodeIndex2];
+                        Button btnDel = null;
+                        btnDel = UIHelper.CreateDelConnectionBtn(panelNodeView, nodeView1, nodeView2, () =>
+                        {
+                            btnDel.Dispose();
+                            delConnectionBtns.Remove(btnDel);
+
+                            DataHelper.RemoveConnection(layer, connection);
+
+                            pictureBoxNode.BackgroundImage = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
+                            UIHelper.DrawGrid(pictureBoxNode); //绘制背景网格
+
+                            UpdateConnection();
+                        });
+                        delConnectionBtns.Add(btnDel);
+                    }
+                }
+            }
+            else
+            {
+                btnEditConnection.Text = "编辑连接";
+            }
+
+            //隐藏类型选择按钮
+            for (int i = 0; i < nodeViews.Count; i++)
+            {
+                NodeView nodeView = nodeViews[i];
+                nodeView.TypeView.Visible = !IsEditMode;
+                nodeView.SubTypeView.Visible = !IsEditMode;
+            }
+        }
+
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
@@ -289,17 +405,11 @@ namespace ArknightsRoguelikeRec
 
         private void btnRemoveLayer_Click(object sender, EventArgs e)
         {
-            if (SaveData == null)
+            Layer layer = GetCurLayer();
+            if (layer == null)
             {
                 return;
             }
-
-            if (SelectedLayer < 0 || SelectedLayer >= SaveData.Layers.Count)
-            {
-                return;
-            }
-
-            Layer layer = SaveData.Layers[SelectedLayer];
 
             if (MessageBox.Show($"是否确认删除选中层\n{layer.Name}", "删除", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
@@ -406,17 +516,11 @@ namespace ArknightsRoguelikeRec
 
         private void btnApply_Click(object sender, EventArgs e)
         {
-            if (SaveData == null)
+            Layer layer = GetCurLayer();
+            if (layer == null)
             {
                 return;
             }
-
-            if (SelectedLayer < 0 || SelectedLayer >= SaveData.Layers.Count)
-            {
-                return;
-            }
-
-            Layer layer = SaveData.Layers[SelectedLayer];
 
             if (layer.Nodes.Count > 0 || layer.Connections.Count > 0)
             {
@@ -444,6 +548,23 @@ namespace ArknightsRoguelikeRec
         private void panelNodeView_Scroll(object sender, ScrollEventArgs e)
         {
             panelNodeView.Refresh();
+        }
+
+        private void btnEditConnection_Click(object sender, EventArgs e)
+        {
+            IsEditMode = !IsEditMode;
+            UpdateEditMode();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (!IsEditMode || CurNodeView == null)
+            {
+                return;
+            }
+
+            UIHelper.ClearConnectionPreview(pictureBoxNode);
+            UIHelper.DrawConnectionPreview(pictureBoxNode, CurNodeView);
         }
     }
 }

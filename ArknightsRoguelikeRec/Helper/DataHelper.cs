@@ -129,7 +129,6 @@ namespace ArknightsRoguelikeRec.Helper
             return -1;
         }
 
-
         public static void AddConnection(Layer layer, Node node1, Node node2)
         {
             if (layer == null)

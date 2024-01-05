@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.labelTitleLayer = new System.Windows.Forms.Label();
             this.btnAddLayer = new System.Windows.Forms.Button();
             this.panelLayer = new System.Windows.Forms.Panel();
@@ -41,6 +42,7 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
+            this.btnEditConnection = new System.Windows.Forms.Button();
             this.panelNodeView = new System.Windows.Forms.Panel();
             this.pictureBoxNode = new System.Windows.Forms.PictureBox();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -49,6 +51,7 @@
             this.textBoxNode = new System.Windows.Forms.TextBox();
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelNodeView.SuspendLayout();
@@ -183,6 +186,7 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.btnEditConnection);
             this.panelCurLayer.Controls.Add(this.panelNodeView);
             this.panelCurLayer.Controls.Add(this.btnCancel);
             this.panelCurLayer.Controls.Add(this.btnApply);
@@ -192,6 +196,17 @@
             this.panelCurLayer.Name = "panelCurLayer";
             this.panelCurLayer.Size = new System.Drawing.Size(853, 739);
             this.panelCurLayer.TabIndex = 0;
+            // 
+            // btnEditConnection
+            // 
+            this.btnEditConnection.Font = new System.Drawing.Font("黑体", 9F);
+            this.btnEditConnection.Location = new System.Drawing.Point(766, 19);
+            this.btnEditConnection.Name = "btnEditConnection";
+            this.btnEditConnection.Size = new System.Drawing.Size(83, 30);
+            this.btnEditConnection.TabIndex = 10;
+            this.btnEditConnection.Text = "编辑连接";
+            this.btnEditConnection.UseVisualStyleBackColor = true;
+            this.btnEditConnection.Click += new System.EventHandler(this.btnEditConnection_Click);
             // 
             // panelNodeView
             // 
@@ -279,6 +294,12 @@
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
             this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -333,6 +354,8 @@
         private System.Windows.Forms.Button btnRemoveLayer;
         private System.Windows.Forms.Panel panelNodeView;
         private System.Windows.Forms.PictureBox pictureBoxNode;
+        private System.Windows.Forms.Button btnEditConnection;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

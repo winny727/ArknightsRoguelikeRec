@@ -17,19 +17,22 @@ namespace ArknightsRoguelikeRec.Helper
         /// <param name="panel"></param>
         /// <param name="layerName"></param>
         /// <param name="onClick"></param>
-        public static void CreateLayerBtn(Panel panel, string layerName, Action onClick = null)
+        public static Button CreateLayerBtn(Panel panel, string layerName, Action onClick = null)
         {
             int gap = GlobalDefine.LAYER_BTN_GAP;
             int height = GlobalDefine.LAYER_BTN_HEIGHT;
 
-            Button btn = new Button();
-            btn.Text = layerName;
-            btn.Font = GlobalDefine.TEXT_FONT;
-            btn.Click += (sender, e) => onClick?.Invoke();
-            panel.Controls.Add(btn);
+            Button btnLayer = new Button();
+            panel.Controls.Add(btnLayer);
+            btnLayer.Text = layerName;
+            btnLayer.Font = GlobalDefine.TEXT_FONT;
 
-            btn.Size = new Size(panel.Width - 2 * gap, height);
-            btn.Location = new Point(gap, gap + (panel.Controls.Count - 1) * height);
+            btnLayer.Size = new Size(panel.Width - 2 * gap, height);
+            btnLayer.Location = new Point(gap, gap + (panel.Controls.Count - 1) * height);
+
+            btnLayer.Click += (sender, e) => onClick?.Invoke();
+
+            return btnLayer;
         }
 
         /// <summary>
@@ -77,11 +80,10 @@ namespace ArknightsRoguelikeRec.Helper
             //初始化节点
             int nodeX = hGap + colIndex * (width + hGap);
             int nodeY = panel.Height / 2 - rowCount * vGap + rowIndex * (height + vGap) - height / 2;
-            Panel viewPanel = new Panel();
-            panel.Controls.Add(viewPanel);
-            viewPanel.BorderStyle = BorderStyle.FixedSingle;
-            viewPanel.Size = new Size(width, height);
-            viewPanel.Location = new Point(nodeX, nodeY);
+            Button btnView = new Button();
+            panel.Controls.Add(btnView);
+            btnView.Size = new Size(width, height);
+            btnView.Location = new Point(nodeX, nodeY);
 
             int btnGap = GlobalDefine.NODE_VIEW_BTN_GAP;
             int btnWidth = width - 2 * btnGap;
@@ -130,7 +132,7 @@ namespace ArknightsRoguelikeRec.Helper
 
                             node.Type = nodeConfig.Type;
                             btnType.Text = nodeConfig.Type;
-                            viewPanel.Tag = nodeConfig;
+                            btnView.Tag = nodeConfig;
                         });
                     }
                 }
@@ -147,7 +149,7 @@ namespace ArknightsRoguelikeRec.Helper
                     {
                         node.Type = string.Empty;
                         btnType.Text = string.Empty;
-                        viewPanel.Tag = null;
+                        btnView.Tag = null;
 
                         node.SubType = string.Empty;
                         btnSubType.Text = string.Empty;
@@ -169,7 +171,7 @@ namespace ArknightsRoguelikeRec.Helper
                     NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
                     if (nodeConfig != null && nodeConfig.Type == node.Type)
                     {
-                        viewPanel.Tag = nodeConfig;
+                        btnView.Tag = nodeConfig;
                         break;
                     }
                 }
@@ -178,7 +180,7 @@ namespace ArknightsRoguelikeRec.Helper
             //选择节点次级类型
             btnSubType.Click += (sender, e) =>
             {
-                if (viewPanel.Tag is NodeConfig nodeConfig)
+                if (btnView.Tag is NodeConfig nodeConfig)
                 {
                     ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
                     for (int i = 0; i < nodeConfig.SubTypes.Count; i++)
@@ -213,24 +215,48 @@ namespace ArknightsRoguelikeRec.Helper
                 }
             };
 
-            return new NodeView(node, colIndex, rowIndex, viewPanel);
+            return new NodeView(node, colIndex, rowIndex, btnView, btnType, btnSubType);
         }
 
-        public static void DrawConnection(Panel panel, PictureBox pictureBox, NodeView nodeView1, NodeView nodeView2)
+        public static void DrawConnection(PictureBox pictureBox, NodeView nodeView1, NodeView nodeView2)
         {
             Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
+
+            int offset = pictureBox.Location.X;
+            int x1 = nodeView1.View.Location.X + nodeView1.View.Width / 2 - offset;
+            int y1 = nodeView1.View.Location.Y + nodeView1.View.Height / 2;
+            int x2 = nodeView2.View.Location.X + nodeView2.View.Width / 2 - offset;
+            int y2 = nodeView2.View.Location.Y + nodeView2.View.Height / 2;
+
+            Point pt1 = new Point(x1, y1);
+            Point pt2 = new Point(x2 - (x2 - x1) / 4, y1);
+            Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
+            Point pt4 = new Point(x2, y2);
+
+            DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);
+        }
+
+        public static Button CreateDelConnectionBtn(Panel panel, NodeView nodeView1, NodeView nodeView2, Action onClick = null)
+        {
+            Button btnDel = new Button();
+            panel.Controls.Add(btnDel);
+            btnDel.Text = "X";
+            btnDel.Font = GlobalDefine.TEXT_FONT;
+
+            int btnSize = GlobalDefine.CONNECTION_DELETE_BTN_SIZE;
 
             int x1 = nodeView1.View.Location.X + nodeView1.View.Width / 2;
             int y1 = nodeView1.View.Location.Y + nodeView1.View.Height / 2;
             int x2 = nodeView2.View.Location.X + nodeView2.View.Width / 2;
             int y2 = nodeView2.View.Location.Y + nodeView2.View.Height / 2;
 
-            Point pt1 = new Point(x1, y1);
-            Point pt2 = new Point(x2, y1);
-            Point pt3 = new Point(x1, y2);
-            Point pt4 = new Point(x2, y2);
+            btnDel.Size = new Size(btnSize, btnSize);
+            btnDel.Location = new Point(x1 + (x2 - x1) / 2 - btnSize / 2, y1 + (y2 - y1) / 2 - btnSize / 2);
+            btnDel.BringToFront();
 
-            DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);
+            btnDel.Click += (sender, e) => onClick?.Invoke();
+
+            return btnDel;
         }
 
         public static void ClearConnectionPreview(PictureBox pictureBox)
@@ -246,14 +272,15 @@ namespace ArknightsRoguelikeRec.Helper
             Point mousePos = Cursor.Position;
             Point locaction = pictureBox.PointToClient(mousePos);
 
-            int x1 = nodeView.View.Location.X + nodeView.View.Width / 2;
+            int offset = pictureBox.Location.X;
+            int x1 = nodeView.View.Location.X + nodeView.View.Width / 2 - offset;
             int y1 = nodeView.View.Location.Y + nodeView.View.Height / 2;
             int x2 = locaction.X;
             int y2 = locaction.Y;
 
             Point pt1 = new Point(x1, y1);
-            Point pt2 = new Point(x2, y1);
-            Point pt3 = new Point(x1, y2);
+            Point pt2 = new Point(x2 - (x2 - x1) / 4, y1);
+            Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
             Point pt4 = new Point(x2, y2);
 
             DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);
