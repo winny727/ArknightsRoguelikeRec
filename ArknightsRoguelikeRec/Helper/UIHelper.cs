@@ -44,20 +44,22 @@ namespace ArknightsRoguelikeRec.Helper
             Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
 
             int step = GlobalDefine.BACKGROUND_GRID_STEP;
-            Color color = Color.DarkGray;
+            Color color = Color.LightGray;
 
             for (int x = 0; x <= pictureBox.Width; x += step)
             {
                 Point p1 = new Point(x, 0);
                 Point p2 = new Point(x, pictureBox.Height);
-                DrawUtil.DrawLine(bitmap, p1, p2, color);
+                float width = (x / step) % 5 == 0 ? 2f : 1f;
+                DrawUtil.DrawLine(bitmap, p1, p2, color, width);
             }
 
             for (int y = 0; y <= pictureBox.Height; y += step)
             {
                 Point p1 = new Point(0, y);
                 Point p2 = new Point(pictureBox.Width, y);
-                DrawUtil.DrawLine(bitmap, p1, p2, color);
+                float width = (y / step) % 5 == 0 ? 2f : 1f;
+                DrawUtil.DrawLine(bitmap, p1, p2, color, width);
             }
         }
 
@@ -113,6 +115,7 @@ namespace ArknightsRoguelikeRec.Helper
         public static void DrawConnection(PictureBox pictureBox, NodeView nodeView1, NodeView nodeView2)
         {
             Bitmap bitmap = (Bitmap)pictureBox.BackgroundImage;
+            Color color = Color.Black;
 
             int offset = pictureBox.Location.X;
             int x1 = nodeView1.View.Location.X + nodeView1.View.Width / 2 - offset;
@@ -125,7 +128,7 @@ namespace ArknightsRoguelikeRec.Helper
             Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
             Point pt4 = new Point(x2, y2);
 
-            DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);
+            DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, color, 2f);
         }
 
         public static Button CreateDelConnectionBtn(Panel panel, NodeView nodeView1, NodeView nodeView2, Action onClick = null)
@@ -160,6 +163,7 @@ namespace ArknightsRoguelikeRec.Helper
         public static void DrawConnectionPreview(PictureBox pictureBox, NodeView nodeView)
         {
             Bitmap bitmap = (Bitmap)pictureBox.Image;
+            Color color = Color.Black;
 
             Point mousePos = Cursor.Position;
             Point locaction = pictureBox.PointToClient(mousePos);
@@ -175,7 +179,7 @@ namespace ArknightsRoguelikeRec.Helper
             Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
             Point pt4 = new Point(x2, y2);
 
-            DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, null, 2f);
+            DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, color, 2f);
         }
     }
 }

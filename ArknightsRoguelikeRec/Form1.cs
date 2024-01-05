@@ -43,6 +43,16 @@ namespace ArknightsRoguelikeRec
             }
         }
 
+        /*
+         TODO：
+        1. 可标记走过的节点（行动路径）；
+        2. 可标记当前游戏状态完成/未完成；
+        3. 存在未连接的节点时提醒；
+        4. 由密文板进行的节点转换记录（如将某节点通过板子变成树洞）；
+        5. 连接编辑状态高亮；
+        6. PictureBox表现优化；
+         */
+
         private void Form1_Load(object sender, EventArgs e)
         {
             DefineConfig.InitConfig();
