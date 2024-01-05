@@ -634,7 +634,7 @@ namespace ArknightsRoguelikeRec
         {
             if (e.KeyChar != (char)8)
             {
-                if ((e.KeyChar < '1') || (e.KeyChar > '4'))
+                if (!int.TryParse(e.KeyChar.ToString(), out int count) || count < GlobalDefine.ROW_MIN_NODE || count > GlobalDefine.ROW_MAX_NODE)
                 {
                     e.Handled = true;
                 }

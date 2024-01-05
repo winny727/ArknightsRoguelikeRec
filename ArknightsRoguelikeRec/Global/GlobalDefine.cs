@@ -6,6 +6,8 @@ namespace ArknightsRoguelikeRec
 {
     public static class GlobalDefine
     {
+        public const int PRESET_LAYER_COUNT = 5;
+
         public const int LAYER_BTN_GAP = 5;
         public const int LAYER_BTN_HEIGHT = 50;
 
@@ -19,6 +21,9 @@ namespace ArknightsRoguelikeRec
         public const int NODE_VIEW_SCROLL_GAP = 20;
 
         public const int CONNECTION_DELETE_BTN_SIZE = 25;
+
+        public const int ROW_MIN_NODE = 1;
+        public const int ROW_MAX_NODE = 4;
 
         public static readonly Font TEXT_FONT = new Font("黑体", 10.0f);
     }

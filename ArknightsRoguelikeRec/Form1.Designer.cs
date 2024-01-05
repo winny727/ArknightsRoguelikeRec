@@ -143,7 +143,7 @@
             this.linkLabelOpenSaveFolder.AutoSize = true;
             this.linkLabelOpenSaveFolder.Font = new System.Drawing.Font("黑体", 9F);
             this.linkLabelOpenSaveFolder.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(1145, 60);
+            this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(1196, 59);
             this.linkLabelOpenSaveFolder.Name = "linkLabelOpenSaveFolder";
             this.linkLabelOpenSaveFolder.Size = new System.Drawing.Size(101, 12);
             this.linkLabelOpenSaveFolder.TabIndex = 11;
@@ -306,7 +306,8 @@
             // 
             // Form1
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1309, 938);
             this.Controls.Add(this.panelAllLayer);
             this.Controls.Add(this.panelCurLayer);
