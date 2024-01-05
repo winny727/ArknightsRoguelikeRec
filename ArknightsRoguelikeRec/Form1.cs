@@ -470,6 +470,8 @@ namespace ArknightsRoguelikeRec
 
             if (IsEditMode)
             {
+                btnEditConnection.BackColor = Color.FromKnownColor(KnownColor.Highlight);
+                btnEditConnection.ForeColor = Color.FromKnownColor(KnownColor.HighlightText);
                 btnEditConnection.Text = "退出编辑";
                 Layer layer = GetCurLayer();
                 if (layer != null)
@@ -499,6 +501,8 @@ namespace ArknightsRoguelikeRec
             }
             else
             {
+                btnEditConnection.BackColor = Color.FromKnownColor(KnownColor.Control);
+                btnEditConnection.ForeColor = Color.FromKnownColor(KnownColor.ControlText);
                 btnEditConnection.Text = "编辑连接";
             }
 
