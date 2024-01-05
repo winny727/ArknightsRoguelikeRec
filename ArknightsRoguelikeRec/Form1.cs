@@ -167,7 +167,7 @@ namespace ArknightsRoguelikeRec
                 }
             }
 
-            //TODO Scroll复位
+            panelNodeView.AutoScrollPosition = new Point(0, 0);
 
             nodeViews.Clear();
             pictureBoxNode.BackgroundImage?.Dispose();
