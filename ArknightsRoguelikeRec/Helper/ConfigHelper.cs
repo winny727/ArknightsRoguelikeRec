@@ -34,6 +34,7 @@ namespace ArknightsRoguelikeRec.Helper
             {
                 if (string.IsNullOrEmpty(values[i]))
                 {
+                    list.Add(default);
                     continue;
                 }
 

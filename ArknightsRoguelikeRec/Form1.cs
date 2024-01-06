@@ -50,7 +50,6 @@ namespace ArknightsRoguelikeRec
         3. 存在未连接的节点时提醒；
         4. 由密文板进行的节点转换记录（如将某节点通过板子变成树洞）；
         5. 连接编辑状态高亮；
-        6. PictureBox表现优化；
          */
 
         private void Form1_Load(object sender, EventArgs e)
@@ -251,6 +250,12 @@ namespace ArknightsRoguelikeRec
                             for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
                             {
                                 int nodeID = layerConfig.NodeTypes[i];
+                                if (nodeID == 0)
+                                {
+                                    contextMenuStrip.Items.Add(new ToolStripSeparator());
+                                    continue;
+                                }
+
                                 NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
                                 if (nodeConfig == null)
                                 {
@@ -311,6 +316,13 @@ namespace ArknightsRoguelikeRec
                             for (int i = 0; i < nodeView.NodeConfig.SubTypes.Count; i++)
                             {
                                 string subType = nodeView.NodeConfig.SubTypes[i];
+
+                                if (string.IsNullOrEmpty(subType))
+                                {
+                                    contextMenuStrip.Items.Add(new ToolStripSeparator());
+                                    continue;
+                                }
+
                                 contextMenuStrip.Items.Add(subType, null, (_sender, _e) =>
                                 {
                                     node.SubType = subType;
