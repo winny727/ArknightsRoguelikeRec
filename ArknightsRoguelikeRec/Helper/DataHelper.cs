@@ -55,7 +55,7 @@ namespace ArknightsRoguelikeRec.Helper
             return null;
         }
 
-        public static string SaveData(SaveData saveData, string path)
+        public static string SaveData(SaveData saveData, string path, Formatting formatting = Formatting.Indented)
         {
             if (saveData == null)
             {
@@ -68,7 +68,7 @@ namespace ArknightsRoguelikeRec.Helper
             }
 
             saveData.UpdateTime = DateTime.Now;
-            string fileText = JsonConvert.SerializeObject(saveData, Formatting.Indented);
+            string fileText = JsonConvert.SerializeObject(saveData, formatting);
             string fileName = $"{saveData.UserName}_data{saveData.DataID}_{saveData.CreateTime:yyyyMMddHHmmss}.json";
             string fullPath = Path.Combine(path, fileName);
             File.WriteAllText(fullPath, fileText);
@@ -86,7 +86,7 @@ namespace ArknightsRoguelikeRec.Helper
             int index = 0;
             while (saveData.Layers.Exists(t => t.CustomName == customName))
             {
-                customName = $"{layerName} ({++index})";
+                customName = $"{layerName}({++index})";
             }
 
             Layer layer = new Layer()
@@ -144,10 +144,10 @@ namespace ArknightsRoguelikeRec.Helper
                 return;
             }
 
-            int nodeIndex1 = IndexOfNode(layer, node1);
-            int nodeIndex2 = IndexOfNode(layer, node2);
+            int index1 = IndexOfNode(layer, node1);
+            int index2 = IndexOfNode(layer, node2);
 
-            if (nodeIndex1 == nodeIndex2)
+            if (index1 == index2)
             {
                 return;
             }
@@ -155,7 +155,7 @@ namespace ArknightsRoguelikeRec.Helper
             for (int i = 0; i < layer.Connections.Count; i++)
             {
                 var connection = layer.Connections[i];
-                if ((connection.NodeIndex1 == nodeIndex1 && connection.NodeIndex2 == nodeIndex2) || (connection.NodeIndex1 == nodeIndex2 && connection.NodeIndex2 == nodeIndex1))
+                if ((connection.Idx1 == index1 && connection.Idx2 == index2) || (connection.Idx1 == index2 && connection.Idx2 == index1))
                 {
                     return;
                 }
@@ -163,8 +163,8 @@ namespace ArknightsRoguelikeRec.Helper
 
             layer.Connections.Add(new Connection()
             {
-                NodeIndex1 = nodeIndex1,
-                NodeIndex2 = nodeIndex2,
+                Idx1 = index1,
+                Idx2 = index2,
             });
         }
 

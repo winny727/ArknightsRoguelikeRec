@@ -103,7 +103,7 @@ namespace ArknightsRoguelikeRec.Helper
             //初始化节点次级类型选择按钮
             Button btnSubType = new Button();
             panel.Controls.Add(btnSubType);
-            btnSubType.Font = GlobalDefine.TEXT_FONT;
+            btnSubType.Font = GlobalDefine.SUB_TEXT_FONT;
             btnSubType.Text = node.SubType;
             btnSubType.Size = new Size(btnWidth, btnHeight);
             btnSubType.Location = new Point(nodeX + btnGap, nodeY + 2 * btnGap + btnHeight);

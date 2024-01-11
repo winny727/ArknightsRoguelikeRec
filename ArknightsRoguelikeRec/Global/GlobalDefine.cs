@@ -26,5 +26,6 @@ namespace ArknightsRoguelikeRec
         public const int ROW_MAX_NODE = 4;
 
         public static readonly Font TEXT_FONT = new Font("黑体", 10.0f);
+        public static readonly Font SUB_TEXT_FONT = new Font("黑体", 9.0f);
     }
 }

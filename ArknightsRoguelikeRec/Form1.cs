@@ -366,6 +366,29 @@ namespace ArknightsRoguelikeRec
                                 });
                             }
 
+                            //树洞层类型
+                            if (nodeView.NodeConfig.ExtraLayer > 0)
+                            {
+                                for (int i = 0; i < SaveData.Layers.Count; i++)
+                                {
+                                    Layer curLayer = SaveData.Layers[i];
+                                    if (curLayer == layer)
+                                    {
+                                        continue;
+                                    }
+
+                                    LayerConfig curLayerConfig = ConfigHelper.GetLayerConfigByName(curLayer.Name);
+                                    if (curLayerConfig != null && curLayerConfig.ID == nodeView.NodeConfig.ExtraLayer)
+                                    {
+                                        contextMenuStrip.Items.Add(curLayer.CustomName, null, (_sender, _e) =>
+                                        {
+                                            node.SubType = curLayer.CustomName;
+                                            nodeView.SubTypeView.Text = curLayer.CustomName;
+                                        });
+                                    }
+                                }
+                            }
+
                             //显示清除选项
                             if (!string.IsNullOrEmpty(nodeView.SubTypeView.Text))
                             {
@@ -434,8 +457,8 @@ namespace ArknightsRoguelikeRec
             for (int i = 0; i < layer.Connections.Count; i++)
             {
                 var connection = layer.Connections[i];
-                NodeView nodeView1 = nodeViews[connection.NodeIndex1];
-                NodeView nodeView2 = nodeViews[connection.NodeIndex2];
+                NodeView nodeView1 = nodeViews[connection.Idx1];
+                NodeView nodeView2 = nodeViews[connection.Idx2];
                 UIHelper.DrawConnection(pictureBoxNode, nodeView1, nodeView2);
             }
         }
@@ -447,10 +470,10 @@ namespace ArknightsRoguelikeRec
                 return false;
             }
 
-            int nodeIndex1 = nodeViews.IndexOf(nodeView1);
-            int nodeIndex2 = nodeViews.IndexOf(nodeView2);
+            int index1 = nodeViews.IndexOf(nodeView1);
+            int index2 = nodeViews.IndexOf(nodeView2);
 
-            if (nodeIndex1 < 0 || nodeIndex2 < 0)
+            if (index1 < 0 || index2 < 0)
             {
                 return false;
             }
@@ -458,7 +481,7 @@ namespace ArknightsRoguelikeRec
             for (int i = 0; i < layer.Connections.Count; i++)
             {
                 var connection = layer.Connections[i];
-                if ((connection.NodeIndex1 == nodeIndex1 && connection.NodeIndex2 == nodeIndex2) || (connection.NodeIndex1 == nodeIndex2 && connection.NodeIndex2 == nodeIndex1))
+                if ((connection.Idx1 == index1 && connection.Idx2 == index2) || (connection.Idx1 == index2 && connection.Idx2 == index1))
                 {
                     MessageBox.Show("选中节点间已存在连接", "连接失败");
                     return false;
@@ -539,8 +562,8 @@ namespace ArknightsRoguelikeRec
                     for (int i = 0; i < layer.Connections.Count; i++)
                     {
                         var connection = layer.Connections[i];
-                        NodeView nodeView1 = nodeViews[connection.NodeIndex1];
-                        NodeView nodeView2 = nodeViews[connection.NodeIndex2];
+                        NodeView nodeView1 = nodeViews[connection.Idx1];
+                        NodeView nodeView2 = nodeViews[connection.Idx2];
                         Button btnDel = null;
                         btnDel = UIHelper.CreateDelConnectionBtn(panelNodeView, nodeView1, nodeView2, () =>
                         {
