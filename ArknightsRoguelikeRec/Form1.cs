@@ -31,6 +31,9 @@ namespace ArknightsRoguelikeRec
         public Form1()
         {
             InitializeComponent();
+
+            comboBoxLayerType.DisplayMember = "Key";
+            comboBoxLayerType.ValueMember = "Value";
         }
 
         protected override CreateParams CreateParams
@@ -107,7 +110,7 @@ namespace ArknightsRoguelikeRec
             for (int i = 0; i < SaveData.Layers.Count; i++)
             {
                 int index = i;
-                UIHelper.CreateLayerBtn(panelLayer, SaveData.Layers[i].Name, () =>
+                UIHelper.CreateLayerBtn(panelLayer, SaveData.Layers[i].CustomName, () =>
                 {
                     SelectedLayer = index;
                     UpdateLayerSelectedHighlight();
@@ -127,7 +130,7 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateCurLayerView()
         {
-            UpdateNodeText();
+            UpdateLayerData();
             UpdateNodeView();
 
             Layer layer = GetCurLayer();
@@ -143,17 +146,49 @@ namespace ArknightsRoguelikeRec
             return null;
         }
 
-        private void UpdateNodeText()
+        private void UpdateLayerData()
         {
+            comboBoxLayerType.Items.Clear();
+            comboBoxLayerType.Visible = false;
+            labelLayerType.Visible = false;
             textBoxNode.Text = string.Empty;
             btnApply.Visible = false;
             btnCancel.Visible = false;
+            labelNodeTips.Visible = false;
 
             Layer layer = GetCurLayer();
             if (layer == null)
             {
                 return;
             }
+
+            //层级类型
+            LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);
+            if (layerConfig?.LayerTypes != null && layerConfig.LayerTypes.Count > 0)
+            {
+                comboBoxLayerType.Items.Add(new Item("（无）", null));
+                for (int i = 0; i < layerConfig.LayerTypes.Count; i++)
+                {
+                    string layerType = layerConfig.LayerTypes[i];
+                    comboBoxLayerType.Items.Add(new Item(layerType, layerType));
+                }
+
+                int index = 0;
+                for (int i = 0; i < comboBoxLayerType.Items.Count; i++)
+                {
+                    Item item = (Item)comboBoxLayerType.Items[i];
+                    if (item.Value == layer.Type)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                comboBoxLayerType.SelectedIndex = index;
+                comboBoxLayerType.Visible = true;
+                labelLayerType.Visible = true;
+            }
+
 
             //节点分布数字
             string nodeText = string.Empty;
@@ -165,6 +200,7 @@ namespace ArknightsRoguelikeRec
 
             btnApply.Visible = false;
             btnCancel.Visible = false;
+            labelNodeTips.Visible = layer.Nodes.Count <= 0;
         }
 
         private void UpdateNodeView()
@@ -245,7 +281,7 @@ namespace ArknightsRoguelikeRec
 
                         //选择节点类型
                         ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                        if (layerConfig.NodeTypes != null)
+                        if (layerConfig?.NodeTypes != null)
                         {
                             for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
                             {
@@ -359,7 +395,7 @@ namespace ArknightsRoguelikeRec
                     nodeView.SubTypeView.Click += OnNodeSubTypeClick;
 
                     //初始化NodeConfig
-                    if (layerConfig.NodeTypes != null)
+                    if (layerConfig?.NodeTypes != null)
                     {
                         for (int k = 0; k < layerConfig.NodeTypes.Count; k++)
                         {
@@ -568,7 +604,7 @@ namespace ArknightsRoguelikeRec
                 return;
             }
 
-            if (MessageBox.Show($"是否确认删除选中层\n{layer.Name}", "删除", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show($"是否确认删除选中层\n{layer.CustomName}", "删除", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 SaveData.Layers.RemoveAt(SelectedLayer);
                 if (SelectedLayer >= SaveData.Layers.Count)
@@ -651,6 +687,7 @@ namespace ArknightsRoguelikeRec
         {
             btnApply.Visible = true;
             btnCancel.Visible = true;
+            labelNodeTips.Visible = false;
         }
 
         private void textBoxNode_KeyPress(object sender, KeyPressEventArgs e)
@@ -666,9 +703,16 @@ namespace ArknightsRoguelikeRec
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            UpdateNodeText();
+            UpdateLayerData();
             btnApply.Visible = false;
             btnCancel.Visible = false;
+            labelNodeTips.Visible = false;
+
+            Layer layer = GetCurLayer();
+            if (layer != null)
+            {
+                labelNodeTips.Visible = layer.Nodes.Count <= 0;
+            }
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -738,6 +782,10 @@ namespace ArknightsRoguelikeRec
             }
 
             UpdateNodeView();
+
+            btnApply.Visible = false;
+            btnCancel.Visible = false;
+            labelNodeTips.Visible = layer.Nodes.Count <= 0;
         }
 
         private void panelNodeView_Scroll(object sender, ScrollEventArgs e)
@@ -805,6 +853,24 @@ namespace ArknightsRoguelikeRec
             {
                 btnSave_Click(sender, e);
             }
+        }
+
+        private void comboBoxLayerType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Layer layer = GetCurLayer();
+            if (layer == null)
+            {
+                return;
+            }
+
+            int index = comboBoxLayerType.SelectedIndex;
+            if (index < 0 || index >= comboBoxLayerType.Items.Count)
+            {
+                return;
+            }
+
+            Item item = (Item)comboBoxLayerType.Items[index];
+            layer.Type = item.Value;
         }
     }
 }

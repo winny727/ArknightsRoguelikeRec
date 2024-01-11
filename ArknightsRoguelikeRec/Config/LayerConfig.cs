@@ -8,6 +8,7 @@ namespace ArknightsRoguelikeRec.Config
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public List<string> LayerTypes { get; set; }
         public List<int> NodeTypes { get; set; }
     }
 }

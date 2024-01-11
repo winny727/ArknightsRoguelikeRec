@@ -7,6 +7,8 @@ namespace ArknightsRoguelikeRec.DataModel
     public class Layer
     {
         public string Name { get; set; }
+        public string CustomName { get; set; }
+        public string Type { get; set; }
         public List<List<Node>> Nodes { get; set;} = new List<List<Node>>();
         public List<Connection> Connections { get; set; } = new List<Connection>();
     }

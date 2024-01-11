@@ -31,13 +31,16 @@ namespace ArknightsRoguelikeRec.Config
             {
                 int layerID = line.GetValue<int>("layerID");
                 string layerName = line.GetValue("layerName");
+                string layerTypes = line.GetValue("layerTypes");
                 string nodeTypes = line.GetValue("nodeTypes");
+                List<string> layerTypesList = ConfigHelper.ParseList<string>(layerTypes);
                 List<int> nodeTypesList = ConfigHelper.ParseList<int>(nodeTypes);
 
                 LayerConfig layerConfig = new LayerConfig()
                 {
                     ID = layerID,
                     Name = layerName,
+                    LayerTypes = layerTypesList,
                     NodeTypes = nodeTypesList,
                 };
 

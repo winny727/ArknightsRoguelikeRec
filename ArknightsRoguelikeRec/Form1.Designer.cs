@@ -52,6 +52,9 @@
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.labelLayerType = new System.Windows.Forms.Label();
+            this.comboBoxLayerType = new System.Windows.Forms.ComboBox();
+            this.labelNodeTips = new System.Windows.Forms.Label();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelNodeView.SuspendLayout();
@@ -63,16 +66,16 @@
             // 
             this.labelTitleLayer.AutoSize = true;
             this.labelTitleLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.labelTitleLayer.Location = new System.Drawing.Point(3, 17);
+            this.labelTitleLayer.Location = new System.Drawing.Point(20, 23);
             this.labelTitleLayer.Name = "labelTitleLayer";
             this.labelTitleLayer.Size = new System.Drawing.Size(49, 19);
             this.labelTitleLayer.TabIndex = 1;
-            this.labelTitleLayer.Text = "层数";
+            this.labelTitleLayer.Text = "层级";
             // 
             // btnAddLayer
             // 
             this.btnAddLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.btnAddLayer.Location = new System.Drawing.Point(305, 3);
+            this.btnAddLayer.Location = new System.Drawing.Point(305, 5);
             this.btnAddLayer.Name = "btnAddLayer";
             this.btnAddLayer.Size = new System.Drawing.Size(56, 56);
             this.btnAddLayer.TabIndex = 3;
@@ -97,7 +100,7 @@
             this.panelInfo.Controls.Add(this.textBoxUserID);
             this.panelInfo.Location = new System.Drawing.Point(444, 12);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(586, 169);
+            this.panelInfo.Size = new System.Drawing.Size(586, 120);
             this.panelInfo.TabIndex = 1;
             // 
             // labelNumber
@@ -186,23 +189,26 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.labelNodeTips);
+            this.panelCurLayer.Controls.Add(this.comboBoxLayerType);
+            this.panelCurLayer.Controls.Add(this.labelLayerType);
             this.panelCurLayer.Controls.Add(this.btnEditConnection);
             this.panelCurLayer.Controls.Add(this.panelNodeView);
             this.panelCurLayer.Controls.Add(this.btnCancel);
             this.panelCurLayer.Controls.Add(this.btnApply);
             this.panelCurLayer.Controls.Add(this.labelNode);
             this.panelCurLayer.Controls.Add(this.textBoxNode);
-            this.panelCurLayer.Location = new System.Drawing.Point(444, 187);
+            this.panelCurLayer.Location = new System.Drawing.Point(444, 138);
             this.panelCurLayer.Name = "panelCurLayer";
-            this.panelCurLayer.Size = new System.Drawing.Size(853, 739);
+            this.panelCurLayer.Size = new System.Drawing.Size(853, 785);
             this.panelCurLayer.TabIndex = 0;
             // 
             // btnEditConnection
             // 
-            this.btnEditConnection.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnEditConnection.Location = new System.Drawing.Point(766, 19);
+            this.btnEditConnection.Font = new System.Drawing.Font("黑体", 12F);
+            this.btnEditConnection.Location = new System.Drawing.Point(760, 9);
             this.btnEditConnection.Name = "btnEditConnection";
-            this.btnEditConnection.Size = new System.Drawing.Size(83, 30);
+            this.btnEditConnection.Size = new System.Drawing.Size(84, 84);
             this.btnEditConnection.TabIndex = 10;
             this.btnEditConnection.Text = "编辑连接";
             this.btnEditConnection.UseVisualStyleBackColor = true;
@@ -213,7 +219,7 @@
             this.panelNodeView.AutoScroll = true;
             this.panelNodeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelNodeView.Controls.Add(this.pictureBoxNode);
-            this.panelNodeView.Location = new System.Drawing.Point(3, 55);
+            this.panelNodeView.Location = new System.Drawing.Point(3, 101);
             this.panelNodeView.Name = "panelNodeView";
             this.panelNodeView.Size = new System.Drawing.Size(847, 681);
             this.panelNodeView.TabIndex = 9;
@@ -235,7 +241,7 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnCancel.Location = new System.Drawing.Point(590, 19);
+            this.btnCancel.Location = new System.Drawing.Point(592, 60);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(83, 30);
             this.btnCancel.TabIndex = 7;
@@ -246,7 +252,7 @@
             // btnApply
             // 
             this.btnApply.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnApply.Location = new System.Drawing.Point(501, 19);
+            this.btnApply.Location = new System.Drawing.Point(503, 60);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(83, 30);
             this.btnApply.TabIndex = 6;
@@ -258,7 +264,7 @@
             // 
             this.labelNode.AutoSize = true;
             this.labelNode.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelNode.Location = new System.Drawing.Point(36, 22);
+            this.labelNode.Location = new System.Drawing.Point(30, 68);
             this.labelNode.Name = "labelNode";
             this.labelNode.Size = new System.Drawing.Size(63, 14);
             this.labelNode.TabIndex = 4;
@@ -267,7 +273,7 @@
             // textBoxNode
             // 
             this.textBoxNode.Font = new System.Drawing.Font("黑体", 10F);
-            this.textBoxNode.Location = new System.Drawing.Point(141, 19);
+            this.textBoxNode.Location = new System.Drawing.Point(117, 65);
             this.textBoxNode.MaxLength = 16;
             this.textBoxNode.Name = "textBoxNode";
             this.textBoxNode.Size = new System.Drawing.Size(354, 23);
@@ -289,7 +295,7 @@
             // btnRemoveLayer
             // 
             this.btnRemoveLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.btnRemoveLayer.Location = new System.Drawing.Point(367, 3);
+            this.btnRemoveLayer.Location = new System.Drawing.Point(367, 5);
             this.btnRemoveLayer.Name = "btnRemoveLayer";
             this.btnRemoveLayer.Size = new System.Drawing.Size(56, 56);
             this.btnRemoveLayer.TabIndex = 4;
@@ -302,6 +308,39 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 1;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // labelLayerType
+            // 
+            this.labelLayerType.AutoSize = true;
+            this.labelLayerType.Font = new System.Drawing.Font("黑体", 10F);
+            this.labelLayerType.Location = new System.Drawing.Point(30, 25);
+            this.labelLayerType.Name = "labelLayerType";
+            this.labelLayerType.Size = new System.Drawing.Size(63, 14);
+            this.labelLayerType.TabIndex = 11;
+            this.labelLayerType.Text = "层级类型";
+            // 
+            // comboBoxLayerType
+            // 
+            this.comboBoxLayerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLayerType.DropDownWidth = 500;
+            this.comboBoxLayerType.Font = new System.Drawing.Font("黑体", 10F);
+            this.comboBoxLayerType.FormattingEnabled = true;
+            this.comboBoxLayerType.Location = new System.Drawing.Point(117, 22);
+            this.comboBoxLayerType.Name = "comboBoxLayerType";
+            this.comboBoxLayerType.Size = new System.Drawing.Size(354, 21);
+            this.comboBoxLayerType.TabIndex = 12;
+            this.comboBoxLayerType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLayerType_SelectedIndexChanged);
+            // 
+            // labelNodeTips
+            // 
+            this.labelNodeTips.AutoSize = true;
+            this.labelNodeTips.Font = new System.Drawing.Font("黑体", 10F);
+            this.labelNodeTips.ForeColor = System.Drawing.Color.Red;
+            this.labelNodeTips.Location = new System.Drawing.Point(500, 68);
+            this.labelNodeTips.Name = "labelNodeTips";
+            this.labelNodeTips.Size = new System.Drawing.Size(175, 14);
+            this.labelNodeTips.TabIndex = 13;
+            this.labelNodeTips.Text = "请先填写当前层的节点分布";
             // 
             // Form1
             // 
@@ -362,6 +401,9 @@
         private System.Windows.Forms.PictureBox pictureBoxNode;
         private System.Windows.Forms.Button btnEditConnection;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ComboBox comboBoxLayerType;
+        private System.Windows.Forms.Label labelLayerType;
+        private System.Windows.Forms.Label labelNodeTips;
     }
 }
 

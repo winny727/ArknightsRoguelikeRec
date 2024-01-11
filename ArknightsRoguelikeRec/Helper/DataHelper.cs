@@ -82,9 +82,17 @@ namespace ArknightsRoguelikeRec.Helper
                 return;
             }
 
+            string customName = layerName;
+            int index = 0;
+            while (saveData.Layers.Exists(t => t.CustomName == customName))
+            {
+                customName = $"{layerName} ({++index})";
+            }
+
             Layer layer = new Layer()
             {
                 Name = layerName,
+                CustomName = customName,
             };
             saveData.Layers.Add(layer);
         }
