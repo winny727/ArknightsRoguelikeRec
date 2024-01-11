@@ -10,6 +10,7 @@ namespace ArknightsRoguelikeRec.DataModel
         public string DataID { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
+        public int Version { get; set; }
         public List<Layer> Layers { get; set; } = new List<Layer>();
     }
 }

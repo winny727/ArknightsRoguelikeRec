@@ -32,6 +32,7 @@ namespace ArknightsRoguelikeRec
         {
             InitializeComponent();
 
+            textBoxNode.MaxLength = GlobalDefine.MAX_COLUMU;
             comboBoxLayerType.DisplayMember = "Key";
             comboBoxLayerType.ValueMember = "Value";
         }
@@ -717,7 +718,7 @@ namespace ArknightsRoguelikeRec
         {
             if (e.KeyChar != (char)8)
             {
-                if (!int.TryParse(e.KeyChar.ToString(), out int count) || count < GlobalDefine.ROW_MIN_NODE || count > GlobalDefine.ROW_MAX_NODE)
+                if (!int.TryParse(e.KeyChar.ToString(), out int count) || count < GlobalDefine.COLUMN_MIN_NODE || count > GlobalDefine.COLUMN_MAX_NODE)
                 {
                     e.Handled = true;
                 }

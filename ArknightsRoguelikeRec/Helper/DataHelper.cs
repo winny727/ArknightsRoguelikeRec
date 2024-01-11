@@ -17,6 +17,7 @@ namespace ArknightsRoguelikeRec.Helper
                 DataID = dataID,
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now,
+                Version = GlobalDefine.VERSION,
             };
 
             //预设，自动添加一层到五层
@@ -68,6 +69,7 @@ namespace ArknightsRoguelikeRec.Helper
             }
 
             saveData.UpdateTime = DateTime.Now;
+            saveData.Version = GlobalDefine.VERSION;
             string fileText = JsonConvert.SerializeObject(saveData, formatting);
             string fileName = $"{saveData.UserName}_data{saveData.DataID}_{saveData.CreateTime:yyyyMMddHHmmss}.json";
             string fullPath = Path.Combine(path, fileName);
