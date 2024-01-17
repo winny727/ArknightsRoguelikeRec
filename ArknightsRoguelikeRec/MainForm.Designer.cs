@@ -1,6 +1,6 @@
 ﻿namespace ArknightsRoguelikeRec
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -42,6 +42,10 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
+            this.btnComment = new System.Windows.Forms.Button();
+            this.labelNodeTips = new System.Windows.Forms.Label();
+            this.comboBoxLayerType = new System.Windows.Forms.ComboBox();
+            this.labelLayerType = new System.Windows.Forms.Label();
             this.btnEditConnection = new System.Windows.Forms.Button();
             this.panelNodeView = new System.Windows.Forms.Panel();
             this.pictureBoxNode = new System.Windows.Forms.PictureBox();
@@ -52,9 +56,6 @@
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.labelLayerType = new System.Windows.Forms.Label();
-            this.comboBoxLayerType = new System.Windows.Forms.ComboBox();
-            this.labelNodeTips = new System.Windows.Forms.Label();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelNodeView.SuspendLayout();
@@ -189,6 +190,7 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.btnComment);
             this.panelCurLayer.Controls.Add(this.labelNodeTips);
             this.panelCurLayer.Controls.Add(this.comboBoxLayerType);
             this.panelCurLayer.Controls.Add(this.labelLayerType);
@@ -202,6 +204,50 @@
             this.panelCurLayer.Name = "panelCurLayer";
             this.panelCurLayer.Size = new System.Drawing.Size(853, 785);
             this.panelCurLayer.TabIndex = 0;
+            // 
+            // btnComment
+            // 
+            this.btnComment.Font = new System.Drawing.Font("黑体", 12F);
+            this.btnComment.Location = new System.Drawing.Point(670, 9);
+            this.btnComment.Name = "btnComment";
+            this.btnComment.Size = new System.Drawing.Size(84, 84);
+            this.btnComment.TabIndex = 14;
+            this.btnComment.Text = "备注";
+            this.btnComment.UseVisualStyleBackColor = true;
+            this.btnComment.Click += new System.EventHandler(this.btnComment_Click);
+            // 
+            // labelNodeTips
+            // 
+            this.labelNodeTips.AutoSize = true;
+            this.labelNodeTips.Font = new System.Drawing.Font("黑体", 10F);
+            this.labelNodeTips.ForeColor = System.Drawing.Color.Red;
+            this.labelNodeTips.Location = new System.Drawing.Point(483, 68);
+            this.labelNodeTips.Name = "labelNodeTips";
+            this.labelNodeTips.Size = new System.Drawing.Size(175, 14);
+            this.labelNodeTips.TabIndex = 13;
+            this.labelNodeTips.Text = "请先填写当前层的节点分布";
+            // 
+            // comboBoxLayerType
+            // 
+            this.comboBoxLayerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLayerType.DropDownWidth = 500;
+            this.comboBoxLayerType.Font = new System.Drawing.Font("黑体", 10F);
+            this.comboBoxLayerType.FormattingEnabled = true;
+            this.comboBoxLayerType.Location = new System.Drawing.Point(117, 22);
+            this.comboBoxLayerType.Name = "comboBoxLayerType";
+            this.comboBoxLayerType.Size = new System.Drawing.Size(354, 21);
+            this.comboBoxLayerType.TabIndex = 12;
+            this.comboBoxLayerType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLayerType_SelectedIndexChanged);
+            // 
+            // labelLayerType
+            // 
+            this.labelLayerType.AutoSize = true;
+            this.labelLayerType.Font = new System.Drawing.Font("黑体", 10F);
+            this.labelLayerType.Location = new System.Drawing.Point(30, 25);
+            this.labelLayerType.Name = "labelLayerType";
+            this.labelLayerType.Size = new System.Drawing.Size(63, 14);
+            this.labelLayerType.TabIndex = 11;
+            this.labelLayerType.Text = "层级类型";
             // 
             // btnEditConnection
             // 
@@ -241,7 +287,7 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnCancel.Location = new System.Drawing.Point(592, 60);
+            this.btnCancel.Location = new System.Drawing.Point(575, 60);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(83, 30);
             this.btnCancel.TabIndex = 7;
@@ -252,7 +298,7 @@
             // btnApply
             // 
             this.btnApply.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnApply.Location = new System.Drawing.Point(503, 60);
+            this.btnApply.Location = new System.Drawing.Point(486, 60);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(83, 30);
             this.btnApply.TabIndex = 6;
@@ -309,40 +355,7 @@
             this.timer1.Interval = 1;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // labelLayerType
-            // 
-            this.labelLayerType.AutoSize = true;
-            this.labelLayerType.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelLayerType.Location = new System.Drawing.Point(30, 25);
-            this.labelLayerType.Name = "labelLayerType";
-            this.labelLayerType.Size = new System.Drawing.Size(63, 14);
-            this.labelLayerType.TabIndex = 11;
-            this.labelLayerType.Text = "层级类型";
-            // 
-            // comboBoxLayerType
-            // 
-            this.comboBoxLayerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxLayerType.DropDownWidth = 500;
-            this.comboBoxLayerType.Font = new System.Drawing.Font("黑体", 10F);
-            this.comboBoxLayerType.FormattingEnabled = true;
-            this.comboBoxLayerType.Location = new System.Drawing.Point(117, 22);
-            this.comboBoxLayerType.Name = "comboBoxLayerType";
-            this.comboBoxLayerType.Size = new System.Drawing.Size(354, 21);
-            this.comboBoxLayerType.TabIndex = 12;
-            this.comboBoxLayerType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLayerType_SelectedIndexChanged);
-            // 
-            // labelNodeTips
-            // 
-            this.labelNodeTips.AutoSize = true;
-            this.labelNodeTips.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelNodeTips.ForeColor = System.Drawing.Color.Red;
-            this.labelNodeTips.Location = new System.Drawing.Point(500, 68);
-            this.labelNodeTips.Name = "labelNodeTips";
-            this.labelNodeTips.Size = new System.Drawing.Size(175, 14);
-            this.labelNodeTips.TabIndex = 13;
-            this.labelNodeTips.Text = "请先填写当前层的节点分布";
-            // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -359,7 +372,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "明日方舟肉鸽节点记录工具";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -404,6 +417,7 @@
         private System.Windows.Forms.ComboBox comboBoxLayerType;
         private System.Windows.Forms.Label labelLayerType;
         private System.Windows.Forms.Label labelNodeTips;
+        private System.Windows.Forms.Button btnComment;
     }
 }
 

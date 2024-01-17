@@ -6,6 +6,7 @@ using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.ViewModel;
 using System.Drawing.Drawing2D;
+using System.Xml.Linq;
 
 namespace ArknightsRoguelikeRec.Helper
 {
@@ -180,6 +181,31 @@ namespace ArknightsRoguelikeRec.Helper
             Point pt4 = new Point(x2, y2);
 
             DrawUtil.DrawBezier(bitmap, pt1, pt2, pt3, pt4, color, 2f);
+        }
+
+        public static void AddSeparator(ContextMenuStrip contextMenuStrip)
+        {
+            if (contextMenuStrip.Items.Count > 0)
+            {
+                contextMenuStrip.Items.Add(new ToolStripSeparator());
+            }
+        }
+
+        public static void AddSeparatedMenuItem(ContextMenuStrip contextMenuStrip, string name, Action onAction)
+        {
+            AddSeparator(contextMenuStrip);
+            contextMenuStrip.Items.Add(name, null, (_sender, _e) =>
+            {
+                onAction?.Invoke();
+            });
+        }
+
+        public static void ShowMenu(ContextMenuStrip contextMenuStrip)
+        {
+            if (contextMenuStrip.Items.Count > 0)
+            {
+                contextMenuStrip.Show(Cursor.Position);
+            }
         }
     }
 }

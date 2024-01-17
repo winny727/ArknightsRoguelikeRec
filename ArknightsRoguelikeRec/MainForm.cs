@@ -11,7 +11,7 @@ using ArknightsRoguelikeRec.Helper;
 
 namespace ArknightsRoguelikeRec
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         public string SavePath = Environment.CurrentDirectory + "\\SaveData";
 
@@ -24,11 +24,12 @@ namespace ArknightsRoguelikeRec
 
         private List<NodeView> nodeViews = new List<NodeView>();
         private List<Button> delConnectionBtns = new List<Button>();
+        private InputForm inputForm = new InputForm();
 
         private bool isDragging = false;
         private Point lastMousePos;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -289,7 +290,7 @@ namespace ArknightsRoguelikeRec
                                 int nodeID = layerConfig.NodeTypes[i];
                                 if (nodeID == 0)
                                 {
-                                    contextMenuStrip.Items.Add(new ToolStripSeparator());
+                                    UIHelper.AddSeparator(contextMenuStrip);
                                     continue;
                                 }
 
@@ -310,6 +311,7 @@ namespace ArknightsRoguelikeRec
                                     node.Type = nodeConfig.Type;
                                     nodeView.TypeView.Text = nodeConfig.Type;
                                     nodeView.NodeConfig = nodeConfig;
+                                    IsDirty = true;
                                 });
                             }
                         }
@@ -317,12 +319,7 @@ namespace ArknightsRoguelikeRec
                         //显示清除选项
                         if (!string.IsNullOrEmpty(nodeView.TypeView.Text) || !string.IsNullOrEmpty(nodeView.SubTypeView.Text))
                         {
-                            if (contextMenuStrip.Items.Count > 0)
-                            {
-                                contextMenuStrip.Items.Add(new ToolStripSeparator());
-                            }
-
-                            contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
+                            UIHelper.AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
                             {
                                 node.Type = string.Empty;
                                 nodeView.TypeView.Text = string.Empty;
@@ -330,13 +327,23 @@ namespace ArknightsRoguelikeRec
 
                                 node.SubType = string.Empty;
                                 nodeView.SubTypeView.Text = string.Empty;
+                                IsDirty = true;
                             });
                         }
 
-                        if (contextMenuStrip.Items.Count > 0)
+                        //显示备注选项
+                        UIHelper.AddSeparatedMenuItem(contextMenuStrip, "备注", () =>
                         {
-                            contextMenuStrip.Show(Cursor.Position);
-                        }
+                            inputForm.Content = node.Comment;
+                            if (inputForm.ShowDialog() == DialogResult.OK)
+                            {
+                                node.Comment = inputForm.Content;
+                                IsDirty = true;
+                            }
+                        });
+
+                        //显示菜单
+                        UIHelper.ShowMenu(contextMenuStrip);
                     }
 
                     void OnNodeSubTypeClick(object sender, EventArgs e)
@@ -356,7 +363,7 @@ namespace ArknightsRoguelikeRec
 
                                 if (string.IsNullOrEmpty(subType))
                                 {
-                                    contextMenuStrip.Items.Add(new ToolStripSeparator());
+                                    UIHelper.AddSeparator(contextMenuStrip);
                                     continue;
                                 }
 
@@ -364,6 +371,7 @@ namespace ArknightsRoguelikeRec
                                 {
                                     node.SubType = subType;
                                     nodeView.SubTypeView.Text = subType;
+                                    IsDirty = true;
                                 });
                             }
 
@@ -385,6 +393,7 @@ namespace ArknightsRoguelikeRec
                                         {
                                             node.SubType = curLayer.CustomName;
                                             nodeView.SubTypeView.Text = curLayer.CustomName;
+                                            IsDirty = true;
                                         });
                                     }
                                 }
@@ -393,22 +402,27 @@ namespace ArknightsRoguelikeRec
                             //显示清除选项
                             if (!string.IsNullOrEmpty(nodeView.SubTypeView.Text))
                             {
-                                if (contextMenuStrip.Items.Count > 0)
-                                {
-                                    contextMenuStrip.Items.Add(new ToolStripSeparator());
-                                }
-
-                                contextMenuStrip.Items.Add("清除", null, (_sender, _e) =>
+                                UIHelper.AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
                                 {
                                     node.SubType = string.Empty;
                                     nodeView.SubTypeView.Text = string.Empty;
+                                    IsDirty = true;
                                 });
                             }
 
-                            if (contextMenuStrip.Items.Count > 0)
+                            //显示备注选项
+                            UIHelper.AddSeparatedMenuItem(contextMenuStrip, "备注", () =>
                             {
-                                contextMenuStrip.Show(Cursor.Position);
-                            }
+                                inputForm.Content = node.Comment;
+                                if (inputForm.ShowDialog() == DialogResult.OK)
+                                {
+                                    node.Comment = inputForm.Content;
+                                    IsDirty = true;
+                                }
+                            });
+
+                            //显示菜单
+                            UIHelper.ShowMenu(contextMenuStrip);
                         }
                     }
 
@@ -588,6 +602,7 @@ namespace ArknightsRoguelikeRec
                 btnEditConnection.BackColor = Color.FromKnownColor(KnownColor.Control);
                 btnEditConnection.ForeColor = Color.FromKnownColor(KnownColor.ControlText);
                 btnEditConnection.Text = "编辑连接";
+                btnEditConnection.UseVisualStyleBackColor = true;
             }
 
             ////隐藏类型选择按钮
@@ -895,6 +910,22 @@ namespace ArknightsRoguelikeRec
 
             Item item = (Item)comboBoxLayerType.Items[index];
             layer.Type = item.Value;
+        }
+
+        private void btnComment_Click(object sender, EventArgs e)
+        {
+            Layer layer = GetCurLayer();
+            if (layer == null)
+            {
+                return;
+            }
+
+            inputForm.Content = layer.Comment;
+            if (inputForm.ShowDialog() == DialogResult.OK)
+            {
+                layer.Comment = inputForm.Content;
+                IsDirty = true;
+            }
         }
     }
 }
