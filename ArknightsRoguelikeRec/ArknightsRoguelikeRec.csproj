@@ -78,6 +78,7 @@
     <Compile Include="DataModel\Layer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\ControlModifyScope.cs" />
     <Compile Include="Utils\DrawUtil.cs" />
     <Compile Include="Utils\MapList.cs" />
     <Compile Include="Utils\TableReader.cs" />

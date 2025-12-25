@@ -66,19 +66,17 @@
             // labelTitleLayer
             // 
             this.labelTitleLayer.AutoSize = true;
-            this.labelTitleLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.labelTitleLayer.Location = new System.Drawing.Point(20, 23);
+            this.labelTitleLayer.Location = new System.Drawing.Point(15, 15);
             this.labelTitleLayer.Name = "labelTitleLayer";
-            this.labelTitleLayer.Size = new System.Drawing.Size(49, 19);
+            this.labelTitleLayer.Size = new System.Drawing.Size(29, 12);
             this.labelTitleLayer.TabIndex = 1;
             this.labelTitleLayer.Text = "层级";
             // 
             // btnAddLayer
             // 
-            this.btnAddLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.btnAddLayer.Location = new System.Drawing.Point(305, 5);
+            this.btnAddLayer.Location = new System.Drawing.Point(141, 10);
             this.btnAddLayer.Name = "btnAddLayer";
-            this.btnAddLayer.Size = new System.Drawing.Size(56, 56);
+            this.btnAddLayer.Size = new System.Drawing.Size(75, 23);
             this.btnAddLayer.TabIndex = 3;
             this.btnAddLayer.Text = "+";
             this.btnAddLayer.UseVisualStyleBackColor = true;
@@ -88,9 +86,9 @@
             // 
             this.panelLayer.AutoScroll = true;
             this.panelLayer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelLayer.Location = new System.Drawing.Point(3, 65);
+            this.panelLayer.Location = new System.Drawing.Point(3, 39);
             this.panelLayer.Name = "panelLayer";
-            this.panelLayer.Size = new System.Drawing.Size(420, 846);
+            this.panelLayer.Size = new System.Drawing.Size(294, 659);
             this.panelLayer.TabIndex = 2;
             // 
             // panelInfo
@@ -99,55 +97,50 @@
             this.panelInfo.Controls.Add(this.textBoxNumber);
             this.panelInfo.Controls.Add(this.labelUserID);
             this.panelInfo.Controls.Add(this.textBoxUserID);
-            this.panelInfo.Location = new System.Drawing.Point(444, 12);
+            this.panelInfo.Location = new System.Drawing.Point(318, 12);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(586, 120);
+            this.panelInfo.Size = new System.Drawing.Size(289, 70);
             this.panelInfo.TabIndex = 1;
             // 
             // labelNumber
             // 
             this.labelNumber.AutoSize = true;
-            this.labelNumber.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelNumber.Location = new System.Drawing.Point(36, 62);
+            this.labelNumber.Location = new System.Drawing.Point(15, 40);
             this.labelNumber.Name = "labelNumber";
-            this.labelNumber.Size = new System.Drawing.Size(63, 14);
+            this.labelNumber.Size = new System.Drawing.Size(53, 12);
             this.labelNumber.TabIndex = 2;
             this.labelNumber.Text = "记录编号";
             // 
             // textBoxNumber
             // 
-            this.textBoxNumber.Font = new System.Drawing.Font("黑体", 10F);
-            this.textBoxNumber.Location = new System.Drawing.Point(141, 59);
+            this.textBoxNumber.Location = new System.Drawing.Point(74, 37);
             this.textBoxNumber.Name = "textBoxNumber";
-            this.textBoxNumber.Size = new System.Drawing.Size(354, 23);
+            this.textBoxNumber.Size = new System.Drawing.Size(200, 21);
             this.textBoxNumber.TabIndex = 3;
             this.textBoxNumber.TextChanged += new System.EventHandler(this.textBoxNumber_TextChanged);
             // 
             // labelUserID
             // 
             this.labelUserID.AutoSize = true;
-            this.labelUserID.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelUserID.Location = new System.Drawing.Point(36, 22);
+            this.labelUserID.Location = new System.Drawing.Point(15, 15);
             this.labelUserID.Name = "labelUserID";
-            this.labelUserID.Size = new System.Drawing.Size(63, 14);
+            this.labelUserID.Size = new System.Drawing.Size(41, 12);
             this.labelUserID.TabIndex = 0;
-            this.labelUserID.Text = "探索者ID";
+            this.labelUserID.Text = "玩家ID";
             // 
             // textBoxUserID
             // 
-            this.textBoxUserID.Font = new System.Drawing.Font("黑体", 10F);
-            this.textBoxUserID.Location = new System.Drawing.Point(141, 19);
+            this.textBoxUserID.Location = new System.Drawing.Point(74, 10);
             this.textBoxUserID.Name = "textBoxUserID";
-            this.textBoxUserID.Size = new System.Drawing.Size(354, 23);
+            this.textBoxUserID.Size = new System.Drawing.Size(200, 21);
             this.textBoxUserID.TabIndex = 1;
             this.textBoxUserID.TextChanged += new System.EventHandler(this.textBoxUserID_TextChanged);
             // 
             // linkLabelOpenSaveFolder
             // 
             this.linkLabelOpenSaveFolder.AutoSize = true;
-            this.linkLabelOpenSaveFolder.Font = new System.Drawing.Font("黑体", 9F);
             this.linkLabelOpenSaveFolder.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(1196, 59);
+            this.linkLabelOpenSaveFolder.Location = new System.Drawing.Point(719, 58);
             this.linkLabelOpenSaveFolder.Name = "linkLabelOpenSaveFolder";
             this.linkLabelOpenSaveFolder.Size = new System.Drawing.Size(101, 12);
             this.linkLabelOpenSaveFolder.TabIndex = 11;
@@ -157,34 +150,31 @@
             // 
             // btnSave
             // 
-            this.btnSave.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnSave.Location = new System.Drawing.Point(1214, 12);
+            this.btnSave.Location = new System.Drawing.Point(613, 51);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(83, 30);
+            this.btnSave.Size = new System.Drawing.Size(100, 23);
             this.btnSave.TabIndex = 9;
-            this.btnSave.Text = "保存";
+            this.btnSave.Text = "保存(Ctrl+S)";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnLoad
             // 
-            this.btnLoad.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnLoad.Location = new System.Drawing.Point(1125, 12);
+            this.btnLoad.Location = new System.Drawing.Point(719, 22);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(83, 30);
+            this.btnLoad.Size = new System.Drawing.Size(100, 23);
             this.btnLoad.TabIndex = 8;
-            this.btnLoad.Text = "读取";
+            this.btnLoad.Text = "读取(Ctrl+O)";
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // btnNew
             // 
-            this.btnNew.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnNew.Location = new System.Drawing.Point(1036, 12);
+            this.btnNew.Location = new System.Drawing.Point(613, 22);
             this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(83, 30);
+            this.btnNew.Size = new System.Drawing.Size(100, 23);
             this.btnNew.TabIndex = 7;
-            this.btnNew.Text = "新建";
+            this.btnNew.Text = "新建(Ctrl+N)";
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
@@ -200,63 +190,58 @@
             this.panelCurLayer.Controls.Add(this.btnApply);
             this.panelCurLayer.Controls.Add(this.labelNode);
             this.panelCurLayer.Controls.Add(this.textBoxNode);
-            this.panelCurLayer.Location = new System.Drawing.Point(444, 138);
+            this.panelCurLayer.Location = new System.Drawing.Point(318, 88);
             this.panelCurLayer.Name = "panelCurLayer";
-            this.panelCurLayer.Size = new System.Drawing.Size(853, 785);
+            this.panelCurLayer.Size = new System.Drawing.Size(674, 625);
             this.panelCurLayer.TabIndex = 0;
             // 
             // btnComment
             // 
-            this.btnComment.Font = new System.Drawing.Font("黑体", 12F);
-            this.btnComment.Location = new System.Drawing.Point(670, 9);
+            this.btnComment.Location = new System.Drawing.Point(571, 7);
             this.btnComment.Name = "btnComment";
-            this.btnComment.Size = new System.Drawing.Size(84, 84);
+            this.btnComment.Size = new System.Drawing.Size(100, 23);
             this.btnComment.TabIndex = 14;
-            this.btnComment.Text = "备注";
+            this.btnComment.Text = "层级备注";
             this.btnComment.UseVisualStyleBackColor = true;
             this.btnComment.Click += new System.EventHandler(this.btnComment_Click);
             // 
             // labelNodeTips
             // 
             this.labelNodeTips.AutoSize = true;
-            this.labelNodeTips.Font = new System.Drawing.Font("黑体", 10F);
             this.labelNodeTips.ForeColor = System.Drawing.Color.Red;
-            this.labelNodeTips.Location = new System.Drawing.Point(483, 68);
+            this.labelNodeTips.Location = new System.Drawing.Point(280, 41);
             this.labelNodeTips.Name = "labelNodeTips";
-            this.labelNodeTips.Size = new System.Drawing.Size(175, 14);
+            this.labelNodeTips.Size = new System.Drawing.Size(149, 12);
             this.labelNodeTips.TabIndex = 13;
-            this.labelNodeTips.Text = "请先填写当前层的节点分布";
+            this.labelNodeTips.Text = "请先输入当前层的节点分布";
             // 
             // comboBoxLayerType
             // 
             this.comboBoxLayerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLayerType.DropDownWidth = 500;
-            this.comboBoxLayerType.Font = new System.Drawing.Font("黑体", 10F);
             this.comboBoxLayerType.FormattingEnabled = true;
-            this.comboBoxLayerType.Location = new System.Drawing.Point(117, 22);
+            this.comboBoxLayerType.Location = new System.Drawing.Point(74, 12);
             this.comboBoxLayerType.Name = "comboBoxLayerType";
-            this.comboBoxLayerType.Size = new System.Drawing.Size(354, 21);
+            this.comboBoxLayerType.Size = new System.Drawing.Size(200, 20);
             this.comboBoxLayerType.TabIndex = 12;
             this.comboBoxLayerType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLayerType_SelectedIndexChanged);
             // 
             // labelLayerType
             // 
             this.labelLayerType.AutoSize = true;
-            this.labelLayerType.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelLayerType.Location = new System.Drawing.Point(30, 25);
+            this.labelLayerType.Location = new System.Drawing.Point(15, 15);
             this.labelLayerType.Name = "labelLayerType";
-            this.labelLayerType.Size = new System.Drawing.Size(63, 14);
+            this.labelLayerType.Size = new System.Drawing.Size(53, 12);
             this.labelLayerType.TabIndex = 11;
             this.labelLayerType.Text = "层级类型";
             // 
             // btnEditConnection
             // 
-            this.btnEditConnection.Font = new System.Drawing.Font("黑体", 12F);
-            this.btnEditConnection.Location = new System.Drawing.Point(760, 9);
+            this.btnEditConnection.Location = new System.Drawing.Point(571, 36);
             this.btnEditConnection.Name = "btnEditConnection";
-            this.btnEditConnection.Size = new System.Drawing.Size(84, 84);
+            this.btnEditConnection.Size = new System.Drawing.Size(100, 23);
             this.btnEditConnection.TabIndex = 10;
-            this.btnEditConnection.Text = "编辑连接";
+            this.btnEditConnection.Text = "编辑连接(Alt)";
             this.btnEditConnection.UseVisualStyleBackColor = true;
             this.btnEditConnection.Click += new System.EventHandler(this.btnEditConnection_Click);
             // 
@@ -265,9 +250,9 @@
             this.panelNodeView.AutoScroll = true;
             this.panelNodeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelNodeView.Controls.Add(this.pictureBoxNode);
-            this.panelNodeView.Location = new System.Drawing.Point(3, 101);
+            this.panelNodeView.Location = new System.Drawing.Point(3, 65);
             this.panelNodeView.Name = "panelNodeView";
-            this.panelNodeView.Size = new System.Drawing.Size(847, 681);
+            this.panelNodeView.Size = new System.Drawing.Size(668, 557);
             this.panelNodeView.TabIndex = 9;
             this.panelNodeView.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelNodeView_Scroll);
             // 
@@ -276,7 +261,7 @@
             this.pictureBoxNode.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxNode.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBoxNode.Name = "pictureBoxNode";
-            this.pictureBoxNode.Size = new System.Drawing.Size(845, 679);
+            this.pictureBoxNode.Size = new System.Drawing.Size(666, 555);
             this.pictureBoxNode.TabIndex = 8;
             this.pictureBoxNode.TabStop = false;
             this.pictureBoxNode.Click += new System.EventHandler(this.pictureBoxNode_Click);
@@ -286,10 +271,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnCancel.Location = new System.Drawing.Point(575, 60);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(361, 36);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(83, 30);
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -297,10 +282,9 @@
             // 
             // btnApply
             // 
-            this.btnApply.Font = new System.Drawing.Font("黑体", 9F);
-            this.btnApply.Location = new System.Drawing.Point(486, 60);
+            this.btnApply.Location = new System.Drawing.Point(280, 36);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(83, 30);
+            this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 6;
             this.btnApply.Text = "确定";
             this.btnApply.UseVisualStyleBackColor = true;
@@ -309,20 +293,18 @@
             // labelNode
             // 
             this.labelNode.AutoSize = true;
-            this.labelNode.Font = new System.Drawing.Font("黑体", 10F);
-            this.labelNode.Location = new System.Drawing.Point(30, 68);
+            this.labelNode.Location = new System.Drawing.Point(15, 41);
             this.labelNode.Name = "labelNode";
-            this.labelNode.Size = new System.Drawing.Size(63, 14);
+            this.labelNode.Size = new System.Drawing.Size(53, 12);
             this.labelNode.TabIndex = 4;
             this.labelNode.Text = "节点分布";
             // 
             // textBoxNode
             // 
-            this.textBoxNode.Font = new System.Drawing.Font("黑体", 10F);
-            this.textBoxNode.Location = new System.Drawing.Point(117, 65);
+            this.textBoxNode.Location = new System.Drawing.Point(74, 38);
             this.textBoxNode.MaxLength = 16;
             this.textBoxNode.Name = "textBoxNode";
-            this.textBoxNode.Size = new System.Drawing.Size(354, 23);
+            this.textBoxNode.Size = new System.Drawing.Size(200, 21);
             this.textBoxNode.TabIndex = 5;
             this.textBoxNode.TextChanged += new System.EventHandler(this.textBoxNode_TextChanged);
             this.textBoxNode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNode_KeyPress);
@@ -335,15 +317,14 @@
             this.panelAllLayer.Controls.Add(this.btnAddLayer);
             this.panelAllLayer.Location = new System.Drawing.Point(12, 12);
             this.panelAllLayer.Name = "panelAllLayer";
-            this.panelAllLayer.Size = new System.Drawing.Size(426, 914);
+            this.panelAllLayer.Size = new System.Drawing.Size(300, 701);
             this.panelAllLayer.TabIndex = 12;
             // 
             // btnRemoveLayer
             // 
-            this.btnRemoveLayer.Font = new System.Drawing.Font("黑体", 14F);
-            this.btnRemoveLayer.Location = new System.Drawing.Point(367, 5);
+            this.btnRemoveLayer.Location = new System.Drawing.Point(222, 10);
             this.btnRemoveLayer.Name = "btnRemoveLayer";
-            this.btnRemoveLayer.Size = new System.Drawing.Size(56, 56);
+            this.btnRemoveLayer.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveLayer.TabIndex = 4;
             this.btnRemoveLayer.Text = "-";
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
@@ -357,9 +338,11 @@
             // 
             // MainForm
             // 
+            this.AcceptButton = this.btnApply;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1309, 938);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(1004, 725);
             this.Controls.Add(this.panelAllLayer);
             this.Controls.Add(this.panelCurLayer);
             this.Controls.Add(this.linkLabelOpenSaveFolder);
@@ -368,7 +351,6 @@
             this.Controls.Add(this.panelInfo);
             this.Controls.Add(this.btnLoad);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("黑体", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.KeyPreview = true;
             this.MaximizeBox = false;
@@ -377,6 +359,7 @@
             this.Text = "明日方舟肉鸽节点记录工具";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
             this.panelCurLayer.ResumeLayout(false);

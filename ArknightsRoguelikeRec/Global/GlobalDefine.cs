@@ -28,7 +28,7 @@ namespace ArknightsRoguelikeRec
         public const int COLUMN_MIN_NODE = 1; //每列最少节点
         public const int COLUMN_MAX_NODE = 4; //每列最多节点
 
-        public static readonly Font TEXT_FONT = new Font("黑体", 10.0f);
-        public static readonly Font SUB_TEXT_FONT = new Font("黑体", 9.0f);
+        //public static readonly Font TEXT_FONT = new Font("宋体", 9.0f);
+        //public static readonly Font SUB_TEXT_FONT = new Font("宋体", 9.0f);
     }
 }

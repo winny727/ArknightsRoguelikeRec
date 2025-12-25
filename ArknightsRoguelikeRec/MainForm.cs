@@ -207,6 +207,8 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateNodeView()
         {
+            using ControlModifyScope scope = new ControlModifyScope(this);
+
             for (int i = panelNodeView.Controls.Count - 1; i >= 0; i--)
             {
                 if (panelNodeView.Controls[i] != pictureBoxNode)
@@ -332,8 +334,9 @@ namespace ArknightsRoguelikeRec
                         }
 
                         //显示备注选项
-                        UIHelper.AddSeparatedMenuItem(contextMenuStrip, "备注", () =>
+                        UIHelper.AddSeparatedMenuItem(contextMenuStrip, "节点备注", () =>
                         {
+                            inputForm.Title = "节点备注";
                             inputForm.Content = node.Comment;
                             if (inputForm.ShowDialog() == DialogResult.OK)
                             {
@@ -411,8 +414,9 @@ namespace ArknightsRoguelikeRec
                             }
 
                             //显示备注选项
-                            UIHelper.AddSeparatedMenuItem(contextMenuStrip, "备注", () =>
+                            UIHelper.AddSeparatedMenuItem(contextMenuStrip, "节点备注", () =>
                             {
+                                inputForm.Title = "节点备注";
                                 inputForm.Content = node.Comment;
                                 if (inputForm.ShowDialog() == DialogResult.OK)
                                 {
@@ -601,7 +605,7 @@ namespace ArknightsRoguelikeRec
             {
                 btnEditConnection.BackColor = Color.FromKnownColor(KnownColor.Control);
                 btnEditConnection.ForeColor = Color.FromKnownColor(KnownColor.ControlText);
-                btnEditConnection.Text = "编辑连接";
+                btnEditConnection.Text = "编辑连接(Alt)";
                 btnEditConnection.UseVisualStyleBackColor = true;
             }
 
@@ -888,9 +892,42 @@ namespace ArknightsRoguelikeRec
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.S)
+            if (e.Control && e.KeyCode == Keys.N && btnNew.Enabled)
+            {
+                btnNew_Click(sender, e);
+            }
+
+            if (e.Control && e.KeyCode == Keys.O && btnLoad.Enabled)
+            {
+                btnLoad_Click(sender, e);
+            }
+
+            if (e.Control && e.KeyCode == Keys.S && btnSave.Enabled)
             {
                 btnSave_Click(sender, e);
+            }
+
+            if (e.KeyCode == Keys.Menu && btnEditConnection.Enabled) //Alt
+            {
+                if (IsEditMode)
+                {
+                    return;
+                }
+                IsEditMode = true;
+                UpdateEditMode();
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Menu && btnEditConnection.Enabled) //Alt
+            {
+                if (!IsEditMode)
+                {
+                    return;
+                }
+                IsEditMode = false;
+                UpdateEditMode();
             }
         }
 
@@ -920,6 +957,7 @@ namespace ArknightsRoguelikeRec
                 return;
             }
 
+            inputForm.Title = "层级备注";
             inputForm.Content = layer.Comment;
             if (inputForm.ShowDialog() == DialogResult.OK)
             {

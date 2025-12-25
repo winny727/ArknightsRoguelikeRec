@@ -6,6 +6,18 @@ namespace ArknightsRoguelikeRec
 {
     public partial class InputForm : Form
     {
+        public string Title
+        {
+            get
+            {
+                return this.Text;
+            }
+            set
+            {
+                this.Text = value;
+            }
+        }
+
         public string Content {
             get
             {

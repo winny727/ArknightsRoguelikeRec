@@ -26,7 +26,7 @@ namespace ArknightsRoguelikeRec.Helper
             Button btnLayer = new Button();
             panel.Controls.Add(btnLayer);
             btnLayer.Text = layerName;
-            btnLayer.Font = GlobalDefine.TEXT_FONT;
+            //btnLayer.Font = GlobalDefine.TEXT_FONT;
 
             btnLayer.Size = new Size(panel.Width - 2 * gap, height);
             btnLayer.Location = new Point(gap, gap + (panel.Controls.Count - 1) * height);
@@ -95,7 +95,7 @@ namespace ArknightsRoguelikeRec.Helper
             //初始化节点类型选择按钮
             Button btnType = new Button();
             panel.Controls.Add(btnType);
-            btnType.Font = GlobalDefine.TEXT_FONT;
+            //btnType.Font = GlobalDefine.TEXT_FONT;
             btnType.Text = node.Type;
             btnType.Size = new Size(btnWidth, btnHeight);
             btnType.Location = new Point(nodeX + btnGap, nodeY + btnGap);
@@ -104,7 +104,7 @@ namespace ArknightsRoguelikeRec.Helper
             //初始化节点次级类型选择按钮
             Button btnSubType = new Button();
             panel.Controls.Add(btnSubType);
-            btnSubType.Font = GlobalDefine.SUB_TEXT_FONT;
+            //btnSubType.Font = GlobalDefine.SUB_TEXT_FONT;
             btnSubType.Text = node.SubType;
             btnSubType.Size = new Size(btnWidth, btnHeight);
             btnSubType.Location = new Point(nodeX + btnGap, nodeY + 2 * btnGap + btnHeight);
@@ -137,7 +137,7 @@ namespace ArknightsRoguelikeRec.Helper
             Button btnDel = new Button();
             panel.Controls.Add(btnDel);
             btnDel.Text = "X";
-            btnDel.Font = GlobalDefine.TEXT_FONT;
+            //btnDel.Font = GlobalDefine.TEXT_FONT;
 
             int btnSize = GlobalDefine.CONNECTION_DELETE_BTN_SIZE;
 

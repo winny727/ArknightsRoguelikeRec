@@ -73,7 +73,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.textBox1);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("黑体", 9F);
+            this.Font = new System.Drawing.Font("宋体", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.KeyPreview = true;
             this.MaximizeBox = false;
