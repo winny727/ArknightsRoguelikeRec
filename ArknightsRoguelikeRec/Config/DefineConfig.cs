@@ -27,7 +27,7 @@ namespace ArknightsRoguelikeRec.Config
                 return;
             }
 
-            tableReader.ForEach((line) =>
+            tableReader.ForEach((key, line) =>
             {
                 int layerID = line.GetValue<int>("layerID");
                 string layerName = line.GetValue("layerName");
@@ -62,7 +62,7 @@ namespace ArknightsRoguelikeRec.Config
                 return;
             }
 
-            tableReader.ForEach((line) =>
+            tableReader.ForEach((key, line) =>
             {
                 int nodeID = line.GetValue<int>("nodeID");
                 string nodeType = line.GetValue("nodeType");

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-[Serializable]
 public class TableReader
 {
-    [Serializable]
     public class TableLine : ICloneable
     {
         public string Key => key;
@@ -56,17 +54,19 @@ public class TableReader
         }
     }
 
-    private MapList<string, TableLine> datas;
+    private Encoding encoding;
+    private char separator;
+    private Dictionary<string, TableLine> datas;
     private Dictionary<string, int> colIndexDict;
 
-    public MapList<string, TableLine> Datas
+    public Dictionary<string, TableLine> Datas
     {
         get
         {
-            var datas = new MapList<string, TableLine>();
-            foreach (var item in this.datas.AsList())
+            var datas = new Dictionary<string, TableLine>();
+            foreach (var item in this.datas)
             {
-                datas.Add(item.Key, (TableLine)item.Clone());
+                datas.Add(item.Key, (TableLine)item.Value.Clone());
             }
             return datas;
         }
@@ -81,8 +81,10 @@ public class TableReader
     }
 
 
-    public TableReader(string filePath)
+    public TableReader(string filePath, Encoding encoding, char separator = '\t')
     {
+        this.encoding = encoding;
+        this.separator = separator;
         string[] lines = ReadFile(filePath);
         InitDatas(lines);
     }
@@ -100,14 +102,13 @@ public class TableReader
         }
 
         // 读取数据文件
-        // var lines = File.ReadAllLines(filePath, Encoding.UTF8);
+        // var lines = File.ReadAllLines(filePath, encoding);
 
         // Excel会占用文件导致File.ReadAllLines读取不了，还是用FileStream
         List<string> lines = new List<string>();
         using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) //FileShare.ReadWrite参数表示可以与其他进程共享读写权限
         {
-            //中文编码Encoding.GetEncoding("GB2312")
-            using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
+            using (StreamReader reader = new StreamReader(fileStream, encoding))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -126,7 +127,7 @@ public class TableReader
             throw new ArgumentException("Line Count Error");
         }
 
-        string[] GetValues(string line) => line.Split('\t');
+        string[] GetValues(string line) => line.Split(separator);
 
         //Init titles
         colIndexDict = new Dictionary<string, int>();
@@ -155,7 +156,7 @@ public class TableReader
         }
 
         //Init Datas
-        datas = new MapList<string, TableLine>();
+        datas = new Dictionary<string, TableLine>();
         for (int i = dataStartRowIndex; i < lines.Length; i++)
         {
             string[] line = GetValues(lines[i]);
@@ -186,7 +187,7 @@ public class TableReader
 
     public TableLine GetLine(string key)
     {
-        if (datas == null || !datas.AsDictionary().TryGetValue(key, out TableLine line))
+        if (datas == null || !datas.TryGetValue(key, out TableLine line))
         {
             return null;
         }
@@ -215,16 +216,16 @@ public class TableReader
         return GetData(key.ToString(), title, defaultValue);
     }
 
-    public void ForEach(Action<TableLine> callback)
+    public void ForEach(Action<string, TableLine> callback)
     {
         if (callback == null)
         {
             return;
         }
 
-        foreach (var item in datas.AsList())
+        foreach (var item in datas)
         {
-            callback(item);
+            callback(item.Key, item.Value);
         }
     }
 }

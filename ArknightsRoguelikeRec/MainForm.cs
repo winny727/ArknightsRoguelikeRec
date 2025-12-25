@@ -731,7 +731,7 @@ namespace ArknightsRoguelikeRec
 
         private void textBoxNode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != (char)8)
+            if (e.KeyChar != (char)8) //8: Backspace
             {
                 if (!int.TryParse(e.KeyChar.ToString(), out int count) || count < GlobalDefine.COLUMN_MIN_NODE || count > GlobalDefine.COLUMN_MAX_NODE)
                 {

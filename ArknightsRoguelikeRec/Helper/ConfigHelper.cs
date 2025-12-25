@@ -1,6 +1,7 @@
-﻿using System;
+﻿using ArknightsRoguelikeRec.Config;
+using System;
 using System.Collections.Generic;
-using ArknightsRoguelikeRec.Config;
+using System.Text;
 
 namespace ArknightsRoguelikeRec.Helper
 {
@@ -10,7 +11,7 @@ namespace ArknightsRoguelikeRec.Helper
         {
             try
             {
-                TableReader tableReader = new TableReader(path);
+                TableReader tableReader = new TableReader(path, Encoding.UTF8);
                 return tableReader;
             }
             catch (Exception ex)

@@ -79,7 +79,7 @@
             this.MaximizeBox = false;
             this.Name = "InputForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form2";
+            this.Text = "备注";
             this.ResumeLayout(false);
             this.PerformLayout();
 
