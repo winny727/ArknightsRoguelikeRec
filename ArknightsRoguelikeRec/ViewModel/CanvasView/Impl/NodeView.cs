@@ -2,28 +2,24 @@
 using System.Collections.Generic;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Config;
-using System.Windows.Forms;
+using ArknightsRoguelikeRec.ViewModel.DataStruct;
 
 namespace ArknightsRoguelikeRec.ViewModel
 {
     public class NodeView
     {
         public Node Node { get; private set; }
-        public Control View { get; private set; }
-        public Control TypeView { get; private set; }
-        public Control SubTypeView { get; private set; }
         public int ColIndex { get; private set; }
         public int RowIndex { get; private set; }
+        public Rect Rect { get; set; }
 
         public NodeConfig NodeConfig { get; set; }
 
 
-        public NodeView(Node node, int colIndex, int rowIndex, Control view, Control typeView, Control subTypeView)
+        public NodeView(Node node, Rect rect, int colIndex, int rowIndex)
         {
             Node = node;
-            View = view;
-            TypeView = typeView;
-            SubTypeView = subTypeView;
+            Rect = rect;
             ColIndex = colIndex;
             RowIndex = rowIndex;
         }

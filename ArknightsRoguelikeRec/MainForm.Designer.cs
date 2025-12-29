@@ -46,7 +46,6 @@
             this.labelNodeTips = new System.Windows.Forms.Label();
             this.comboBoxLayerType = new System.Windows.Forms.ComboBox();
             this.labelLayerType = new System.Windows.Forms.Label();
-            this.btnEditConnection = new System.Windows.Forms.Button();
             this.panelNodeView = new System.Windows.Forms.Panel();
             this.pictureBoxNode = new System.Windows.Forms.PictureBox();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -184,7 +183,6 @@
             this.panelCurLayer.Controls.Add(this.labelNodeTips);
             this.panelCurLayer.Controls.Add(this.comboBoxLayerType);
             this.panelCurLayer.Controls.Add(this.labelLayerType);
-            this.panelCurLayer.Controls.Add(this.btnEditConnection);
             this.panelCurLayer.Controls.Add(this.panelNodeView);
             this.panelCurLayer.Controls.Add(this.btnCancel);
             this.panelCurLayer.Controls.Add(this.btnApply);
@@ -197,7 +195,7 @@
             // 
             // btnComment
             // 
-            this.btnComment.Location = new System.Drawing.Point(571, 7);
+            this.btnComment.Location = new System.Drawing.Point(571, 36);
             this.btnComment.Name = "btnComment";
             this.btnComment.Size = new System.Drawing.Size(100, 23);
             this.btnComment.TabIndex = 14;
@@ -235,16 +233,6 @@
             this.labelLayerType.TabIndex = 11;
             this.labelLayerType.Text = "层级类型";
             // 
-            // btnEditConnection
-            // 
-            this.btnEditConnection.Location = new System.Drawing.Point(571, 36);
-            this.btnEditConnection.Name = "btnEditConnection";
-            this.btnEditConnection.Size = new System.Drawing.Size(100, 23);
-            this.btnEditConnection.TabIndex = 10;
-            this.btnEditConnection.Text = "编辑连接(Alt)";
-            this.btnEditConnection.UseVisualStyleBackColor = true;
-            this.btnEditConnection.Click += new System.EventHandler(this.btnEditConnection_Click);
-            // 
             // panelNodeView
             // 
             this.panelNodeView.AutoScroll = true;
@@ -264,7 +252,6 @@
             this.pictureBoxNode.Size = new System.Drawing.Size(666, 555);
             this.pictureBoxNode.TabIndex = 8;
             this.pictureBoxNode.TabStop = false;
-            this.pictureBoxNode.Click += new System.EventHandler(this.pictureBoxNode_Click);
             this.pictureBoxNode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseDown);
             this.pictureBoxNode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseMove);
             this.pictureBoxNode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseUp);
@@ -359,7 +346,6 @@
             this.Text = "明日方舟肉鸽节点记录工具";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
             this.panelCurLayer.ResumeLayout(false);
@@ -395,7 +381,6 @@
         private System.Windows.Forms.Button btnRemoveLayer;
         private System.Windows.Forms.Panel panelNodeView;
         private System.Windows.Forms.PictureBox pictureBoxNode;
-        private System.Windows.Forms.Button btnEditConnection;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ComboBox comboBoxLayerType;
         private System.Windows.Forms.Label labelLayerType;

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 
 [Serializable]
-public class Item
+public class MenuItem
 {
     public string Key { get; set; }
     public string Value { get; set; }
 
-    public Item()
+    public MenuItem()
     {
 
     }
 
-    public Item(string key, string value)
+    public MenuItem(string key, string value)
     {
         Key = key;
         Value = value;

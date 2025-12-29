@@ -20,14 +20,13 @@ namespace ArknightsRoguelikeRec
         public bool IsDirty { get; private set; }
 
         public NodeView CurNodeView { get; private set; }
-        public bool IsEditMode { get; private set; }
 
-        private List<NodeView> nodeViews = new List<NodeView>();
-        private List<Button> delConnectionBtns = new List<Button>();
-        private InputForm inputForm = new InputForm();
+        private InputForm mInputForm = new InputForm();
 
-        private bool isDragging = false;
-        private Point lastMousePos;
+        private bool mIsDragging = false;
+        private Point mLastMousePos;
+
+        private CanvasView mCanvasView;
 
         public MainForm()
         {
@@ -36,6 +35,12 @@ namespace ArknightsRoguelikeRec
             textBoxNode.MaxLength = GlobalDefine.MAX_COLUMU;
             comboBoxLayerType.DisplayMember = "Key";
             comboBoxLayerType.ValueMember = "Value";
+
+            mCanvasView = new CanvasView(
+                new PictureBoxCanvas(pictureBoxNode),
+                new ControlMouseHandler(pictureBoxNode),
+                new MenuBuilder(mInputForm, () => mCanvasView?.RefreshCanvas()),
+                new NodeConfigInitializer());
         }
 
         protected override CreateParams CreateParams
@@ -168,17 +173,17 @@ namespace ArknightsRoguelikeRec
             LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);
             if (layerConfig?.LayerTypes != null && layerConfig.LayerTypes.Count > 0)
             {
-                comboBoxLayerType.Items.Add(new Item("（无）", null));
+                comboBoxLayerType.Items.Add(new MenuItem("（无）", null));
                 for (int i = 0; i < layerConfig.LayerTypes.Count; i++)
                 {
                     string layerType = layerConfig.LayerTypes[i];
-                    comboBoxLayerType.Items.Add(new Item(layerType, layerType));
+                    comboBoxLayerType.Items.Add(new MenuItem(layerType, layerType));
                 }
 
                 int index = 0;
                 for (int i = 0; i < comboBoxLayerType.Items.Count; i++)
                 {
-                    Item item = (Item)comboBoxLayerType.Items[i];
+                    MenuItem item = (MenuItem)comboBoxLayerType.Items[i];
                     if (item.Value == layer.Type)
                     {
                         index = i;
@@ -207,315 +212,11 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateNodeView()
         {
-            using ControlModifyScope scope = new ControlModifyScope(this);
-
-            for (int i = panelNodeView.Controls.Count - 1; i >= 0; i--)
-            {
-                if (panelNodeView.Controls[i] != pictureBoxNode)
-                {
-                    panelNodeView.Controls.RemoveAt(i);
-                }
-            }
-
             panelNodeView.AutoScrollPosition = new Point(0, 0);
 
-            nodeViews.Clear();
-            pictureBoxNode.BackgroundImage?.Dispose();
-            pictureBoxNode.Image?.Dispose();
-            pictureBoxNode.BackgroundImage = null;
-            pictureBoxNode.Image = null;
-
             Layer layer = GetCurLayer();
-            if (layer == null)
-            {
-                return;
-            }
-
-            LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);
-
-            int width = layer.Nodes.Count * (GlobalDefine.NODE_VIEW_H_GAP + GlobalDefine.NODE_VIEW_WIDTH) + GlobalDefine.NODE_VIEW_H_GAP;
-            pictureBoxNode.Width = Math.Max(width, panelNodeView.Width - 2);
-            pictureBoxNode.Height = panelNodeView.HorizontalScroll.Visible ? panelNodeView.Height - GlobalDefine.NODE_VIEW_SCROLL_GAP : panelNodeView.Height - 2;
-            pictureBoxNode.BackgroundImage = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
-
-            UIHelper.DrawGrid(pictureBoxNode); //绘制背景网格
-
-            for (int i = 0; i < layer.Nodes.Count; i++)
-            {
-                int rowCount = layer.Nodes[i].Count;
-                for (int j = 0; j < layer.Nodes[i].Count; j++)
-                {
-                    //创建节点
-                    Node node = layer.Nodes[i][j];
-                    NodeView nodeView = UIHelper.CreateNodeView(panelNodeView, i, j, rowCount, node);
-
-                    void OnNodeClick(object sender, EventArgs e)
-                    {
-                        nodeView.View.Focus();
-                        if (!IsEditMode)
-                        {
-                            return;
-                        }
-
-                        UIHelper.ClearConnectionPreview(pictureBoxNode);
-                        if (CurNodeView == null)
-                        {
-                            CurNodeView = nodeView;
-                            UIHelper.DrawConnectionPreview(pictureBoxNode, nodeView);
-                        }
-                        else
-                        {
-                            NodeView tempNodeView = CurNodeView;
-                            CurNodeView = null;
-                            if (CheckConnectionValid(layer, tempNodeView, nodeView))
-                            {
-                                DataHelper.AddConnection(layer, tempNodeView.Node, nodeView.Node);
-                                UpdateConnection();
-                                UpdateEditMode();
-                            }
-                        }
-                    }
-
-                    void OnNodeTypeClick(object sender, EventArgs e)
-                    {
-                        if (IsEditMode)
-                        {
-                            return;
-                        }
-
-                        //选择节点类型
-                        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                        if (layerConfig?.NodeTypes != null)
-                        {
-                            for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
-                            {
-                                int nodeID = layerConfig.NodeTypes[i];
-                                if (nodeID == 0)
-                                {
-                                    UIHelper.AddSeparator(contextMenuStrip);
-                                    continue;
-                                }
-
-                                NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                                if (nodeConfig == null)
-                                {
-                                    continue;
-                                }
-
-                                contextMenuStrip.Items.Add(nodeConfig.Type, null, (_sender, _e) =>
-                                {
-                                    if (nodeView.TypeView.Text != nodeConfig.Type)
-                                    {
-                                        nodeView.SubTypeView.Text = string.Empty;
-                                        node.SubType = string.Empty;
-                                    }
-
-                                    node.Type = nodeConfig.Type;
-                                    nodeView.TypeView.Text = nodeConfig.Type;
-                                    nodeView.NodeConfig = nodeConfig;
-                                    IsDirty = true;
-                                });
-                            }
-                        }
-
-                        //显示清除选项
-                        if (!string.IsNullOrEmpty(nodeView.TypeView.Text) || !string.IsNullOrEmpty(nodeView.SubTypeView.Text))
-                        {
-                            UIHelper.AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
-                            {
-                                node.Type = string.Empty;
-                                nodeView.TypeView.Text = string.Empty;
-                                nodeView.NodeConfig = null;
-
-                                node.SubType = string.Empty;
-                                nodeView.SubTypeView.Text = string.Empty;
-                                IsDirty = true;
-                            });
-                        }
-
-                        //显示备注选项
-                        UIHelper.AddSeparatedMenuItem(contextMenuStrip, "节点备注", () =>
-                        {
-                            inputForm.Title = "节点备注";
-                            inputForm.Content = node.Comment;
-                            if (inputForm.ShowDialog() == DialogResult.OK)
-                            {
-                                node.Comment = inputForm.Content;
-                                IsDirty = true;
-                            }
-                        });
-
-                        //显示菜单
-                        UIHelper.ShowMenu(contextMenuStrip);
-                    }
-
-                    void OnNodeSubTypeClick(object sender, EventArgs e)
-                    {
-                        if (IsEditMode)
-                        {
-                            return;
-                        }
-
-                        //选择节点次级类型
-                        if (nodeView.NodeConfig != null)
-                        {
-                            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                            for (int i = 0; i < nodeView.NodeConfig.SubTypes.Count; i++)
-                            {
-                                string subType = nodeView.NodeConfig.SubTypes[i];
-
-                                if (string.IsNullOrEmpty(subType))
-                                {
-                                    UIHelper.AddSeparator(contextMenuStrip);
-                                    continue;
-                                }
-
-                                contextMenuStrip.Items.Add(subType, null, (_sender, _e) =>
-                                {
-                                    node.SubType = subType;
-                                    nodeView.SubTypeView.Text = subType;
-                                    IsDirty = true;
-                                });
-                            }
-
-                            //树洞层类型
-                            if (nodeView.NodeConfig.ExtraLayer > 0)
-                            {
-                                for (int i = 0; i < SaveData.Layers.Count; i++)
-                                {
-                                    Layer curLayer = SaveData.Layers[i];
-                                    if (curLayer == layer)
-                                    {
-                                        continue;
-                                    }
-
-                                    LayerConfig curLayerConfig = ConfigHelper.GetLayerConfigByName(curLayer.Name);
-                                    if (curLayerConfig != null && curLayerConfig.ID == nodeView.NodeConfig.ExtraLayer)
-                                    {
-                                        contextMenuStrip.Items.Add(curLayer.CustomName, null, (_sender, _e) =>
-                                        {
-                                            node.SubType = curLayer.CustomName;
-                                            nodeView.SubTypeView.Text = curLayer.CustomName;
-                                            IsDirty = true;
-                                        });
-                                    }
-                                }
-                            }
-
-                            //显示清除选项
-                            if (!string.IsNullOrEmpty(nodeView.SubTypeView.Text))
-                            {
-                                UIHelper.AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
-                                {
-                                    node.SubType = string.Empty;
-                                    nodeView.SubTypeView.Text = string.Empty;
-                                    IsDirty = true;
-                                });
-                            }
-
-                            //显示备注选项
-                            UIHelper.AddSeparatedMenuItem(contextMenuStrip, "节点备注", () =>
-                            {
-                                inputForm.Title = "节点备注";
-                                inputForm.Content = node.Comment;
-                                if (inputForm.ShowDialog() == DialogResult.OK)
-                                {
-                                    node.Comment = inputForm.Content;
-                                    IsDirty = true;
-                                }
-                            });
-
-                            //显示菜单
-                            UIHelper.ShowMenu(contextMenuStrip);
-                        }
-                    }
-
-                    nodeView.View.Click += OnNodeClick;
-                    nodeView.TypeView.Click += OnNodeClick;
-                    nodeView.SubTypeView.Click += OnNodeClick;
-                    nodeView.TypeView.Click += OnNodeTypeClick;
-                    nodeView.SubTypeView.Click += OnNodeSubTypeClick;
-
-                    //初始化NodeConfig
-                    if (layerConfig?.NodeTypes != null)
-                    {
-                        for (int k = 0; k < layerConfig.NodeTypes.Count; k++)
-                        {
-                            int nodeID = layerConfig.NodeTypes[k];
-                            NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                            if (nodeConfig != null && nodeConfig.Type == node.Type)
-                            {
-                                nodeView.NodeConfig = nodeConfig;
-                                break;
-                            }
-                        }
-                    }
-
-                    nodeViews.Add(nodeView);
-                }
-            }
-
-            //绘制连接
-            UpdateConnection();
-
-            //编辑模式状态更新
-            UpdateEditMode();
-
-            pictureBoxNode.SendToBack(); //置于底层
-            pictureBoxNode.Refresh();
-        }
-
-        private void UpdateConnection()
-        {
-            Layer layer = GetCurLayer();
-            if (layer == null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < layer.Connections.Count; i++)
-            {
-                var connection = layer.Connections[i];
-                NodeView nodeView1 = nodeViews[connection.Idx1];
-                NodeView nodeView2 = nodeViews[connection.Idx2];
-                UIHelper.DrawConnection(pictureBoxNode, nodeView1, nodeView2);
-            }
-        }
-
-        private bool CheckConnectionValid(Layer layer, NodeView nodeView1, NodeView nodeView2)
-        {
-            if (nodeView1.ColIndex == nodeView2.ColIndex && nodeView1.RowIndex == nodeView2.RowIndex)
-            {
-                return false;
-            }
-
-            int index1 = nodeViews.IndexOf(nodeView1);
-            int index2 = nodeViews.IndexOf(nodeView2);
-
-            if (index1 < 0 || index2 < 0)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < layer.Connections.Count; i++)
-            {
-                var connection = layer.Connections[i];
-                if ((connection.Idx1 == index1 && connection.Idx2 == index2) || (connection.Idx1 == index2 && connection.Idx2 == index1))
-                {
-                    MessageBox.Show("选中节点间已存在连接", "连接失败");
-                    return false;
-                }
-            }
-
-            int colDelta = Math.Abs(nodeView1.ColIndex - nodeView2.ColIndex);
-            int rowDelta = Math.Abs(nodeView1.RowIndex - nodeView2.RowIndex);
-            if ((colDelta == 0 && rowDelta > 1) || colDelta > 1)
-            {
-                MessageBox.Show("选中节点无法连接", "连接失败");
-                return false;
-            }
-
-            return true;
+            mCanvasView.InitCanvas(SaveData, layer);
+            mCanvasView.RefreshCanvas();
         }
 
         private bool CheckSaveData()
@@ -560,64 +261,6 @@ namespace ArknightsRoguelikeRec
             return savePath;
         }
 
-        private void UpdateEditMode()
-        {
-            CurNodeView = null;
-            for (int i = 0; i < delConnectionBtns.Count; i++)
-            {
-                delConnectionBtns[i].Dispose();
-            }
-            delConnectionBtns.Clear();
-            UIHelper.ClearConnectionPreview(pictureBoxNode);
-
-            if (IsEditMode)
-            {
-                btnEditConnection.BackColor = Color.FromKnownColor(KnownColor.Highlight);
-                btnEditConnection.ForeColor = Color.FromKnownColor(KnownColor.HighlightText);
-                btnEditConnection.Text = "退出编辑";
-                Layer layer = GetCurLayer();
-                if (layer != null)
-                {
-                    for (int i = 0; i < layer.Connections.Count; i++)
-                    {
-                        var connection = layer.Connections[i];
-                        NodeView nodeView1 = nodeViews[connection.Idx1];
-                        NodeView nodeView2 = nodeViews[connection.Idx2];
-                        Button btnDel = null;
-                        btnDel = UIHelper.CreateDelConnectionBtn(panelNodeView, nodeView1, nodeView2, () =>
-                        {
-                            btnDel.Dispose();
-                            delConnectionBtns.Remove(btnDel);
-
-                            DataHelper.RemoveConnection(layer, connection);
-
-                            pictureBoxNode.BackgroundImage = new Bitmap(pictureBoxNode.Width, pictureBoxNode.Height);
-                            UIHelper.DrawGrid(pictureBoxNode); //绘制背景网格
-
-                            UpdateConnection();
-                            pictureBoxNode.Refresh();
-                        });
-                        delConnectionBtns.Add(btnDel);
-                    }
-                }
-            }
-            else
-            {
-                btnEditConnection.BackColor = Color.FromKnownColor(KnownColor.Control);
-                btnEditConnection.ForeColor = Color.FromKnownColor(KnownColor.ControlText);
-                btnEditConnection.Text = "编辑连接(Alt)";
-                btnEditConnection.UseVisualStyleBackColor = true;
-            }
-
-            ////隐藏类型选择按钮
-            //for (int i = 0; i < nodeViews.Count; i++)
-            //{
-            //    NodeView nodeView = nodeViews[i];
-            //    nodeView.TypeView.Visible = !IsEditMode;
-            //    nodeView.SubTypeView.Visible = !IsEditMode;
-            //}
-        }
-
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
@@ -627,7 +270,7 @@ namespace ArknightsRoguelikeRec
                 LayerConfig layerConfig = layerList[i];
                 contextMenuStrip.Items.Add(layerConfig.Name, null, (_sender, _e) =>
                 {
-                    DataHelper.AddLayer(SaveData, layerConfig.Name);
+                    DataAPI.AddLayer(SaveData, layerConfig.Name);
                     SelectedLayer = panelLayer.Controls.Count;
                     IsDirty = true;
                     UpdateLayerView();
@@ -778,11 +421,11 @@ namespace ArknightsRoguelikeRec
             layer.Connections.Clear();
             for (int i = 0; i < textBoxNode.Text.Length; i++)
             {
-                DataHelper.AddColume(layer);
+                DataAPI.AddColume(layer);
                 int.TryParse(textBoxNode.Text[i].ToString(), out int num);
                 for (int j = 0; j < num; j++)
                 {
-                    DataHelper.AddNode(layer, i);
+                    DataAPI.AddNode(layer, i);
                 }
             }
 
@@ -802,15 +445,15 @@ namespace ArknightsRoguelikeRec
                 Node nextColFirstNode = nextColNodes[0];
                 Node nextColLastNode = nextColNodes[nextColNodes.Count - 1];
 
-                DataHelper.AddConnection(layer, curColFirstNode, nextColFirstNode); //已去重
-                DataHelper.AddConnection(layer, curColLastNode, nextColLastNode);
+                DataAPI.AddConnection(layer, curColFirstNode, nextColFirstNode); //已去重
+                DataAPI.AddConnection(layer, curColLastNode, nextColLastNode);
 
                 if (curColNodes.Count == 1)
                 {
                     for (int j = 0; j < nextColNodes.Count; j++)
                     {
                         Node nextColNode = nextColNodes[j];
-                        DataHelper.AddConnection(layer, curColFirstNode, nextColNode);
+                        DataAPI.AddConnection(layer, curColFirstNode, nextColNode);
                     }
                 }
 
@@ -819,7 +462,7 @@ namespace ArknightsRoguelikeRec
                     for (int j = 0; j < curColNodes.Count; j++)
                     {
                         Node curColNode = curColNodes[j];
-                        DataHelper.AddConnection(layer, curColNode, nextColFirstNode);
+                        DataAPI.AddConnection(layer, curColNode, nextColFirstNode);
                     }
                 }
             }
@@ -836,58 +479,41 @@ namespace ArknightsRoguelikeRec
             panelNodeView.Refresh();
         }
 
-        private void btnEditConnection_Click(object sender, EventArgs e)
-        {
-            IsEditMode = !IsEditMode;
-            UpdateEditMode();
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!IsEditMode || CurNodeView == null)
-            {
-                return;
-            }
+            //if (!IsEditMode || CurNodeView == null)
+            //{
+            //    return;
+            //}
 
-            UIHelper.ClearConnectionPreview(pictureBoxNode);
-            UIHelper.DrawConnectionPreview(pictureBoxNode, CurNodeView);
-        }
-
-        private void pictureBoxNode_Click(object sender, EventArgs e)
-        {
-            if (!IsEditMode)
-            {
-                return;
-            }
-
-            CurNodeView = null;
-            UIHelper.ClearConnectionPreview(pictureBoxNode);
+            //UIHelper.ClearConnectionPreview(pictureBoxNode);
+            //UIHelper.DrawConnectionPreview(pictureBoxNode, CurNodeView);
         }
 
         private void pictureBoxNode_MouseDown(object sender, MouseEventArgs e)
         {
-            lastMousePos = pictureBoxNode.PointToScreen(e.Location);
-            isDragging = true;
+            mLastMousePos = pictureBoxNode.PointToScreen(e.Location);
+            mIsDragging = true;
         }
 
         private void pictureBoxNode_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!isDragging)
+            if (!mIsDragging)
             {
                 return;
             }
 
             Point curMousePos = pictureBoxNode.PointToScreen(e.Location);
-            int deltaX = curMousePos.X - lastMousePos.X;
-            int deltaY = curMousePos.Y - lastMousePos.Y;
+            int deltaX = curMousePos.X - mLastMousePos.X;
+            int deltaY = curMousePos.Y - mLastMousePos.Y;
             panelNodeView.AutoScrollPosition = new Point(-(panelNodeView.AutoScrollPosition.X + deltaX), -(panelNodeView.AutoScrollPosition.Y + deltaY));
-            lastMousePos = curMousePos;
+            mLastMousePos = curMousePos;
             panelNodeView.Refresh();
         }
 
         private void pictureBoxNode_MouseUp(object sender, MouseEventArgs e)
         {
-            isDragging = false;
+            mIsDragging = false;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -906,29 +532,6 @@ namespace ArknightsRoguelikeRec
             {
                 btnSave_Click(sender, e);
             }
-
-            if (e.KeyCode == Keys.Menu && btnEditConnection.Enabled) //Alt
-            {
-                if (IsEditMode)
-                {
-                    return;
-                }
-                IsEditMode = true;
-                UpdateEditMode();
-            }
-        }
-
-        private void Form1_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Menu && btnEditConnection.Enabled) //Alt
-            {
-                if (!IsEditMode)
-                {
-                    return;
-                }
-                IsEditMode = false;
-                UpdateEditMode();
-            }
         }
 
         private void comboBoxLayerType_SelectedIndexChanged(object sender, EventArgs e)
@@ -945,7 +548,7 @@ namespace ArknightsRoguelikeRec
                 return;
             }
 
-            Item item = (Item)comboBoxLayerType.Items[index];
+            MenuItem item = (MenuItem)comboBoxLayerType.Items[index];
             layer.Type = item.Value;
         }
 
@@ -957,11 +560,11 @@ namespace ArknightsRoguelikeRec
                 return;
             }
 
-            inputForm.Title = "层级备注";
-            inputForm.Content = layer.Comment;
-            if (inputForm.ShowDialog() == DialogResult.OK)
+            mInputForm.Title = "层级备注";
+            mInputForm.Content = layer.Comment;
+            if (mInputForm.ShowDialog() == DialogResult.OK)
             {
-                layer.Comment = inputForm.Content;
+                layer.Comment = mInputForm.Content;
                 IsDirty = true;
             }
         }

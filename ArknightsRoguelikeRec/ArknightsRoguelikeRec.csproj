@@ -57,6 +57,7 @@
     <Compile Include="Config\NodeConfig.cs" />
     <Compile Include="Config\DefineConfig.cs" />
     <Compile Include="DataModel\Connection.cs" />
+    <Compile Include="DataModel\DataAPI.cs" />
     <Compile Include="InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,13 +79,22 @@
     <Compile Include="DataModel\Layer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\ControlModifyScope.cs" />
+    <Compile Include="Utils\CodeTimer.cs" />
     <Compile Include="Utils\DrawUtil.cs" />
     <Compile Include="Utils\MapList.cs" />
     <Compile Include="Utils\TableReader.cs" />
     <Compile Include="Utils\TypeUtility.cs" />
-    <Compile Include="ViewModel\Item.cs" />
-    <Compile Include="ViewModel\NodeView.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\ControlMouseHandler.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\MenuBuilder.cs" />
+    <Compile Include="ViewModel\CanvasView\Interface\IMenuBuilder.cs" />
+    <Compile Include="ViewModel\CanvasView\Interface\IMouseHandler.cs" />
+    <Compile Include="ViewModel\CanvasView\Interface\INodeConfigInitializer.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\NodeConfigInitializer.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\PictureBoxCanvas.cs" />
+    <Compile Include="ViewModel\CanvasView\Interface\ICanvas.cs" />
+    <Compile Include="ViewModel\MenuItem.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\NodeView.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\CanvasView.cs" />
     <EmbeddedResource Include="InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
