@@ -6,8 +6,9 @@ using System.Windows.Forms;
 using System.Drawing;
 using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataModel;
-using ArknightsRoguelikeRec.ViewModel;
 using ArknightsRoguelikeRec.Helper;
+using ArknightsRoguelikeRec.ViewModel;
+using ArknightsRoguelikeRec.ViewModel.Impl;
 
 namespace ArknightsRoguelikeRec
 {
@@ -37,10 +38,12 @@ namespace ArknightsRoguelikeRec
             comboBoxLayerType.ValueMember = "Value";
 
             mCanvasView = new CanvasView(
-                new PictureBoxCanvas(pictureBoxNode),
+                new PictureBoxCanvas(pictureBoxNode, GlobalDefine.TEXT_FONT),
                 new ControlMouseHandler(pictureBoxNode),
-                new MenuBuilder(mInputForm, () => mCanvasView?.RefreshCanvas()),
+                new MenuBuilder(mInputForm, () => mCanvasView?.UpdateCanvas()),
                 new NodeConfigInitializer());
+            mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
+                pictureBoxNode.Width, pictureBoxNode.Height - 20f); // 预留部分高度给滚动条
         }
 
         protected override CreateParams CreateParams
@@ -64,7 +67,7 @@ namespace ArknightsRoguelikeRec
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            DefineConfig.InitConfig();
+            ConfigHelper.InitConfig();
 
             ////测试用
             //string layerConfig = Newtonsoft.Json.JsonConvert.SerializeObject(DefineConfig.LayerConfigDict.AsList(), Newtonsoft.Json.Formatting.Indented);
@@ -216,7 +219,7 @@ namespace ArknightsRoguelikeRec
 
             Layer layer = GetCurLayer();
             mCanvasView.InitCanvas(SaveData, layer);
-            mCanvasView.RefreshCanvas();
+            mCanvasView.UpdateCanvas();
         }
 
         private bool CheckSaveData()
@@ -567,6 +570,12 @@ namespace ArknightsRoguelikeRec
                 layer.Comment = mInputForm.Content;
                 IsDirty = true;
             }
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            mCanvasView.IsEditMode = !mCanvasView.IsEditMode;
+            buttonEdit.Text = mCanvasView.IsEditMode ? "退出编辑" : "编辑连线";
         }
     }
 }

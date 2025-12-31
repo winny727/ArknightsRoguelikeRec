@@ -1,53 +1,12 @@
-﻿using ArknightsRoguelikeRec.Config;
+﻿using System;
+using System.Collections.Generic;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.ViewModel;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace ArknightsRoguelikeRec.Helper
 {
     public static class DataAPI
     {
-        public static SaveData CreateData(string userName, string dataID)
-        {
-            SaveData saveData = new SaveData()
-            {
-                UserName = userName,
-                DataID = dataID,
-                CreateTime = DateTime.Now,
-                UpdateTime = DateTime.Now,
-                Version = GlobalDefine.VERSION,
-            };
-
-            //预设，自动添加一层到五层
-            var layerList = DefineConfig.LayerConfigDict.AsList();
-            for (int i = 0; i < GlobalDefine.PRESET_LAYER_COUNT; i++)
-            {
-                AddLayer(saveData, layerList[i].Name);
-            }
-
-            return saveData;
-        }
-
-        public static void RefreshInfo(this SaveData saveData)
-        {
-            if (saveData == null)
-            {
-                return;
-            }
-
-            saveData.UpdateTime = DateTime.Now;
-            saveData.Version = GlobalDefine.VERSION;
-        }
-
-        public static string GenerateFileName(this SaveData saveData)
-        {
-            return $"{saveData.UserName}_data{saveData.DataID}_{saveData.CreateTime:yyyy-MM-dd_HH-mm-ss}";
-        }
-            
-
         public static void AddLayer(SaveData saveData, string layerName)
         {
             if (saveData == null)
@@ -110,11 +69,11 @@ namespace ArknightsRoguelikeRec.Helper
             return -1;
         }
 
-        public static void AddConnection(Layer layer, Node node1, Node node2)
+        public static bool AddConnection(Layer layer, Node node1, Node node2)
         {
             if (layer == null)
             {
-                return;
+                return false;
             }
 
             int nodeIdx1 = IndexOfNode(layer, node1);
@@ -122,7 +81,7 @@ namespace ArknightsRoguelikeRec.Helper
 
             if (nodeIdx1 == nodeIdx2)
             {
-                return;
+                return false;
             }
 
             for (int i = 0; i < layer.Connections.Count; i++)
@@ -130,7 +89,7 @@ namespace ArknightsRoguelikeRec.Helper
                 var connection = layer.Connections[i];
                 if ((connection.Idx1 == nodeIdx1 && connection.Idx2 == nodeIdx2) || (connection.Idx1 == nodeIdx2 && connection.Idx2 == nodeIdx1))
                 {
-                    return;
+                    return false;
                 }
             }
 
@@ -139,6 +98,8 @@ namespace ArknightsRoguelikeRec.Helper
                 Idx1 = nodeIdx1,
                 Idx2 = nodeIdx2,
             });
+
+            return true;
         }
 
         public static void RemoveConnection(Layer layer, Connection connection)

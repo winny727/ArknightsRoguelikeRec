@@ -4,7 +4,7 @@ using ArknightsRoguelikeRec.DataModel;
 
 namespace ArknightsRoguelikeRec.ViewModel
 {
-    public interface IMenuBuilder
+    public interface IOptionBuilder
     {
         void ShowTypeMenu(SaveData saveData, Layer layer, NodeView nodeView);
         void ShowSubTypeMenu(SaveData saveData, Layer layer, NodeView nodeView);

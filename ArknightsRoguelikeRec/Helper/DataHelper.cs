@@ -68,9 +68,10 @@ namespace ArknightsRoguelikeRec.Helper
                 return null;
             }
 
-            saveData.RefreshInfo();
+            saveData.UpdateTime = DateTime.Now;
+            saveData.Version = GlobalDefine.VERSION;
             string fileText = JsonConvert.SerializeObject(saveData, formatting);
-            string fileName = $"{saveData.GenerateFileName()}.json";
+            string fileName = $"{saveData.UserName}_data{saveData.DataID}_{saveData.CreateTime:yyyy-MM-dd_HH-mm-ss}.json";
             string fullPath = Path.Combine(path, fileName);
             File.WriteAllText(fullPath, fileText);
             return fullPath;

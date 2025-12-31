@@ -5,9 +5,9 @@ using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Helper;
 
-namespace ArknightsRoguelikeRec.ViewModel
+namespace ArknightsRoguelikeRec.ViewModel.Impl
 {
-    public class MenuBuilder : IMenuBuilder
+    public class MenuBuilder : IOptionBuilder
     {
         private readonly InputForm mInputForm;
         private readonly Action mRefreshCallback;

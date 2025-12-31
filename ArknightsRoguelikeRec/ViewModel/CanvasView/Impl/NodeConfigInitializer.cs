@@ -4,7 +4,7 @@ using ArknightsRoguelikeRec.Helper;
 using System;
 using System.Collections.Generic;
 
-namespace ArknightsRoguelikeRec.ViewModel
+namespace ArknightsRoguelikeRec.ViewModel.Impl
 {
     public class NodeConfigInitializer : INodeConfigInitializer
     {

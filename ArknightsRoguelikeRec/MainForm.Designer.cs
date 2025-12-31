@@ -55,6 +55,7 @@
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.buttonEdit = new System.Windows.Forms.Button();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelNodeView.SuspendLayout();
@@ -179,6 +180,7 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.buttonEdit);
             this.panelCurLayer.Controls.Add(this.btnComment);
             this.panelCurLayer.Controls.Add(this.labelNodeTips);
             this.panelCurLayer.Controls.Add(this.comboBoxLayerType);
@@ -323,6 +325,16 @@
             this.timer1.Interval = 1;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // buttonEdit
+            // 
+            this.buttonEdit.Location = new System.Drawing.Point(571, 7);
+            this.buttonEdit.Name = "buttonEdit";
+            this.buttonEdit.Size = new System.Drawing.Size(100, 23);
+            this.buttonEdit.TabIndex = 15;
+            this.buttonEdit.Text = "编辑连线";
+            this.buttonEdit.UseVisualStyleBackColor = true;
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.btnApply;
@@ -386,6 +398,7 @@
         private System.Windows.Forms.Label labelLayerType;
         private System.Windows.Forms.Label labelNodeTips;
         private System.Windows.Forms.Button btnComment;
+        private System.Windows.Forms.Button buttonEdit;
     }
 }
 

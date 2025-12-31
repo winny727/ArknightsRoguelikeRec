@@ -53,9 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\LayerConfig.cs" />
-    <Compile Include="Config\NodeConfig.cs" />
-    <Compile Include="Config\DefineConfig.cs" />
+    <Compile Include="DataModel\Config\LayerConfig.cs" />
+    <Compile Include="DataModel\Config\NodeConfig.cs" />
+    <Compile Include="DataModel\Config\DefineConfig.cs" />
     <Compile Include="DataModel\Connection.cs" />
     <Compile Include="DataModel\DataAPI.cs" />
     <Compile Include="InputForm.cs">
@@ -84,17 +84,23 @@
     <Compile Include="Utils\MapList.cs" />
     <Compile Include="Utils\TableReader.cs" />
     <Compile Include="Utils\TypeUtility.cs" />
+    <Compile Include="ViewModel\CanvasView\ButtonView.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\ControlMouseHandler.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\ImplHelper.cs" />
+    <Compile Include="ViewModel\CanvasView\ButtonColorHelper.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\MenuBuilder.cs" />
-    <Compile Include="ViewModel\CanvasView\Interface\IMenuBuilder.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\ImageCanvasLayer.cs" />
+    <Compile Include="ViewModel\CanvasView\DataStruct.cs" />
+    <Compile Include="ViewModel\CanvasView\Interface\ICanvasLayer.cs" />
+    <Compile Include="ViewModel\CanvasView\Interface\IOptionBuilder.cs" />
     <Compile Include="ViewModel\CanvasView\Interface\IMouseHandler.cs" />
     <Compile Include="ViewModel\CanvasView\Interface\INodeConfigInitializer.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\NodeConfigInitializer.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\PictureBoxCanvas.cs" />
     <Compile Include="ViewModel\CanvasView\Interface\ICanvas.cs" />
     <Compile Include="ViewModel\MenuItem.cs" />
-    <Compile Include="ViewModel\CanvasView\Impl\NodeView.cs" />
-    <Compile Include="ViewModel\CanvasView\Impl\CanvasView.cs" />
+    <Compile Include="ViewModel\CanvasView\NodeView.cs" />
+    <Compile Include="ViewModel\CanvasView\CanvasView.cs" />
     <EmbeddedResource Include="InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
