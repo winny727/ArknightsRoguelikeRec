@@ -51,14 +51,7 @@ namespace ArknightsRoguelikeRec
 
             Timer timer = new Timer();
             timer.Interval = 1;
-            timer.Tick += (s, e) =>
-            {
-                if (mCanvasView.IsConnecting)
-                {
-                    mCanvasView.UpdateConnectionPreview();
-                    mCanvasView.ApplyCanvas();
-                }
-            };
+            timer.Tick += (s, e) => mCanvasView.Tick();
             timer.Start();
         }
 

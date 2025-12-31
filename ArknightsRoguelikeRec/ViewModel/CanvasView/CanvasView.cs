@@ -79,7 +79,6 @@ namespace ArknightsRoguelikeRec.ViewModel
             mNodeConfigInitializer = nodeConfigInitializer;
 
             mouseHandler.MouseUp += OnMouseUp;
-            mouseHandler.MouseMove += OnMouseMove;
         }
 
         public void InitCanvas(SaveData saveData, Layer layer)
@@ -540,16 +539,16 @@ namespace ArknightsRoguelikeRec.ViewModel
             }
         }
 
-        private void OnMouseMove(Point point)
+        public void Tick()
         {
             if (mDisposed) return;
 
-            // 改为在外部每帧更新
-            //if (IsConnecting)
-            //{
-            //    UpdateConnectionPreview();
-            //    ApplyCanvas();
-            //}
+            // 在外部驱动Tick
+            if (IsConnecting)
+            {
+                UpdateConnectionPreview();
+                ApplyCanvas();
+            }
         }
 
         public virtual void Dispose()
@@ -562,7 +561,6 @@ namespace ArknightsRoguelikeRec.ViewModel
             if (mMouseHandler != null)
             {
                 mMouseHandler.MouseUp -= OnMouseUp;
-                mMouseHandler.MouseMove -= OnMouseMove;
             }
 
             mDisposed = true;
