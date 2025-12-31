@@ -125,11 +125,16 @@ namespace ArknightsRoguelikeRec.ViewModel
             if (mDisposed) return;
             InitCanvas(SaveData, CurrentLayer);
 
-            DrawBackgroundGrid();
-            DrawNodes();
-            DrawConnections();
-            DrawDelConnectionBtns();
+            UpdateBackgroundGrid();
+            UpdateNodes();
+            UpdateConnections();
+            UpdateDelConnectionBtns();
 
+            ApplyCanvas();
+        }
+
+        public void ApplyCanvas()
+        {
             mCanvas.ApplyCanvas();
         }
 
@@ -154,7 +159,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             return null;
         }
 
-        private void DrawBackgroundGrid()
+        public void UpdateBackgroundGrid()
         {
             if (mDisposed) return;
 
@@ -163,6 +168,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 return;
             }
+            canvasLayer.Clear();
 
             float step = GridStep;
             for (float x = 0; x <= CanvasWidth; x += step)
@@ -182,7 +188,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             }
         }
 
-        private void DrawNodes()
+        public void UpdateNodes()
         {
             if (mDisposed) return;
             Layer layer = CurrentLayer;
@@ -190,6 +196,11 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 return;
             }
+
+            DisposeButtonViews();
+
+            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.Nodes);
+            canvasLayer?.Clear();
 
             int colCount = layer.Nodes.Count;
             for (int colIndex = 0; colIndex < colCount; colIndex++)
@@ -259,6 +270,8 @@ namespace ArknightsRoguelikeRec.ViewModel
                     return;
                 }
 
+                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
+                canvasLayer?.Clear();
                 mOptionBuilder.ShowTypeMenu(SaveData, CurrentLayer, nodeView);
             };
 
@@ -279,13 +292,15 @@ namespace ArknightsRoguelikeRec.ViewModel
                     return;
                 }
 
+                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
+                canvasLayer?.Clear();
                 mOptionBuilder.ShowSubTypeMenu(SaveData, CurrentLayer, nodeView);
             };
 
             return nodeView;
         }
 
-        private void DrawConnections()
+        public void UpdateConnections()
         {
             if (mDisposed) return;
 
@@ -294,6 +309,9 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 return;
             }
+
+            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.Connections);
+            canvasLayer?.Clear();
 
             for (int i = 0; i < layer.Connections.Count; i++)
             {
@@ -336,6 +354,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 return;
             }
+            canvasLayer.Clear();
 
             float x1 = nodeView.Rect.X + nodeView.Rect.Width / 2;
             float y1 = nodeView.Rect.Y + nodeView.Rect.Height / 2;
@@ -347,11 +366,10 @@ namespace ArknightsRoguelikeRec.ViewModel
             Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
             Point pt4 = new Point(x2, y2);
 
-            canvasLayer.Clear();
             canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, ConnectionColor, 2f);
         }
 
-        private void DrawDelConnectionBtns()
+        private void UpdateDelConnectionBtns()
         {
             if (mDisposed) return;
             if (!mIsEditMode) return;
@@ -361,6 +379,8 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 return;
             }
+
+            canvasLayer.Clear();
         }
 
         private NodeView GetNodeViewByIdx(int nodeIdx)
@@ -412,7 +432,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                     buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetHoverColor(color));
                     buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetHoverColor(textColor.Value));
                 }
-                mCanvas.ApplyCanvas();
+                ApplyCanvas();
             };
             buttonView.PointerExit += () =>
             {
@@ -427,7 +447,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 buttonStateLayer.Clear();
                 buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetPressedColor(color));
                 buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetPressedColor(textColor.Value));
-                mCanvas.ApplyCanvas();
+                ApplyCanvas();
             };
             buttonView.PointerUp += (button) =>
             {
@@ -451,7 +471,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 {
                     buttonStateLayer.Clear();
                 }
-                mCanvas.ApplyCanvas();
+                ApplyCanvas();
             };
 
             return buttonView;
@@ -489,7 +509,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             }
 
             mConnectionNodeView = null;
-            mCanvas.ApplyCanvas();
+            ApplyCanvas();
         }
 
         private void OnMouseUp(Point point, MouseButton button)
@@ -518,7 +538,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             if (IsConnecting)
             {
                 DrawConnectionPreview(mConnectionNodeView, point);
-                mCanvas.ApplyCanvas();
+                ApplyCanvas();
             }
         }
 

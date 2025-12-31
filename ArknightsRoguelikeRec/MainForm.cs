@@ -40,7 +40,11 @@ namespace ArknightsRoguelikeRec
             mCanvasView = new CanvasView(
                 new PictureBoxCanvas(pictureBoxNode, GlobalDefine.TEXT_FONT),
                 new ControlMouseHandler(pictureBoxNode),
-                new MenuBuilder(mInputForm, () => mCanvasView?.UpdateCanvas()),
+                new MenuBuilder(mInputForm, () =>
+                {
+                    mCanvasView?.UpdateNodes();
+                    mCanvasView?.ApplyCanvas();
+                }),
                 new NodeConfigInitializer());
             mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
                 pictureBoxNode.Width, pictureBoxNode.Height - 20f); // 预留部分高度给滚动条
