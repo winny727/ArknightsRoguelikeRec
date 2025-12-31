@@ -52,7 +52,7 @@ namespace ArknightsRoguelikeRec.ViewModel
         private readonly Dictionary<CanvasLayerType, ICanvasLayer> mCanvasLayers = new Dictionary<CanvasLayerType, ICanvasLayer>();
 
         private NodeView mConnectionNodeView = null;
-        private bool IsConnecting => mConnectionNodeView != null;
+        public bool IsConnecting => mConnectionNodeView != null;
 
         private bool mIsEditMode = false;
         public bool IsEditMode
@@ -65,7 +65,8 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 if (mIsEditMode == value) return;
                 mIsEditMode = value;
-                UpdateCanvas();
+                UpdateDelConnectionBtns();
+                ApplyCanvas();
             }
         }
 
@@ -345,7 +346,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, ConnectionColor, 2f);
         }
 
-        private void DrawConnectionPreview(NodeView nodeView, Point point)
+        public void UpdateConnectionPreview()
         {
             if (mDisposed) return;
 
@@ -356,10 +357,17 @@ namespace ArknightsRoguelikeRec.ViewModel
             }
             canvasLayer.Clear();
 
+            NodeView nodeView = mConnectionNodeView;
+            Point mousePoint = mMouseHandler.GetMousePoint();
+            if (nodeView == null)
+            {
+                return;
+            }
+
             float x1 = nodeView.Rect.X + nodeView.Rect.Width / 2;
             float y1 = nodeView.Rect.Y + nodeView.Rect.Height / 2;
-            float x2 = point.X;
-            float y2 = point.Y;
+            float x2 = mousePoint.X;
+            float y2 = mousePoint.Y;
 
             Point pt1 = new Point(x1, y1);
             Point pt2 = new Point(x2 - (x2 - x1) / 4, y1);
@@ -437,6 +445,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             buttonView.PointerExit += () =>
             {
                 buttonStateLayer.Clear();
+                ApplyCanvas();
             };
             buttonView.PointerDown += (button) =>
             {
@@ -535,11 +544,12 @@ namespace ArknightsRoguelikeRec.ViewModel
         {
             if (mDisposed) return;
 
-            if (IsConnecting)
-            {
-                DrawConnectionPreview(mConnectionNodeView, point);
-                ApplyCanvas();
-            }
+            // 改为在外部每帧更新
+            //if (IsConnecting)
+            //{
+            //    UpdateConnectionPreview();
+            //    ApplyCanvas();
+            //}
         }
 
         public virtual void Dispose()
@@ -547,6 +557,12 @@ namespace ArknightsRoguelikeRec.ViewModel
             if (mDisposed)
             {
                 return;
+            }
+
+            if (mMouseHandler != null)
+            {
+                mMouseHandler.MouseUp -= OnMouseUp;
+                mMouseHandler.MouseMove -= OnMouseMove;
             }
 
             mDisposed = true;

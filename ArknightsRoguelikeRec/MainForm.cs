@@ -48,6 +48,18 @@ namespace ArknightsRoguelikeRec
                 new NodeConfigInitializer());
             mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
                 pictureBoxNode.Width, pictureBoxNode.Height - 20f); // 预留部分高度给滚动条
+
+            Timer timer = new Timer();
+            timer.Interval = 1;
+            timer.Tick += (s, e) =>
+            {
+                if (mCanvasView.IsConnecting)
+                {
+                    mCanvasView.UpdateConnectionPreview();
+                    mCanvasView.ApplyCanvas();
+                }
+            };
+            timer.Start();
         }
 
         protected override CreateParams CreateParams
