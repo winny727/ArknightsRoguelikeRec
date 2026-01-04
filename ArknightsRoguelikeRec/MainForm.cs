@@ -94,9 +94,23 @@ namespace ArknightsRoguelikeRec
             };
 #endif
 
-            Timer timer = new Timer();
-            timer.Interval = 16;
-            timer.Tick += (s, e) => mCanvasView.Tick();
+            //Timer timer = new Timer();
+            //timer.Interval = 8;
+            //timer.Tick += (s, e) => mCanvasView.Tick();
+            //timer.Start();
+
+            var timer = new System.Timers.Timer(8); // 8ms → 120FPS
+            timer.Elapsed += (s, e) =>
+            {
+                if (mNodeViewControl.InvokeRequired)
+                {
+                    mNodeViewControl.BeginInvoke((Action)(() => mCanvasView.Tick()));
+                }
+                else
+                {
+                    mNodeViewControl.Invalidate();
+                }
+            };
             timer.Start();
         }
 

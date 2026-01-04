@@ -259,15 +259,8 @@ namespace ArknightsRoguelikeRec.ViewModel
             ButtonView btnTitle = RegButton(CanvasLayerType.Nodes, rectTitle, NodeTitleBackgroundColor, node.Type, NodeTitleTextColor);
             btnTitle.Click += (button) =>
             {
-                if (IsConnecting)
+                if (IsConnecting || IsEditMode)
                 {
-                    OnConnectionEnd(nodeView);
-                    return;
-                }
-
-                if (IsEditMode)
-                {
-                    mConnectionNodeView = nodeView;
                     return;
                 }
 
@@ -281,21 +274,28 @@ namespace ArknightsRoguelikeRec.ViewModel
             ButtonView btnContent = RegButton(CanvasLayerType.Nodes, rectContent, NodeContentBackgroundColor, node.SubType, NodeTitleTextColor);
             btnContent.Click += (button) =>
             {
-                if (IsConnecting)
+                if (IsConnecting || IsEditMode)
                 {
-                    OnConnectionEnd(nodeView);
-                    return;
-                }
-
-                if (IsEditMode)
-                {
-                    mConnectionNodeView = nodeView;
                     return;
                 }
 
                 ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
                 canvasLayer?.Clear();
                 mOptionBuilder.ShowSubTypeMenu(SaveData, CurrentLayer, nodeView);
+            };
+
+            ButtonView buttonView = new ButtonView(rect, mMouseHandler);
+            mButtonViews.Add(buttonView);
+            buttonView.Click += (button) =>
+            {
+                if (IsConnecting)
+                {
+                    OnConnectionEnd(nodeView);
+                }
+                else if (IsEditMode)
+                {
+                    mConnectionNodeView = nodeView;
+                }
             };
 
             return nodeView;
@@ -387,6 +387,9 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 return;
             }
+
+            //TODO: 实现删除连接按钮
+            //TODO 切换读取文件时GC耗时？
 
             canvasLayer.Clear();
         }

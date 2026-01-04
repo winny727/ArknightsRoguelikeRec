@@ -142,7 +142,6 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
             mDisposed = true;
             mGraphics?.Dispose();
-            mTextFont?.Dispose();
             mGraphics = null;
             mTextFont = null;
         }
