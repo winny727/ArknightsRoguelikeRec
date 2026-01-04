@@ -135,6 +135,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
         public void ApplyCanvas()
         {
+            //using CodeTimer codeTimer = new CodeTimer("ApplyCanvas");
             mCanvas.ApplyCanvas();
         }
 

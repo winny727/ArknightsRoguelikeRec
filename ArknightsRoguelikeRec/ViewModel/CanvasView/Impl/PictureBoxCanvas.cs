@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 using ArknightsRoguelikeRec.ViewModel.DataStruct;
 
 using Size = ArknightsRoguelikeRec.ViewModel.DataStruct.Size;
@@ -37,6 +38,10 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             mPictureBox.BackgroundImage = CreateBitmap(width, height);
             mPictureBox.Image = CreateBitmap(width, height);
             mGraphics = Graphics.FromImage(mPictureBox.Image);
+            mGraphics.CompositingMode = CompositingMode.SourceOver;
+            mGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+            mGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            mGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 
             Graphics backgroundGraphics = Graphics.FromImage(mPictureBox.BackgroundImage);
             mPictureBox.Size = ImplHelper.ToDrawingSize(new Size(width, height));
@@ -54,7 +59,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                     mGraphics.DrawImage(layer.Image, 0, 0);
                 }
             }
-            mPictureBox.Refresh();
+            mPictureBox.Invalidate();
         }
 
         public void ClearCanvas()

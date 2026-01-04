@@ -491,17 +491,6 @@ namespace ArknightsRoguelikeRec
             panelNodeView.Refresh();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            //if (!IsEditMode || CurNodeView == null)
-            //{
-            //    return;
-            //}
-
-            //UIHelper.ClearConnectionPreview(pictureBoxNode);
-            //UIHelper.DrawConnectionPreview(pictureBoxNode, CurNodeView);
-        }
-
         private void pictureBoxNode_MouseDown(object sender, MouseEventArgs e)
         {
             mLastMousePos = pictureBoxNode.PointToScreen(e.Location);

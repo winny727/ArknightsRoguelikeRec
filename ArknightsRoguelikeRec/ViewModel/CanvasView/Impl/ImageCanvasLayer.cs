@@ -1,14 +1,13 @@
-﻿using System;
+﻿using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
-
+using Color = ArknightsRoguelikeRec.ViewModel.DataStruct.Color;
+using DrawingColor = System.Drawing.Color;
 using Point = ArknightsRoguelikeRec.ViewModel.DataStruct.Point;
 using Rect = ArknightsRoguelikeRec.ViewModel.DataStruct.Rect;
-using Color = ArknightsRoguelikeRec.ViewModel.DataStruct.Color;
-
-using DrawingColor = System.Drawing.Color;
 
 namespace ArknightsRoguelikeRec.ViewModel.Impl
 {
@@ -26,6 +25,11 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             Image = image ?? throw new ArgumentNullException(nameof(Image));
             mGraphics = Graphics.FromImage(image) ?? throw new ArgumentNullException(nameof(Graphics));
             mTextFont = textFont ?? throw new ArgumentNullException(nameof(Font));
+
+            mGraphics.CompositingMode = CompositingMode.SourceOver;
+            mGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+            mGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            mGraphics.SmoothingMode = SmoothingMode.HighSpeed;
         }
 
         public void Clear(Color? color = null)
@@ -33,6 +37,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             if (mDisposed) return;
             mGraphics.Clear(ImplHelper.ToDrawingColor(color) ?? DrawingColor.Transparent);
         }
+
         public void DrawLine(Point start, Point end, Color? color = null, float width = 1f)
         {
             if (mDisposed) return;
