@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.labelTitleLayer = new System.Windows.Forms.Label();
             this.btnAddLayer = new System.Windows.Forms.Button();
             this.panelLayer = new System.Windows.Forms.Panel();
@@ -41,24 +42,23 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
-            this.buttonEdit = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.btnComment = new System.Windows.Forms.Button();
             this.labelNodeTips = new System.Windows.Forms.Label();
             this.comboBoxLayerType = new System.Windows.Forms.ComboBox();
             this.labelLayerType = new System.Windows.Forms.Label();
             this.panelNodeView = new System.Windows.Forms.Panel();
-            this.pictureBoxNode = new System.Windows.Forms.PictureBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.labelNode = new System.Windows.Forms.Label();
             this.textBoxNode = new System.Windows.Forms.TextBox();
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
-            this.panelNodeView.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).BeginInit();
             this.panelAllLayer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelTitleLayer
@@ -178,7 +178,7 @@
             // 
             // panelCurLayer
             // 
-            this.panelCurLayer.Controls.Add(this.buttonEdit);
+            this.panelCurLayer.Controls.Add(this.btnEdit);
             this.panelCurLayer.Controls.Add(this.btnComment);
             this.panelCurLayer.Controls.Add(this.labelNodeTips);
             this.panelCurLayer.Controls.Add(this.comboBoxLayerType);
@@ -193,15 +193,15 @@
             this.panelCurLayer.Size = new System.Drawing.Size(674, 625);
             this.panelCurLayer.TabIndex = 0;
             // 
-            // buttonEdit
+            // btnEdit
             // 
-            this.buttonEdit.Location = new System.Drawing.Point(571, 7);
-            this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(100, 23);
-            this.buttonEdit.TabIndex = 15;
-            this.buttonEdit.Text = "编辑连线";
-            this.buttonEdit.UseVisualStyleBackColor = true;
-            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
+            this.btnEdit.Location = new System.Drawing.Point(571, 7);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(100, 23);
+            this.btnEdit.TabIndex = 15;
+            this.btnEdit.Text = "编辑连线(E)";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnComment
             // 
@@ -209,7 +209,7 @@
             this.btnComment.Name = "btnComment";
             this.btnComment.Size = new System.Drawing.Size(100, 23);
             this.btnComment.TabIndex = 14;
-            this.btnComment.Text = "层级备注";
+            this.btnComment.Text = "层级备注(G)";
             this.btnComment.UseVisualStyleBackColor = true;
             this.btnComment.Click += new System.EventHandler(this.btnComment_Click);
             // 
@@ -247,24 +247,11 @@
             // 
             this.panelNodeView.AutoScroll = true;
             this.panelNodeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelNodeView.Controls.Add(this.pictureBoxNode);
             this.panelNodeView.Location = new System.Drawing.Point(3, 65);
             this.panelNodeView.Name = "panelNodeView";
             this.panelNodeView.Size = new System.Drawing.Size(668, 557);
             this.panelNodeView.TabIndex = 9;
             this.panelNodeView.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelNodeView_Scroll);
-            // 
-            // pictureBoxNode
-            // 
-            this.pictureBoxNode.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxNode.Margin = new System.Windows.Forms.Padding(0);
-            this.pictureBoxNode.Name = "pictureBoxNode";
-            this.pictureBoxNode.Size = new System.Drawing.Size(666, 555);
-            this.pictureBoxNode.TabIndex = 8;
-            this.pictureBoxNode.TabStop = false;
-            this.pictureBoxNode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseDown);
-            this.pictureBoxNode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseMove);
-            this.pictureBoxNode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxNode_MouseUp);
             // 
             // btnCancel
             // 
@@ -354,10 +341,9 @@
             this.panelInfo.PerformLayout();
             this.panelCurLayer.ResumeLayout(false);
             this.panelCurLayer.PerformLayout();
-            this.panelNodeView.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNode)).EndInit();
             this.panelAllLayer.ResumeLayout(false);
             this.panelAllLayer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -384,12 +370,12 @@
         private System.Windows.Forms.Panel panelAllLayer;
         private System.Windows.Forms.Button btnRemoveLayer;
         private System.Windows.Forms.Panel panelNodeView;
-        private System.Windows.Forms.PictureBox pictureBoxNode;
         private System.Windows.Forms.ComboBox comboBoxLayerType;
         private System.Windows.Forms.Label labelLayerType;
         private System.Windows.Forms.Label labelNodeTips;
         private System.Windows.Forms.Button btnComment;
-        private System.Windows.Forms.Button buttonEdit;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.BindingSource bindingSource1;
     }
 }
 

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Windows.Forms;
-using System.Drawing;
-using ArknightsRoguelikeRec.Config;
+﻿using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Helper;
 using ArknightsRoguelikeRec.ViewModel;
 using ArknightsRoguelikeRec.ViewModel.Impl;
+using SkiaSharp;
+using SkiaSharp.Views.Desktop;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace ArknightsRoguelikeRec
 {
@@ -29,6 +31,8 @@ namespace ArknightsRoguelikeRec
 
         private CanvasView mCanvasView;
 
+        private SKGLControl mSKGLControl;
+
         public MainForm()
         {
             InitializeComponent();
@@ -37,9 +41,16 @@ namespace ArknightsRoguelikeRec
             comboBoxLayerType.DisplayMember = "Key";
             comboBoxLayerType.ValueMember = "Value";
 
+            mSKGLControl = new SKGLControl
+            {
+                Width = panelNodeView.Width - 2,
+                Height = panelNodeView.Height - 2,
+            };
+            panelNodeView.Controls.Add(mSKGLControl);
+
             mCanvasView = new CanvasView(
-                new PictureBoxCanvas(pictureBoxNode, GlobalDefine.TEXT_FONT),
-                new ControlMouseHandler(pictureBoxNode),
+                new SKGLCanvas(mSKGLControl, GlobalDefine.SK_TEXT_FONT),
+                new ControlMouseHandler(mSKGLControl),
                 new MenuBuilder(mInputForm, () =>
                 {
                     mCanvasView?.UpdateNodes();
@@ -47,7 +58,15 @@ namespace ArknightsRoguelikeRec
                 }),
                 new NodeConfigInitializer());
             mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
-                pictureBoxNode.Width, pictureBoxNode.Height - 20f); // 预留部分高度给滚动条
+                mSKGLControl.Width, mSKGLControl.Height - 20f); // 预留部分高度给滚动条
+
+            mSKGLControl.MouseDown += SKGLControl_MouseDown;
+            mSKGLControl.MouseUp += SKGLControl_MouseUp;
+            mSKGLControl.MouseMove += SKGLControl_MouseMove;
+            mSKGLControl.PaintSurface += (s, e) =>
+            {
+                panelNodeView.Refresh();
+            };
 
             Timer timer = new Timer();
             timer.Interval = 1;
@@ -103,7 +122,7 @@ namespace ArknightsRoguelikeRec
             panelLayer.Enabled = isEnabled;
             panelInfo.Enabled = isEnabled;
             panelCurLayer.Enabled = isEnabled;
-            pictureBoxNode.Enabled = isEnabled;
+            mSKGLControl.Enabled = isEnabled;
             btnSave.Enabled = isEnabled;
 
             UpdateInfoView();
@@ -491,20 +510,20 @@ namespace ArknightsRoguelikeRec
             panelNodeView.Refresh();
         }
 
-        private void pictureBoxNode_MouseDown(object sender, MouseEventArgs e)
+        private void SKGLControl_MouseDown(object sender, MouseEventArgs e)
         {
-            mLastMousePos = pictureBoxNode.PointToScreen(e.Location);
+            mLastMousePos = mSKGLControl.PointToScreen(e.Location);
             mIsDragging = true;
         }
 
-        private void pictureBoxNode_MouseMove(object sender, MouseEventArgs e)
+        private void SKGLControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (!mIsDragging)
             {
                 return;
             }
 
-            Point curMousePos = pictureBoxNode.PointToScreen(e.Location);
+            Point curMousePos = mSKGLControl.PointToScreen(e.Location);
             int deltaX = curMousePos.X - mLastMousePos.X;
             int deltaY = curMousePos.Y - mLastMousePos.Y;
             panelNodeView.AutoScrollPosition = new Point(-(panelNodeView.AutoScrollPosition.X + deltaX), -(panelNodeView.AutoScrollPosition.Y + deltaY));
@@ -512,7 +531,7 @@ namespace ArknightsRoguelikeRec
             panelNodeView.Refresh();
         }
 
-        private void pictureBoxNode_MouseUp(object sender, MouseEventArgs e)
+        private void SKGLControl_MouseUp(object sender, MouseEventArgs e)
         {
             mIsDragging = false;
         }
@@ -532,6 +551,16 @@ namespace ArknightsRoguelikeRec
             if (e.Control && e.KeyCode == Keys.S && btnSave.Enabled)
             {
                 btnSave_Click(sender, e);
+            }
+
+            if (e.KeyCode == Keys.E && btnEdit.Enabled)
+            {
+                btnEdit_Click(sender, e);
+            }
+
+            if (e.KeyCode == Keys.G && btnComment.Enabled)
+            {
+                btnComment_Click(sender, e);
             }
         }
 
@@ -570,10 +599,11 @@ namespace ArknightsRoguelikeRec
             }
         }
 
-        private void buttonEdit_Click(object sender, EventArgs e)
+        private void btnEdit_Click(object sender, EventArgs e)
         {
             mCanvasView.IsEditMode = !mCanvasView.IsEditMode;
-            buttonEdit.Text = mCanvasView.IsEditMode ? "退出编辑" : "编辑连线";
+            btnEdit.Text = mCanvasView.IsEditMode ? "退出编辑(E)" : "编辑连线(E)";
+            btnEdit.BackColor = mCanvasView.IsEditMode ? Color.LightGreen : SystemColors.Control;
         }
     }
 }
