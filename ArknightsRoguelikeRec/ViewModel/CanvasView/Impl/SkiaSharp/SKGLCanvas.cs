@@ -1,4 +1,5 @@
-﻿using ArknightsRoguelikeRec.ViewModel.DataStruct;
+﻿#if SKIA_SHARP
+using ArknightsRoguelikeRec.ViewModel.DataStruct;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using System;
@@ -133,3 +134,4 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             => new SKColor(c.R, c.G, c.B, c.A);
     }
 }
+#endif

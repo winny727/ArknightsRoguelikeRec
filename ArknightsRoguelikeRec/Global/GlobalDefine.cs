@@ -1,10 +1,6 @@
-﻿using SkiaSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
-using System.IO;
-using System.Reflection;
 
 namespace ArknightsRoguelikeRec
 {
@@ -21,11 +17,11 @@ namespace ArknightsRoguelikeRec
         public const int COLUMN_MIN_NODE = 1; //每列最少节点
         public const int COLUMN_MAX_NODE = 4; //每列最多节点
 
+        public static readonly Font TEXT_FONT = new Font("宋体", 12.0f, FontStyle.Bold);
+
+#if SKIA_SHARP
         public const string FONT_PATH = "ArknightsRoguelikeRec.Assets.Fonts.HarmonyOS_Sans_SC_Regular.ttf";
-
-        //public static readonly Font TEXT_FONT = new Font("宋体", 12.0f, FontStyle.Bold);
-        public static readonly Font TEXT_FONT = FontHelper.CreateFont(FONT_PATH, 12.0f, FontStyle.Regular);
-
-        public static readonly SKTypeface SK_TEXT_FONT = FontHelper.LoadEmbeddedSKTypeface(FONT_PATH);
+        public static readonly SkiaSharp.SKTypeface SK_TEXT_FONT = FontHelper.LoadEmbeddedSKTypeface(FONT_PATH);
+#endif
     }
 }

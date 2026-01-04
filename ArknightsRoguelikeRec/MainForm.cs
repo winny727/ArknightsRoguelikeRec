@@ -3,8 +3,9 @@ using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Helper;
 using ArknightsRoguelikeRec.ViewModel;
 using ArknightsRoguelikeRec.ViewModel.Impl;
-using SkiaSharp;
+#if SKIA_SHARP
 using SkiaSharp.Views.Desktop;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,14 +25,17 @@ namespace ArknightsRoguelikeRec
 
         public NodeView CurNodeView { get; private set; }
 
-        private InputForm mInputForm = new InputForm();
+        private readonly InputForm mInputForm = new InputForm();
 
         private bool mIsDragging = false;
         private Point mLastMousePos;
 
-        private CanvasView mCanvasView;
-
-        private SKGLControl mSKGLControl;
+        private readonly CanvasView mCanvasView;
+#if SKIA_SHARP
+        private readonly SKGLControl mNodeViewControl;
+#else
+        private readonly PictureBox mNodeViewControl;
+#endif
 
         public MainForm()
         {
@@ -41,32 +45,54 @@ namespace ArknightsRoguelikeRec
             comboBoxLayerType.DisplayMember = "Key";
             comboBoxLayerType.ValueMember = "Value";
 
-            mSKGLControl = new SKGLControl
+#if SKIA_SHARP
+            mNodeViewControl = new SKGLControl
             {
                 Width = panelNodeView.Width - 2,
                 Height = panelNodeView.Height - 2,
             };
-            panelNodeView.Controls.Add(mSKGLControl);
 
             mCanvasView = new CanvasView(
-                new SKGLCanvas(mSKGLControl, GlobalDefine.SK_TEXT_FONT),
-                new ControlMouseHandler(mSKGLControl),
+                new SKGLCanvas(mNodeViewControl, GlobalDefine.SK_TEXT_FONT),
+                new ControlMouseHandler(mNodeViewControl),
                 new MenuBuilder(mInputForm, () =>
                 {
                     mCanvasView?.UpdateNodes();
                     mCanvasView?.ApplyCanvas();
                 }),
                 new NodeConfigInitializer());
-            mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
-                mSKGLControl.Width, mSKGLControl.Height - 20f); // 预留部分高度给滚动条
+#else
+            mNodeViewControl = new PictureBox
+            {
+                Width = panelNodeView.Width - 2,
+                Height = panelNodeView.Height - 2,
+            };
 
-            mSKGLControl.MouseDown += SKGLControl_MouseDown;
-            mSKGLControl.MouseUp += SKGLControl_MouseUp;
-            mSKGLControl.MouseMove += SKGLControl_MouseMove;
-            mSKGLControl.PaintSurface += (s, e) =>
+            mCanvasView = new CanvasView(
+                new PictureBoxCanvas(mNodeViewControl, GlobalDefine.TEXT_FONT),
+                new ControlMouseHandler(mNodeViewControl),
+                new MenuBuilder(mInputForm, () =>
+                {
+                    mCanvasView?.UpdateNodes();
+                    mCanvasView?.ApplyCanvas();
+                }),
+                new NodeConfigInitializer());
+#endif
+
+            panelNodeView.Controls.Add(mNodeViewControl);
+
+            mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
+                mNodeViewControl.Width, mNodeViewControl.Height - 20f); // 预留部分高度给滚动条
+
+            mNodeViewControl.MouseDown += NodeViewControl_MouseDown;
+            mNodeViewControl.MouseUp += NodeViewControl_MouseUp;
+            mNodeViewControl.MouseMove += NodeViewControl_MouseMove;
+#if SKIA_SHARP
+            mNodeViewControl.PaintSurface += (s, e) =>
             {
                 panelNodeView.Refresh();
             };
+#endif
 
             Timer timer = new Timer();
             timer.Interval = 16;
@@ -122,7 +148,7 @@ namespace ArknightsRoguelikeRec
             panelLayer.Enabled = isEnabled;
             panelInfo.Enabled = isEnabled;
             panelCurLayer.Enabled = isEnabled;
-            mSKGLControl.Enabled = isEnabled;
+            mNodeViewControl.Enabled = isEnabled;
             btnSave.Enabled = isEnabled;
 
             UpdateInfoView();
@@ -510,20 +536,20 @@ namespace ArknightsRoguelikeRec
             panelNodeView.Refresh();
         }
 
-        private void SKGLControl_MouseDown(object sender, MouseEventArgs e)
+        private void NodeViewControl_MouseDown(object sender, MouseEventArgs e)
         {
-            mLastMousePos = mSKGLControl.PointToScreen(e.Location);
+            mLastMousePos = mNodeViewControl.PointToScreen(e.Location);
             mIsDragging = true;
         }
 
-        private void SKGLControl_MouseMove(object sender, MouseEventArgs e)
+        private void NodeViewControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (!mIsDragging)
             {
                 return;
             }
 
-            Point curMousePos = mSKGLControl.PointToScreen(e.Location);
+            Point curMousePos = mNodeViewControl.PointToScreen(e.Location);
             int deltaX = curMousePos.X - mLastMousePos.X;
             int deltaY = curMousePos.Y - mLastMousePos.Y;
             panelNodeView.AutoScrollPosition = new Point(-(panelNodeView.AutoScrollPosition.X + deltaX), -(panelNodeView.AutoScrollPosition.Y + deltaY));
@@ -531,7 +557,7 @@ namespace ArknightsRoguelikeRec
             panelNodeView.Refresh();
         }
 
-        private void SKGLControl_MouseUp(object sender, MouseEventArgs e)
+        private void NodeViewControl_MouseUp(object sender, MouseEventArgs e)
         {
             mIsDragging = false;
         }

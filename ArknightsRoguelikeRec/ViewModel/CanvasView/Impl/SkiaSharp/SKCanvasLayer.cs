@@ -1,4 +1,5 @@
-﻿using ArknightsRoguelikeRec.ViewModel.DataStruct;
+﻿#if SKIA_SHARP
+using ArknightsRoguelikeRec.ViewModel.DataStruct;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -169,7 +170,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
             mCommands.Add(canvas =>
             {
-                float fontSize = layoutRect.Height * 0.5f;
+                float fontSize = layoutRect.Height * 0.4f;
                 var font = GetFont(mSKTypeface, fontSize);
                 var paint = GetFill(c);
 
@@ -283,3 +284,4 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         }
     }
 }
+#endif
