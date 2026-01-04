@@ -38,7 +38,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             if (mDirty)
             {
                 mCachedPicture?.Dispose();
-                mCachedPicture = RecordPicture();
+                mCachedPicture = GeneratePicture();
                 mDirty = false;
             }
 
@@ -46,7 +46,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 canvas.DrawPicture(mCachedPicture);
         }
 
-        private SKPicture RecordPicture()
+        private SKPicture GeneratePicture()
         {
             if (mDisposed) return null;
 
@@ -55,7 +55,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 new SKRect(0, 0, mSize.Width, mSize.Height));
 
             foreach (var layer in mCanvasLayers)
-                layer.Replay(canvas);
+                layer.ExecuteRenderCommands(canvas);
 
             return recorder.EndRecording();
         }
@@ -129,6 +129,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             mDisposed = true;
         }
 
-        private static SKColor ToSK(Color c) => new SKColor(c.R, c.G, c.B, c.A);
+        private static SKColor ToSK(Color c)
+            => new SKColor(c.R, c.G, c.B, c.A);
     }
 }

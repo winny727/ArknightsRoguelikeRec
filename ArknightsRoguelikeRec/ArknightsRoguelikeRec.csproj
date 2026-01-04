@@ -135,7 +135,7 @@
     <Compile Include="Utils\TypeUtility.cs" />
     <Compile Include="ViewModel\CanvasView\ButtonView.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\ControlMouseHandler.cs" />
-    <Compile Include="ViewModel\CanvasView\Impl\ImplHelper.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\PictureBox\PictureBoxHelper.cs" />
     <Compile Include="ViewModel\CanvasView\ButtonColorHelper.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\MenuBuilder.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\PictureBox\ImageCanvasLayer.cs" />

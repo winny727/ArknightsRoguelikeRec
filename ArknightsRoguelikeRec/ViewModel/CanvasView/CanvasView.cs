@@ -425,11 +425,6 @@ namespace ArknightsRoguelikeRec.ViewModel
             // 注册按钮状态变化事件
             buttonView.PointerEnter += () =>
             {
-                if (IsConnecting)
-                {
-                    return;
-                }
-                buttonStateLayer.Clear();
                 if (buttonView.IsPressed)
                 {
                     buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetPressedColor(color));
@@ -444,27 +439,18 @@ namespace ArknightsRoguelikeRec.ViewModel
             };
             buttonView.PointerExit += () =>
             {
-                buttonStateLayer.Clear();
+                buttonStateLayer.FillRectangle(rect, color);
+                buttonStateLayer.DrawString(text, rect, textColor.Value);
                 ApplyCanvas();
             };
-            buttonView.PointerDown += (button) =>
+            buttonView.MouseDown += (button) =>
             {
-                if (IsConnecting)
-                {
-                    return;
-                }
-                buttonStateLayer.Clear();
                 buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetPressedColor(color));
                 buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetPressedColor(textColor.Value));
                 ApplyCanvas();
             };
-            buttonView.PointerUp += (button) =>
+            buttonView.MouseUp += (button) =>
             {
-                if (IsConnecting)
-                {
-                    return;
-                }
-
                 if (buttonView.IsPressed)
                 {
                     // 还有别的鼠标按键还按着，不改变状态
@@ -478,7 +464,8 @@ namespace ArknightsRoguelikeRec.ViewModel
                 }
                 else
                 {
-                    buttonStateLayer.Clear();
+                    buttonStateLayer.FillRectangle(rect, color);
+                    buttonStateLayer.DrawString(text, rect, textColor.Value);
                 }
                 ApplyCanvas();
             };

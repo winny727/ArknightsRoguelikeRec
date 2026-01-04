@@ -28,8 +28,8 @@ namespace ArknightsRoguelikeRec.ViewModel
             }
         }
 
-        public event Action<MouseButton> PointerDown; // 按钮范围内按下鼠标
-        public event Action<MouseButton> PointerUp; // 按钮范围内抬起鼠标
+        public event Action<MouseButton> MouseDown; // 按钮范围内按下鼠标
+        public event Action<MouseButton> MouseUp; // 按钮范围内抬起鼠标
         public event Action<MouseButton> Click; // 按钮范围内点击鼠标
         public event Action<MouseButton> Cancel; // 在按钮范围外抬起鼠标取消点击
         public event Action PointerEnter; // 鼠标进入按钮范围
@@ -71,7 +71,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             bool isPressed = IsButtonPressed(button);
             SetIsPressed(button, true);
 
-            PointerDown?.Invoke(button);
+            MouseDown?.Invoke(button);
         }
 
         private void OnMouseUp(Point point, MouseButton button)
@@ -85,7 +85,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
             if (contains)
             {
-                PointerUp?.Invoke(button);
+                MouseUp?.Invoke(button);
             }
 
             if (isPressed)

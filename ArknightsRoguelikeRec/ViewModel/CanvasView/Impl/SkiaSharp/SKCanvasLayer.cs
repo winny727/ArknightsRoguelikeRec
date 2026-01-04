@@ -24,19 +24,12 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             mSKTypeface = skTypeface ?? throw new ArgumentNullException(nameof(skTypeface));
         }
 
-        internal void Replay(SKCanvas canvas)
+        internal void ExecuteRenderCommands(SKCanvas canvas)
         {
             if (mDisposed) return;
 
             foreach (var cmd in mCommands)
                 cmd(canvas);
-        }
-
-        internal void ClearInternal()
-        {
-            if (mDisposed) return;
-
-            mCommands.Clear();
         }
 
         public void Clear(Color? color = null)

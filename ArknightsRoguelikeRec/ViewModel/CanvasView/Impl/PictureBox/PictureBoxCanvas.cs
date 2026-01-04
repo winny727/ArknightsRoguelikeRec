@@ -44,8 +44,8 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             mGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 
             Graphics backgroundGraphics = Graphics.FromImage(mPictureBox.BackgroundImage);
-            mPictureBox.Size = ImplHelper.ToDrawingSize(new Size(width, height));
-            backgroundGraphics.Clear(ImplHelper.ToDrawingColor(backgroundColor) ?? DrawingColor.White);
+            mPictureBox.Size = PictureBoxHelper.ToDrawingSize(new Size(width, height));
+            backgroundGraphics.Clear(PictureBoxHelper.ToDrawingColor(backgroundColor) ?? DrawingColor.White);
         }
 
         public void ApplyCanvas()
@@ -110,7 +110,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
         private Bitmap CreateBitmap(float width, float height)
         {
-            return new Bitmap(ImplHelper.ConvertNumber(width), ImplHelper.ConvertNumber(height));
+            return new Bitmap(PictureBoxHelper.ConvertNumber(width), PictureBoxHelper.ConvertNumber(height));
         }
     }
 }

@@ -69,7 +69,7 @@ namespace ArknightsRoguelikeRec
             };
 
             Timer timer = new Timer();
-            timer.Interval = 1;
+            timer.Interval = 16;
             timer.Tick += (s, e) => mCanvasView.Tick();
             timer.Start();
         }

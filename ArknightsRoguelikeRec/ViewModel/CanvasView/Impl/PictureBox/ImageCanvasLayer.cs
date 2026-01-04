@@ -35,16 +35,18 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         public void Clear(Color? color = null)
         {
             if (mDisposed) return;
-            mGraphics.Clear(ImplHelper.ToDrawingColor(color) ?? DrawingColor.Transparent);
+
+            var c = PictureBoxHelper.ToDrawingColor(color) ?? DrawingColor.Transparent;
+            mGraphics.Clear(c);
         }
 
         public void DrawLine(Point start, Point end, Color? color = null, float width = 1f)
         {
             if (mDisposed) return;
 
-            var startPoint = ImplHelper.ToDrawingPoint(start);
-            var endPoint = ImplHelper.ToDrawingPoint(end);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
+            var startPoint = PictureBoxHelper.ToDrawingPoint(start);
+            var endPoint = PictureBoxHelper.ToDrawingPoint(end);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
             DrawUtil.DrawLine(mGraphics, startPoint, endPoint, drawingColor, width);
         }
 
@@ -52,8 +54,8 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         {
             if (mDisposed) return;
 
-            var drawingRect = ImplHelper.ToDrawingRect(rect);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
+            var drawingRect = PictureBoxHelper.ToDrawingRect(rect);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
             DrawUtil.DrawRectangle(mGraphics, drawingRect, drawingColor, width);
         }
 
@@ -61,8 +63,8 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         {
             if (mDisposed) return;
 
-            var drawingRect = ImplHelper.ToDrawingRect(rect);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
+            var drawingRect = PictureBoxHelper.ToDrawingRect(rect);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
             DrawUtil.FillRectangle(mGraphics, drawingRect, drawingColor);
         }
 
@@ -70,29 +72,29 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         {
             if (mDisposed) return;
 
-            var centerPoint = ImplHelper.ToDrawingPoint(center);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
-            DrawUtil.DrawCircle(mGraphics, centerPoint, ImplHelper.ConvertNumber(radius), drawingColor, width);
+            var centerPoint = PictureBoxHelper.ToDrawingPoint(center);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
+            DrawUtil.DrawCircle(mGraphics, centerPoint, PictureBoxHelper.ConvertNumber(radius), drawingColor, width);
         }
 
         public void FillCircle(Point center, float radius, Color? color)
         {
             if (mDisposed) return;
 
-            var centerPoint = ImplHelper.ToDrawingPoint(center);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
-            DrawUtil.FillCircle(mGraphics, centerPoint, ImplHelper.ConvertNumber(radius), drawingColor);
+            var centerPoint = PictureBoxHelper.ToDrawingPoint(center);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
+            DrawUtil.FillCircle(mGraphics, centerPoint, PictureBoxHelper.ConvertNumber(radius), drawingColor);
         }
 
         public void DrawBezier(Point p1, Point p2, Point p3, Point p4, Color? color, float width = 1f)
         {
             if (mDisposed) return;
 
-            var point1 = ImplHelper.ToDrawingPoint(p1);
-            var point2 = ImplHelper.ToDrawingPoint(p2);
-            var point3 = ImplHelper.ToDrawingPoint(p3);
-            var point4 = ImplHelper.ToDrawingPoint(p4);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
+            var point1 = PictureBoxHelper.ToDrawingPoint(p1);
+            var point2 = PictureBoxHelper.ToDrawingPoint(p2);
+            var point3 = PictureBoxHelper.ToDrawingPoint(p3);
+            var point4 = PictureBoxHelper.ToDrawingPoint(p4);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
             DrawUtil.DrawBezier(mGraphics, point1, point2, point3, point4, drawingColor, width);
         }
 
@@ -100,9 +102,9 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         {
             if (mDisposed) return;
 
-            var drawingPoint = ImplHelper.ToDrawingPoint(point);
-            var drawingColor = ImplHelper.ToDrawingColor(color);
-            DrawUtil.DrawPoint(mGraphics, drawingPoint, drawingColor, ImplHelper.ConvertNumber(size));
+            var drawingPoint = PictureBoxHelper.ToDrawingPoint(point);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color);
+            DrawUtil.DrawPoint(mGraphics, drawingPoint, drawingColor, PictureBoxHelper.ConvertNumber(size));
         }
 
         public void DrawString(string text, Rect layoutRect, Color? color, TextAlignment alignment = TextAlignment.Center)
@@ -113,8 +115,8 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 return;
             }
 
-            var drawingRect = ImplHelper.ToDrawingRect(layoutRect);
-            var drawingColor = ImplHelper.ToDrawingColor(color) ?? DrawingColor.Black;
+            var drawingRect = PictureBoxHelper.ToDrawingRect(layoutRect);
+            var drawingColor = PictureBoxHelper.ToDrawingColor(color) ?? DrawingColor.Black;
             var textFormatFlags = alignment switch
             {
                 TextAlignment.Left => TextFormatFlags.Left | TextFormatFlags.VerticalCenter,

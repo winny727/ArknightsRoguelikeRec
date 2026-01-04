@@ -11,7 +11,7 @@ using Size = ArknightsRoguelikeRec.ViewModel.DataStruct.Size;
 
 namespace ArknightsRoguelikeRec.ViewModel.Impl
 {
-    public static class ImplHelper
+    public static class PictureBoxHelper
     {
         public static int ConvertNumber(float value)
         {
