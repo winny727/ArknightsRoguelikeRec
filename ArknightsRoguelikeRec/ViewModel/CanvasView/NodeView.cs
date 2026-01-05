@@ -15,7 +15,6 @@ namespace ArknightsRoguelikeRec.ViewModel
 
         public NodeConfig NodeConfig { get; set; }
 
-
         public NodeView(Node node, Rect rect, int colIndex, int rowIndex)
         {
             Node = node;

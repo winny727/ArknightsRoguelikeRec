@@ -187,15 +187,26 @@ namespace ArknightsRoguelikeRec
                 return;
             }
 
+            int gap = GlobalDefine.LAYER_BTN_GAP;
+            int height = GlobalDefine.LAYER_BTN_HEIGHT;
+
             for (int i = 0; i < SaveData.Layers.Count; i++)
             {
                 int index = i;
-                UIHelper.CreateLayerBtn(panelLayer, SaveData.Layers[i].CustomName, () =>
+                Button btnLayer = new Button();
+                panelLayer.Controls.Add(btnLayer);
+                btnLayer.Text = SaveData.Layers[i].CustomName;
+                //btnLayer.Font = GlobalDefine.TEXT_FONT;
+
+                btnLayer.Size = new Size(panelLayer.Width - 2 * gap, height);
+                btnLayer.Location = new Point(gap, gap + (panelLayer.Controls.Count - 1) * height);
+
+                btnLayer.Click += (sender, e) =>
                 {
                     SelectedLayer = index;
                     UpdateLayerSelectedHighlight();
                     UpdateCurLayerView();
-                });
+                };
             }
         }
 
@@ -285,8 +296,6 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateNodeView()
         {
-            panelNodeView.AutoScrollPosition = new Point(0, 0);
-
             Layer layer = GetCurLayer();
             mCanvasView.InitCanvas(SaveData, layer);
             mCanvasView.UpdateCanvas();

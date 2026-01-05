@@ -112,7 +112,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
                     if (string.IsNullOrEmpty(subType))
                     {
-                        UIHelper.AddSeparator(contextMenuStrip);
+                        AddSeparator(contextMenuStrip);
                         continue;
                     }
 

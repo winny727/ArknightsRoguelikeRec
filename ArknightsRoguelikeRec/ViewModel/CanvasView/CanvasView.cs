@@ -38,6 +38,9 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Color NodeContentBackgroundColor { get; set; } = Color.White;
         public Color NodeContentTextColor { get; set; } = Color.Black;
         public Color ConnectionColor { get; set; } = Color.Gray;
+        public Color DelBtnBorderColor { get; set; } = Color.Black;
+        public Color DelBtnBackgroundColor { get; set; } = Color.Gray;
+        public Color DelBtnIconColor { get; set; } = Color.Red;
 
         public float GridStep { get; set; } = 20f;
         public float NodeGapHorizontal { get; set; } = 120f;
@@ -45,9 +48,11 @@ namespace ArknightsRoguelikeRec.ViewModel
         public float NodeWidth { get; set; } = 150f;
         public float NodeHeight { get; set; } = 80f;
         public float NodeTitleHeight { get; set; } = 40f;
+        public float DelBtnWidth { get; set; } = 20f;
+        public float DelBtnHeight { get; set; } = 20f;
 
         private readonly List<NodeView> mNodeViews = new List<NodeView>();
-        private readonly List<ButtonView> mButtonViews = new List<ButtonView>();
+        private readonly Dictionary<CanvasLayerType, List<ButtonView>> mButtonViews = new Dictionary<CanvasLayerType, List<ButtonView>>();
 
         private readonly Dictionary<CanvasLayerType, ICanvasLayer> mCanvasLayers = new Dictionary<CanvasLayerType, ICanvasLayer>();
 
@@ -65,6 +70,8 @@ namespace ArknightsRoguelikeRec.ViewModel
             {
                 if (mIsEditMode == value) return;
                 mIsEditMode = value;
+                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
+                canvasLayer?.Clear();
                 UpdateDelConnectionBtns();
                 ApplyCanvas();
             }
@@ -113,10 +120,10 @@ namespace ArknightsRoguelikeRec.ViewModel
             CanvasHeight = height;
             mCanvas.InitCanvas(CanvasWidth, CanvasHeight, BackgroundColor);
 
-            foreach (CanvasLayerType layerType in Enum.GetValues(typeof(CanvasLayerType)))
+            foreach (CanvasLayerType type in Enum.GetValues(typeof(CanvasLayerType)))
             {
                 ICanvasLayer canvasLayer = mCanvas.NewCanvasLayer();
-                mCanvasLayers[layerType] = canvasLayer;
+                mCanvasLayers[type] = canvasLayer;
             }
         }
 
@@ -150,10 +157,10 @@ namespace ArknightsRoguelikeRec.ViewModel
             mConnectionNodeView = null;
         }
 
-        private ICanvasLayer GetCanvasLayer(CanvasLayerType layerType)
+        private ICanvasLayer GetCanvasLayer(CanvasLayerType type)
         {
             if (mDisposed) return null;
-            if (mCanvasLayers.TryGetValue(layerType, out var canvasLayer))
+            if (mCanvasLayers.TryGetValue(type, out var canvasLayer))
             {
                 return canvasLayer;
             }
@@ -198,7 +205,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 return;
             }
 
-            DisposeButtonViews();
+            DisposeButtonViews(CanvasLayerType.Nodes);
 
             ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.Nodes);
             canvasLayer?.Clear();
@@ -245,10 +252,11 @@ namespace ArknightsRoguelikeRec.ViewModel
             float height = NodeHeight;
 
             //初始化节点
+            float borderWidth = 2f;
             float nodeX = hGap + colIndex * (width + hGap);
             float nodeY = CanvasHeight / 2 - (rowCount * height + (rowCount - 1) * vGap) / 2 + rowIndex * (height + vGap);
-            Rect rect = new Rect(nodeX - 1f, nodeY - 1f, width + 2f, height + 2f);
-            canvasLayer.DrawRectangle(rect, NodeBorderColor, 2f);
+            Rect rect = new Rect(nodeX - borderWidth / 2, nodeY - borderWidth / 2, width + borderWidth, height + borderWidth);
+            canvasLayer.DrawRectangle(rect, NodeBorderColor, borderWidth);
 
             NodeView nodeView = new NodeView(node, rect, colIndex, rowIndex);
 
@@ -285,7 +293,6 @@ namespace ArknightsRoguelikeRec.ViewModel
             };
 
             ButtonView buttonView = new ButtonView(rect, mMouseHandler);
-            mButtonViews.Add(buttonView);
             buttonView.Click += (button) =>
             {
                 if (IsConnecting)
@@ -297,6 +304,8 @@ namespace ArknightsRoguelikeRec.ViewModel
                     mConnectionNodeView = nodeView;
                 }
             };
+
+            AddButtonView(CanvasLayerType.Nodes, buttonView);
 
             return nodeView;
         }
@@ -380,7 +389,40 @@ namespace ArknightsRoguelikeRec.ViewModel
         private void UpdateDelConnectionBtns()
         {
             if (mDisposed) return;
+
+            DisposeButtonViews(CanvasLayerType.DeleteConnectionButtons);
+
+            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.DeleteConnectionButtons);
+            canvasLayer?.Clear();
+
             if (!mIsEditMode) return;
+
+            Layer layer = CurrentLayer;
+            if (layer == null || layer.Connections == null)
+            {
+                return;
+            }
+
+            foreach (var connection in layer.Connections)
+            {
+                DrawDelConnectionBtn(connection);
+            }
+        }
+
+        private void DrawDelConnectionBtn(Connection connection)
+        {
+            if (connection == null)
+            {
+                return;
+            }
+
+            NodeView nodeView1 = GetNodeViewByIdx(connection.Idx1);
+            NodeView nodeView2 = GetNodeViewByIdx(connection.Idx2);
+
+            if (nodeView1 == null || nodeView2 == null)
+            {
+                return;
+            }
 
             ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.DeleteConnectionButtons);
             if (canvasLayer == null)
@@ -388,10 +430,33 @@ namespace ArknightsRoguelikeRec.ViewModel
                 return;
             }
 
-            //TODO: 实现删除连接按钮
-            //TODO 切换读取文件时GC耗时？
+            float borderWidth = 2f;
+            float width = DelBtnWidth;
+            float height = DelBtnHeight;
 
-            canvasLayer.Clear();
+            float x1 = nodeView1.Rect.X + nodeView1.Rect.Width / 2;
+            float y1 = nodeView1.Rect.Y + nodeView1.Rect.Height / 2;
+            float x2 = nodeView2.Rect.X + nodeView2.Rect.Width / 2;
+            float y2 = nodeView2.Rect.Y + nodeView2.Rect.Height / 2;
+
+            float btnX = x1 + (x2 - x1) / 2 - width / 2;
+            float btnY = y1 + (y2 - y1) / 2 - height / 2;
+
+            Rect rect = new Rect(btnX - borderWidth / 2, btnY - borderWidth / 2, width + borderWidth, height + borderWidth);
+            canvasLayer.DrawRectangle(rect, DelBtnBorderColor, borderWidth);
+
+            Rect rectDel = new Rect(btnX, btnY, width, height);
+            ButtonView btnDel = RegButton(CanvasLayerType.DeleteConnectionButtons, rectDel, DelBtnBackgroundColor, "X", DelBtnIconColor, 1.5f);
+            btnDel.Click += (button) =>
+            {
+                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
+                canvasLayer?.Clear();
+
+                DataAPI.RemoveConnection(CurrentLayer, connection);
+                UpdateConnections();
+                UpdateDelConnectionBtns();
+                ApplyCanvas();
+            };
         }
 
         private NodeView GetNodeViewByIdx(int nodeIdx)
@@ -403,20 +468,28 @@ namespace ArknightsRoguelikeRec.ViewModel
             return mNodeViews[nodeIdx];
         }
 
-        private ButtonView RegButton(CanvasLayerType buttonLayerType, Rect rect, Color color, string text = null, Color? textColor = null)
+        private ButtonView RegButton(CanvasLayerType type, Rect rect, Color color, string text = null, Color? textColor = null, float textScale = 1f)
         {
             if (mDisposed) return null;
 
             ButtonView buttonView = new ButtonView(rect, mMouseHandler);
-            mButtonViews.Add(buttonView);
+            AddButtonView(type, buttonView);
 
             textColor ??= Color.Black;
 
-            ICanvasLayer buttonLayer = GetCanvasLayer(buttonLayerType);
+            float textWidth = rect.Width * textScale;
+            float textHeight = rect.Height * textScale;
+
+            Rect textRect = new Rect(rect.X - (textWidth - rect.Width) / 2, 
+                                    rect.Y - (textHeight - rect.Height) / 2,
+                                    textWidth,
+                                    textHeight);
+
+            ICanvasLayer buttonLayer = GetCanvasLayer(type);
             if (buttonLayer != null)
             {
                 buttonLayer.FillRectangle(rect, color);
-                buttonLayer.DrawString(text, rect, textColor);
+                buttonLayer.DrawString(text, textRect, textColor);
             }
 
             ICanvasLayer buttonStateLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
@@ -431,25 +504,25 @@ namespace ArknightsRoguelikeRec.ViewModel
                 if (buttonView.IsPressed)
                 {
                     buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetPressedColor(color));
-                    buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetPressedColor(textColor.Value));
+                    buttonStateLayer.DrawString(text, textRect, ButtonColorHelper.GetPressedColor(textColor.Value));
                 }
                 else
                 {
                     buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetHoverColor(color));
-                    buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetHoverColor(textColor.Value));
+                    buttonStateLayer.DrawString(text, textRect, ButtonColorHelper.GetHoverColor(textColor.Value));
                 }
                 ApplyCanvas();
             };
             buttonView.PointerExit += () =>
             {
                 buttonStateLayer.FillRectangle(rect, color);
-                buttonStateLayer.DrawString(text, rect, textColor.Value);
+                buttonStateLayer.DrawString(text, textRect, textColor.Value);
                 ApplyCanvas();
             };
             buttonView.MouseDown += (button) =>
             {
                 buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetPressedColor(color));
-                buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetPressedColor(textColor.Value));
+                buttonStateLayer.DrawString(text, textRect, ButtonColorHelper.GetPressedColor(textColor.Value));
                 ApplyCanvas();
             };
             buttonView.MouseUp += (button) =>
@@ -463,12 +536,12 @@ namespace ArknightsRoguelikeRec.ViewModel
                 if (buttonView.IsHover)
                 {
                     buttonStateLayer.FillRectangle(rect, ButtonColorHelper.GetHoverColor(color));
-                    buttonStateLayer.DrawString(text, rect, ButtonColorHelper.GetHoverColor(textColor.Value));
+                    buttonStateLayer.DrawString(text, textRect, ButtonColorHelper.GetHoverColor(textColor.Value));
                 }
                 else
                 {
                     buttonStateLayer.FillRectangle(rect, color);
-                    buttonStateLayer.DrawString(text, rect, textColor.Value);
+                    buttonStateLayer.DrawString(text, textRect, textColor.Value);
                 }
                 ApplyCanvas();
             };
@@ -476,12 +549,37 @@ namespace ArknightsRoguelikeRec.ViewModel
             return buttonView;
         }
 
+        private void AddButtonView(CanvasLayerType type, ButtonView buttonView)
+        {
+            if (!mButtonViews.TryGetValue(type, out var buttonViewList))
+            {
+                buttonViewList = new List<ButtonView>();
+                mButtonViews[type] = buttonViewList;
+            }
+
+            buttonViewList.Add(buttonView);
+        }
+
+        private void DisposeButtonViews(CanvasLayerType type)
+        {
+            if (mDisposed) return;
+            if (mButtonViews.TryGetValue(type, out var buttonViewList))
+            {
+                foreach (var buttonView in buttonViewList)
+                {
+                    buttonView.Dispose();
+                }
+                buttonViewList.Clear();
+            }
+        }
+
         private void DisposeButtonViews()
         {
             if (mDisposed) return;
-            foreach (var buttonView in mButtonViews)
+            foreach (var item in mButtonViews)
             {
-                buttonView.Dispose();
+                var canvasLayerType = item.Key;
+                DisposeButtonViews(item.Key);
             }
             mButtonViews.Clear();
         }
@@ -504,6 +602,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                     DataAPI.AddConnection(CurrentLayer, nodeView.Node, mConnectionNodeView.Node))
                 {
                     DrawConnection(nodeView, mConnectionNodeView);
+                    UpdateDelConnectionBtns();
                 }
             }
 
@@ -515,11 +614,15 @@ namespace ArknightsRoguelikeRec.ViewModel
         {
             if (mDisposed) return;
 
-            foreach (var buttonView in mButtonViews)
+            foreach (var item in mButtonViews)
             {
-                if (buttonView.Rect.Contains(point))
+                var buttonViewList = item.Value;
+                foreach (var buttonView in buttonViewList)
                 {
-                    return;
+                    if (buttonView.Rect.Contains(point))
+                    {
+                        return;
+                    }
                 }
             }
 

@@ -121,7 +121,6 @@
       <DependentUpon>InputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Global\GlobalDefine.cs" />
-    <Compile Include="Helper\UIHelper.cs" />
     <Compile Include="Helper\ConfigHelper.cs" />
     <Compile Include="Helper\DataHelper.cs" />
     <Compile Include="DataModel\SaveData.cs" />
