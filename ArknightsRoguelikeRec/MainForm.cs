@@ -53,7 +53,7 @@ namespace ArknightsRoguelikeRec
             };
 
             mCanvasView = new CanvasView(
-                new SKGLCanvas(mNodeViewControl, GlobalDefine.SK_TEXT_FONT),
+                new SKGLCanvas(mNodeViewControl, FontLoader.SK_TEXT_FONT),
                 new ControlMouseHandler(mNodeViewControl),
                 new MenuBuilder(mInputForm, () =>
                 {
@@ -94,12 +94,8 @@ namespace ArknightsRoguelikeRec
             };
 #endif
 
-            //Timer timer = new Timer();
-            //timer.Interval = 8;
-            //timer.Tick += (s, e) => mCanvasView.Tick();
-            //timer.Start();
-
-            var timer = new System.Timers.Timer(8); // 8ms → 120FPS
+#if SKIA_SHARP
+            var timer = new System.Timers.Timer(8);
             timer.Elapsed += (s, e) =>
             {
                 if (mNodeViewControl.InvokeRequired)
@@ -112,6 +108,12 @@ namespace ArknightsRoguelikeRec
                 }
             };
             timer.Start();
+#else
+            Timer timer = new Timer();
+            timer.Interval = 8;
+            timer.Tick += (s, e) => mCanvasView.Tick();
+            timer.Start();
+#endif
         }
 
         protected override CreateParams CreateParams
@@ -129,7 +131,7 @@ namespace ArknightsRoguelikeRec
         1. 可标记走过的节点（行动路径）；
         2. 可标记当前游戏状态完成/未完成；
         3. 存在未连接的节点时提醒；
-        4. 由密文板进行的节点转换记录（如将某节点通过板子变成树洞）；
+        4. 由密文板进行的节点转换记录（如将某节点通过板-子变成树洞）；
         5. 连接编辑状态高亮；
          */
 

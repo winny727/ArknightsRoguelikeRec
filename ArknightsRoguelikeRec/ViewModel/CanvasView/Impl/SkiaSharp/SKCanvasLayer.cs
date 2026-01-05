@@ -225,6 +225,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             mDisposed = true;
             mCommands.Clear();
             mCanvas = null;
+            mSKTypeface = null;
         }
 
         private static SKPaint StrokePaint(Color c, float width) => GetStroke(c, width);

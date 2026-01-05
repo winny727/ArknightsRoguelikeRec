@@ -48,7 +48,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;SKIA_SHARP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -113,7 +113,7 @@
     <Compile Include="DataModel\Config\DefineConfig.cs" />
     <Compile Include="DataModel\Connection.cs" />
     <Compile Include="DataModel\DataAPI.cs" />
-    <Compile Include="Helper\FontHelper.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\SkiaSharp\FontLoader.cs" />
     <Compile Include="InputForm.cs">
       <SubType>Form</SubType>
     </Compile>

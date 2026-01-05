@@ -18,10 +18,5 @@ namespace ArknightsRoguelikeRec
         public const int COLUMN_MAX_NODE = 4; //每列最多节点
 
         public static readonly Font TEXT_FONT = new Font("宋体", 12.0f, FontStyle.Bold);
-
-#if SKIA_SHARP
-        public const string FONT_PATH = "ArknightsRoguelikeRec.Assets.Fonts.HarmonyOS_Sans_SC_Regular.ttf";
-        public static readonly SkiaSharp.SKTypeface SK_TEXT_FONT = FontHelper.LoadEmbeddedSKTypeface(FONT_PATH);
-#endif
     }
 }
