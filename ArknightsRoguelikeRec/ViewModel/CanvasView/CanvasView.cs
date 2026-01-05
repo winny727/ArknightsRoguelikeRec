@@ -72,6 +72,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 mIsEditMode = value;
                 ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
                 canvasLayer?.Clear();
+                OnConnectionEnd(null);
                 UpdateDelConnectionBtns();
                 ApplyCanvas();
             }
