@@ -37,9 +37,12 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Color NodeTitleTextColor { get; set; } = Color.Black;
         public Color NodeContentBackgroundColor { get; set; } = Color.White;
         public Color NodeContentTextColor { get; set; } = Color.Black;
-        public Color ConnectionColor { get; set; } = Color.Gray;
+        public Color ConnectionColor { get; set; } = Color.Black;
+        public Color ConnectionPreviewColor { get; set; } = Color.Red;
+        public Color ConnectionValidNodeColor { get; set; } = Color.Green;
+        public Color ConnectionInvalidNodeColor { get; set; } = Color.Red;
         public Color DelBtnBorderColor { get; set; } = Color.Black;
-        public Color DelBtnBackgroundColor { get; set; } = Color.Gray;
+        public Color DelBtnBackgroundColor { get; set; } = Color.LightGray;
         public Color DelBtnIconColor { get; set; } = Color.Red;
 
         public float GridStep { get; set; } = 20f;
@@ -230,7 +233,6 @@ namespace ArknightsRoguelikeRec.ViewModel
                     NodeView nodeView = DrawNode(node, colIndex, rowIndex, rowCount);
                     if (nodeView != null)
                     {
-                        mNodeConfigInitializer?.InitializeNodeConfig(layer, nodeView);
                         mNodeViews.Add(nodeView);
                     }
                 }
@@ -257,15 +259,23 @@ namespace ArknightsRoguelikeRec.ViewModel
             float nodeX = hGap + colIndex * (width + hGap);
             float nodeY = CanvasHeight / 2 - (rowCount * height + (rowCount - 1) * vGap) / 2 + rowIndex * (height + vGap);
             Rect rect = new Rect(nodeX - borderWidth / 2, nodeY - borderWidth / 2, width + borderWidth, height + borderWidth);
-            canvasLayer.DrawRectangle(rect, NodeBorderColor, borderWidth);
 
             NodeView nodeView = new NodeView(node, rect, colIndex, rowIndex);
+            mNodeConfigInitializer?.InitializeNodeConfig(CurrentLayer, nodeView);
+
+            Color borderColor = nodeView.NodeConfig?.NodeColor ?? NodeBorderColor;
+            Color titleBgColor = nodeView.NodeConfig?.NodeColor ?? NodeTitleBackgroundColor;
+            Color titleTextColor = nodeView.NodeConfig?.TextColor ?? NodeTitleTextColor;
+            Color contentBgColor = NodeContentBackgroundColor;
+            Color contentTextColor = NodeContentTextColor;
+
+            canvasLayer.DrawRectangle(rect, borderColor, borderWidth);
 
             float titleHeight = NodeTitleHeight;
 
             //初始化节点类型选择按钮
             Rect rectTitle = new Rect(nodeX, nodeY, width, titleHeight);
-            ButtonView btnTitle = RegButton(CanvasLayerType.Nodes, rectTitle, NodeTitleBackgroundColor, node.Type, NodeTitleTextColor);
+            ButtonView btnTitle = RegButton(CanvasLayerType.Nodes, rectTitle, titleBgColor, node.Type, titleTextColor);
             btnTitle.Click += (button) =>
             {
                 if (IsConnecting || IsEditMode)
@@ -280,7 +290,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
             //初始化节点次级类型选择按钮
             Rect rectContent = new Rect(nodeX, nodeY + titleHeight, width, titleHeight);
-            ButtonView btnContent = RegButton(CanvasLayerType.Nodes, rectContent, NodeContentBackgroundColor, node.SubType, NodeTitleTextColor);
+            ButtonView btnContent = RegButton(CanvasLayerType.Nodes, rectContent, contentBgColor, node.SubType, contentTextColor);
             btnContent.Click += (button) =>
             {
                 if (IsConnecting || IsEditMode)
@@ -369,8 +379,20 @@ namespace ArknightsRoguelikeRec.ViewModel
 
             NodeView nodeView = mConnectionNodeView;
             Point mousePoint = mMouseHandler.GetMousePoint();
+            float borderWidth = 4f;
+
             if (nodeView == null)
             {
+                foreach (var targetNodeView in mNodeViews)
+                {
+                    if (targetNodeView.Rect.Contains(mousePoint))
+                    {
+                        Rect targetRect = targetNodeView.Rect;
+                        Rect targetNodeHighlightRect = new Rect(targetRect.X - borderWidth / 2, targetRect.Y - borderWidth / 2, targetRect.Width + borderWidth, targetRect.Height + borderWidth);
+                        canvasLayer.DrawRectangle(targetNodeHighlightRect, ConnectionValidNodeColor, borderWidth);
+                        break;
+                    }
+                }
                 return;
             }
 
@@ -384,7 +406,24 @@ namespace ArknightsRoguelikeRec.ViewModel
             Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
             Point pt4 = new Point(x2, y2);
 
-            canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, ConnectionColor, 2f);
+            canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, ConnectionPreviewColor, 2f);
+
+            Rect rect = nodeView.Rect;
+            Rect nodeHighlightRect = new Rect(rect.X - borderWidth / 2, rect.Y - borderWidth / 2, rect.Width + borderWidth, rect.Height + borderWidth);
+            canvasLayer.DrawRectangle(nodeHighlightRect, ConnectionValidNodeColor, borderWidth);
+
+            foreach (var otherNodeView in mNodeViews)
+            {
+                if (otherNodeView.Rect.Contains(mousePoint) && otherNodeView != nodeView)
+                {
+                    bool isValid = DataAPI.CheckConnectionValid(CurrentLayer, nodeView, otherNodeView);
+                    Color color = isValid ? ConnectionValidNodeColor : ConnectionInvalidNodeColor;
+                    Rect otherRect = otherNodeView.Rect;
+                    Rect otherNodeHighlightRect = new Rect(otherRect.X - borderWidth / 2, otherRect.Y - borderWidth / 2, otherRect.Width + borderWidth, otherRect.Height + borderWidth);
+                    canvasLayer.DrawRectangle(otherNodeHighlightRect, color, borderWidth);
+                    break;
+                }
+            }
         }
 
         private void UpdateDelConnectionBtns()
@@ -447,7 +486,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             canvasLayer.DrawRectangle(rect, DelBtnBorderColor, borderWidth);
 
             Rect rectDel = new Rect(btnX, btnY, width, height);
-            ButtonView btnDel = RegButton(CanvasLayerType.DeleteConnectionButtons, rectDel, DelBtnBackgroundColor, "X", DelBtnIconColor, 1.5f);
+            ButtonView btnDel = RegButton(CanvasLayerType.DeleteConnectionButtons, rectDel, DelBtnBackgroundColor, "X", DelBtnIconColor, 2f);
             btnDel.Click += (button) =>
             {
                 ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
@@ -639,7 +678,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             if (mDisposed) return;
 
             // 在外部驱动Tick
-            if (IsConnecting)
+            if (IsEditMode)
             {
                 UpdateConnectionPreview();
                 ApplyCanvas();

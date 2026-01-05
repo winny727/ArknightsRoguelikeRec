@@ -13,8 +13,8 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         private SKTypeface mSKTypeface;
         private readonly List<Action<SKCanvas>> mCommands = new List<Action<SKCanvas>>();
 
-        private static readonly Dictionary<(Color, float), SKPaint> mStrokeCache = new Dictionary<(Color, float), SKPaint>();
-        private static readonly Dictionary<Color, SKPaint> mFillCache = new Dictionary<Color, SKPaint>();
+        private static readonly Dictionary<(Color, float, bool), SKPaint> mStrokeCache = new Dictionary<(Color, float, bool), SKPaint>();
+        private static readonly Dictionary<(Color, bool), SKPaint> mFillCache = new Dictionary<(Color, bool), SKPaint>();
         private static readonly Dictionary<(SKTypeface, float), SKFont> mFontCache = new Dictionary<(SKTypeface, float), SKFont>();
 
         private bool mDisposed = false;
@@ -101,7 +101,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
             mCommands.Add(canvas =>
             {
-                var paint = StrokePaint(c, width);
+                var paint = StrokePaint(c, width, true);
                 canvas.DrawCircle(origin.X, origin.Y, radius, paint);
             });
 
@@ -116,7 +116,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
             mCommands.Add(canvas =>
             {
-                var paint = FillPaint(c);
+                var paint = FillPaint(c, true);
                 canvas.DrawCircle(origin.X, origin.Y, radius, paint);
             });
 
@@ -135,7 +135,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 path.MoveTo(p1.X, p1.Y);
                 path.CubicTo(p2.X, p2.Y, p3.X, p3.Y, p4.X, p4.Y);
 
-                var paint = StrokePaint(c, width);
+                var paint = StrokePaint(c, width, true);
                 canvas.DrawPath(path, paint);
             });
 
@@ -228,9 +228,11 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             mSKTypeface = null;
         }
 
-        private static SKPaint StrokePaint(Color c, float width) => GetStroke(c, width);
+        private static SKPaint StrokePaint(Color c, float width, bool isAntialias = false)
+            => GetStroke(c, width, isAntialias);
 
-        private static SKPaint FillPaint(Color c) => GetFill(c);
+        private static SKPaint FillPaint(Color c, bool isAntialias = false)
+            => GetFill(c, isAntialias);
 
         private static SKRect ToSKRect(Rect r)
             => new SKRect(r.X, r.Y, r.X + r.Width, r.Y + r.Height);
@@ -238,9 +240,9 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
         private static SKColor ToSK(Color c)
             => new SKColor(c.R, c.G, c.B, c.A);
 
-        private static SKPaint GetStroke(Color c, float w)
+        private static SKPaint GetStroke(Color c, float w, bool isAntialias = false)
         {
-            var key = (c, w);
+            var key = (c, w, isAntialias);
             if (!mStrokeCache.TryGetValue(key, out var p))
             {
                 p = new SKPaint
@@ -248,23 +250,24 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                     Color = ToSK(c),
                     StrokeWidth = w,
                     IsStroke = true,
-                    IsAntialias = true
+                    IsAntialias = isAntialias,
                 };
                 mStrokeCache[key] = p;
             }
             return p;
         }
 
-        private static SKPaint GetFill(Color c)
+        private static SKPaint GetFill(Color c, bool isAntialias = false)
         {
-            if (!mFillCache.TryGetValue(c, out var p))
+            var key = (c, isAntialias);
+            if (!mFillCache.TryGetValue(key, out var p))
             {
                 p = new SKPaint
                 {
                     Color = ToSK(c),
-                    IsAntialias = true
+                    IsAntialias = isAntialias,
                 };
-                mFillCache[c] = p;
+                mFillCache[key] = p;
             }
             return p;
         }

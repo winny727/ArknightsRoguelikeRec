@@ -10,14 +10,9 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
     {
         public void InitializeNodeConfig(Layer layer, NodeView nodeView)
         {
-            if (layer == null)
+            if (layer == null || nodeView == null)
             {
-                throw new ArgumentNullException(nameof(layer));
-            }
-
-            if (nodeView == null)
-            {
-                throw new ArgumentNullException(nameof(nodeView));
+                return;
             }
 
             LayerConfig layerConfig = ConfigHelper.GetLayerConfigByName(layer.Name);

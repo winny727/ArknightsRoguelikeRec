@@ -1,4 +1,5 @@
 ﻿using ArknightsRoguelikeRec.Config;
+using ArknightsRoguelikeRec.ViewModel.DataStruct;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -63,7 +64,11 @@ namespace ArknightsRoguelikeRec.Helper
                 string nodeType = line.GetValue("nodeType");
                 string subTypes = line.GetValue("subTypes");
                 int extraLayer = line.GetValue<int>("extraLayer");
+                string nodeColorText = line.GetValue("nodeColor");
+                string textColorText = line.GetValue("textColor");
                 List<string> subTypesList = ParseList<string>(subTypes);
+                Color? nodeColor = ParseColor(nodeColorText);
+                Color? textColor = ParseColor(textColorText);
 
                 NodeConfig nodeConfig = new NodeConfig()
                 {
@@ -71,6 +76,8 @@ namespace ArknightsRoguelikeRec.Helper
                     Type = nodeType,
                     SubTypes = subTypesList,
                     ExtraLayer = extraLayer,
+                    NodeColor = nodeColor ?? Color.Gray,
+                    TextColor = textColor ?? Color.Black,
                 };
 
                 DefineConfig.NodeConfigDict[nodeID] = nodeConfig;
@@ -101,11 +108,29 @@ namespace ArknightsRoguelikeRec.Helper
             return list;
         }
 
+        private static Color? ParseColor(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return null;
+            }
+
+            try
+            {
+                var color = System.Drawing.ColorTranslator.FromHtml(text);
+                return new Color(color.R, color.G, color.B, color.A);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static TableReader LoadConfig(string path)
         {
             try
             {
-                TableReader tableReader = new TableReader(path, Encoding.UTF8);
+                TableReader tableReader = new TableReader(path, Encoding.Default);
                 return tableReader;
             }
             catch (Exception ex)
