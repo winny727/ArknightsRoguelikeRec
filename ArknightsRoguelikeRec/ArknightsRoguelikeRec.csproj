@@ -142,10 +142,10 @@
     <Compile Include="Utils\TypeUtility.cs" />
     <Compile Include="ViewModel\CanvasView\ButtonView.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\ControlMouseHandler.cs" />
-    <Compile Include="ViewModel\CanvasView\Impl\PictureBox\PictureBoxHelper.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\GDI\PictureBoxHelper.cs" />
     <Compile Include="ViewModel\CanvasView\ButtonColorHelper.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\MenuBuilder.cs" />
-    <Compile Include="ViewModel\CanvasView\Impl\PictureBox\ImageCanvasLayer.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\GDI\ImageCanvasLayer.cs" />
     <Compile Include="ViewModel\CanvasView\DataStruct.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\SkiaSharp\SKCanvasLayer.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\SkiaSharp\SKGLCanvas.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="ViewModel\CanvasView\Interface\IMouseHandler.cs" />
     <Compile Include="ViewModel\CanvasView\Interface\INodeConfigInitializer.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\NodeConfigInitializer.cs" />
-    <Compile Include="ViewModel\CanvasView\Impl\PictureBox\PictureBoxCanvas.cs" />
+    <Compile Include="ViewModel\CanvasView\Impl\GDI\PictureBoxCanvas.cs" />
     <Compile Include="ViewModel\CanvasView\Interface\ICanvas.cs" />
     <Compile Include="ViewModel\MenuItem.cs" />
     <Compile Include="ViewModel\CanvasView\NodeView.cs" />
