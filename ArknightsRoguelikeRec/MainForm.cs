@@ -21,7 +21,22 @@ namespace ArknightsRoguelikeRec
 
         public SaveData SaveData { get; private set; }
         public int SelectedLayer { get; private set; }
-        public bool IsDirty { get; private set; }
+        public bool IsDirty
+        {
+            get
+            {
+                return SaveData != null && SaveData.IsDirty;
+            }
+            set
+            {
+                if (SaveData != null)
+                {
+                    SaveData.IsDirty = value;
+                }
+            }
+        }
+
+        private bool mRawSet = false;
 
         public NodeView CurNodeView { get; private set; }
 
@@ -131,7 +146,7 @@ namespace ArknightsRoguelikeRec
         1. 可标记走过的节点（行动路径）；
         2. 可标记当前游戏状态完成/未完成；
         3. 存在未连接的节点时提醒；
-        4. 由密文板进行的节点转换记录（如将某节点通过板-子变成树洞）；
+        4. 由密文板进行的节点转换记录（如将某节点通过板子变成树洞）；
          */
 
         private void Form1_Load(object sender, EventArgs e)
@@ -238,13 +253,16 @@ namespace ArknightsRoguelikeRec
 
         private void UpdateLayerData()
         {
+            mRawSet = true;
             comboBoxLayerType.Items.Clear();
             comboBoxLayerType.Visible = false;
             labelLayerType.Visible = false;
             textBoxNode.Text = string.Empty;
+            checkBoxComplete.Checked = false;
             btnApply.Visible = false;
             btnCancel.Visible = false;
             labelNodeTips.Visible = false;
+            mRawSet = false;
 
             Layer layer = GetCurLayer();
             if (layer == null)
@@ -279,14 +297,15 @@ namespace ArknightsRoguelikeRec
                 labelLayerType.Visible = true;
             }
 
-
-            //节点分布数字
+            mRawSet = true;
             string nodeText = string.Empty;
             for (int i = 0; i < layer.Nodes.Count; i++)
             {
                 nodeText += layer.Nodes[i].Count;
             }
             textBoxNode.Text = nodeText;
+            checkBoxComplete.Checked = layer.IsComplete;
+            mRawSet = false;
 
             btnApply.Visible = false;
             btnCancel.Visible = false;
@@ -442,16 +461,19 @@ namespace ArknightsRoguelikeRec
 
         private void textBoxUserID_TextChanged(object sender, EventArgs e)
         {
+            if (mRawSet) return;
             IsDirty = true;
         }
 
         private void textBoxNumber_TextChanged(object sender, EventArgs e)
         {
+            if (mRawSet) return;
             IsDirty = true;
         }
 
         private void textBoxNode_TextChanged(object sender, EventArgs e)
         {
+            if (mRawSet) return;
             btnApply.Visible = true;
             btnCancel.Visible = true;
             labelNodeTips.Visible = false;
@@ -579,6 +601,7 @@ namespace ArknightsRoguelikeRec
 
             UpdateNodeView();
 
+            IsDirty = true;
             btnApply.Visible = false;
             btnCancel.Visible = false;
             labelNodeTips.Visible = layer.Nodes.Count <= 0;
@@ -645,6 +668,8 @@ namespace ArknightsRoguelikeRec
 
         private void comboBoxLayerType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mRawSet) return;
+
             Layer layer = GetCurLayer();
             if (layer == null)
             {
@@ -683,6 +708,19 @@ namespace ArknightsRoguelikeRec
             mCanvasView.IsEditMode = !mCanvasView.IsEditMode;
             btnEdit.Text = mCanvasView.IsEditMode ? "退出编辑(E)" : "编辑连线(E)";
             btnEdit.BackColor = mCanvasView.IsEditMode ? Color.LightGreen : SystemColors.Control;
+        }
+
+        private void checkBoxComplete_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mRawSet) return;
+
+            Layer layer = GetCurLayer();
+            if (layer == null)
+            {
+                return;
+            }
+
+            layer.IsComplete = checkBoxComplete.Checked;
         }
     }
 }

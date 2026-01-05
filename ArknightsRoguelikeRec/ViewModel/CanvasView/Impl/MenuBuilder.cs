@@ -20,7 +20,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
         public void ShowTypeMenu(SaveData saveData, Layer layer, NodeView nodeView)
         {
-            if (nodeView == null)
+            if (saveData == null || layer == null || nodeView == null)
             {
                 return;
             }
@@ -56,6 +56,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
                         node.Data.Type = nodeConfig.Type;
                         nodeView.NodeConfig = nodeConfig;
+                        saveData.IsDirty = true;
                         mRefreshCallback?.Invoke();
                     });
                 }
@@ -67,9 +68,9 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
                 {
                     node.Data.Type = string.Empty;
-                    nodeView.NodeConfig = null;
-
                     node.Data.SubType = string.Empty;
+                    nodeView.NodeConfig = null;
+                    saveData.IsDirty = true;
                     mRefreshCallback?.Invoke();
                 });
             }
@@ -84,6 +85,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                     if (mInputForm.ShowDialog() == DialogResult.OK)
                     {
                         node.Data.Comment = mInputForm.Content;
+                        saveData.IsDirty = true;
                         mRefreshCallback?.Invoke();
                     }
                 });
@@ -94,7 +96,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
 
         public void ShowSubTypeMenu(SaveData saveData, Layer layer, NodeView nodeView)
         {
-            if (nodeView == null)
+            if (saveData == null || layer == null || nodeView == null)
             {
                 return;
             }
@@ -119,6 +121,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                     AddMenuItem(contextMenuStrip, subType, () =>
                     {
                         node.Data.SubType = subType;
+                        saveData.IsDirty = true;
                         mRefreshCallback?.Invoke();
                     });
                 }
@@ -140,6 +143,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                             contextMenuStrip.Items.Add(curLayer.CustomName, null, (sender, e) =>
                             {
                                 node.Data.SubType = curLayer.CustomName;
+                                saveData.IsDirty = true;
                                 mRefreshCallback?.Invoke();
                             });
                         }
@@ -152,6 +156,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                     AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
                     {
                         node.Data.SubType = string.Empty;
+                        saveData.IsDirty = true;
                         mRefreshCallback?.Invoke();
                     });
                 }
@@ -166,6 +171,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                         if (mInputForm.ShowDialog() == DialogResult.OK)
                         {
                             node.Data.Comment = mInputForm.Content;
+                            saveData.IsDirty = true;
                             mRefreshCallback?.Invoke();
                         }
                     });

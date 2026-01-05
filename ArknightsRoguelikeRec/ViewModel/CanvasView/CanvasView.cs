@@ -493,6 +493,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 canvasLayer?.Clear();
 
                 DataAPI.RemoveConnection(CurrentLayer, connection);
+                SaveData.IsDirty = true;
                 UpdateConnections();
                 UpdateDelConnectionBtns();
                 ApplyCanvas();
@@ -641,6 +642,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 if (DataAPI.CheckConnectionValid(CurrentLayer, nodeView, mConnectionNodeView) && 
                     DataAPI.AddConnection(CurrentLayer, nodeView.Node, mConnectionNodeView.Node))
                 {
+                    SaveData.IsDirty = true;
                     DrawConnection(nodeView, mConnectionNodeView);
                     UpdateDelConnectionBtns();
                 }

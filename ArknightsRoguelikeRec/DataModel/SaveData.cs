@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace ArknightsRoguelikeRec.DataModel
@@ -12,5 +13,8 @@ namespace ArknightsRoguelikeRec.DataModel
         public DateTime UpdateTime { get; set; }
         public int Version { get; set; }
         public List<Layer> Layers { get; set; } = new List<Layer>();
+
+        [JsonIgnore]
+        public bool IsDirty{ get; set; }
     }
 }

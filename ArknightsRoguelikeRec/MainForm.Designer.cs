@@ -55,6 +55,7 @@
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.checkBoxComplete = new System.Windows.Forms.CheckBox();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelAllLayer.SuspendLayout();
@@ -178,6 +179,7 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.checkBoxComplete);
             this.panelCurLayer.Controls.Add(this.btnEdit);
             this.panelCurLayer.Controls.Add(this.btnComment);
             this.panelCurLayer.Controls.Add(this.labelNodeTips);
@@ -314,6 +316,17 @@
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
             this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
             // 
+            // checkBoxComplete
+            // 
+            this.checkBoxComplete.AutoSize = true;
+            this.checkBoxComplete.Location = new System.Drawing.Point(505, 40);
+            this.checkBoxComplete.Name = "checkBoxComplete";
+            this.checkBoxComplete.Size = new System.Drawing.Size(60, 16);
+            this.checkBoxComplete.TabIndex = 16;
+            this.checkBoxComplete.Text = "已完成";
+            this.checkBoxComplete.UseVisualStyleBackColor = true;
+            this.checkBoxComplete.CheckedChanged += new System.EventHandler(this.checkBoxComplete_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.btnApply;
@@ -376,6 +389,7 @@
         private System.Windows.Forms.Button btnComment;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.BindingSource bindingSource1;
+        private System.Windows.Forms.CheckBox checkBoxComplete;
     }
 }
 
