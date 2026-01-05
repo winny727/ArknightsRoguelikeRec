@@ -10,8 +10,8 @@ namespace ArknightsRoguelikeRec.Helper
     {
         public static void InitConfig()
         {
-            DefineConfig.LayerConfigDict.Clear();
-            DefineConfig.NodeConfigDict.Clear();
+            GlobalDefine.LayerConfigDict.Clear();
+            GlobalDefine.NodeConfigDict.Clear();
             InitLayerDefine();
             InitNodeDefine();
         }
@@ -43,7 +43,7 @@ namespace ArknightsRoguelikeRec.Helper
                     NodeTypes = nodeTypesList,
                 };
 
-                DefineConfig.LayerConfigDict[layerID] = layerConfig;
+                GlobalDefine.LayerConfigDict[layerID] = layerConfig;
             });
         }
 
@@ -80,7 +80,7 @@ namespace ArknightsRoguelikeRec.Helper
                     TextColor = textColor ?? Color.Black,
                 };
 
-                DefineConfig.NodeConfigDict[nodeID] = nodeConfig;
+                GlobalDefine.NodeConfigDict[nodeID] = nodeConfig;
             });
         }
 
@@ -143,7 +143,7 @@ namespace ArknightsRoguelikeRec.Helper
 
         public static LayerConfig GetLayerConfigByName(string layerName)
         {
-            var layerList = DefineConfig.LayerConfigDict.AsList();
+            var layerList = GlobalDefine.LayerConfigDict.AsList();
             for (int i = 0; i < layerList.Count; i++)
             {
                 if (layerList[i].Name == layerName)

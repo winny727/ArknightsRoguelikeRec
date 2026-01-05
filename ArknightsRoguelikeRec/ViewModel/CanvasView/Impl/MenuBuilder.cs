@@ -41,20 +41,20 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                         continue;
                     }
 
-                    NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
+                    NodeConfig nodeConfig = GlobalDefine.NodeConfigDict[nodeID];
                     if (nodeConfig == null)
                     {
                         continue;
                     }
 
-                    contextMenuStrip.Items.Add(nodeConfig.Type, null, (sender, e) =>
+                    AddMenuItem(contextMenuStrip, nodeConfig.Type, () =>
                     {
-                        if (node.Type != nodeConfig.Type)
+                        if (node.Data.Type != nodeConfig.Type)
                         {
-                            node.SubType = string.Empty;
+                            node.Data.SubType = string.Empty;
                         }
 
-                        node.Type = nodeConfig.Type;
+                        node.Data.Type = nodeConfig.Type;
                         nodeView.NodeConfig = nodeConfig;
                         mRefreshCallback?.Invoke();
                     });
@@ -62,14 +62,14 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             }
 
             //显示清除选项
-            if (!string.IsNullOrEmpty(node.Type) || !string.IsNullOrEmpty(node.SubType))
+            if (!string.IsNullOrEmpty(node.Data.Type) || !string.IsNullOrEmpty(node.Data.SubType))
             {
                 AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
                 {
-                    node.Type = string.Empty;
+                    node.Data.Type = string.Empty;
                     nodeView.NodeConfig = null;
 
-                    node.SubType = string.Empty;
+                    node.Data.SubType = string.Empty;
                     mRefreshCallback?.Invoke();
                 });
             }
@@ -80,10 +80,10 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 AddSeparatedMenuItem(contextMenuStrip, "节点备注", () =>
                 {
                     mInputForm.Title = "节点备注";
-                    mInputForm.Content = node.Comment;
+                    mInputForm.Content = node.Data.Comment;
                     if (mInputForm.ShowDialog() == DialogResult.OK)
                     {
-                        node.Comment = mInputForm.Content;
+                        node.Data.Comment = mInputForm.Content;
                         mRefreshCallback?.Invoke();
                     }
                 });
@@ -116,9 +116,9 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                         continue;
                     }
 
-                    contextMenuStrip.Items.Add(subType, null, (_sender, _e) =>
+                    AddMenuItem(contextMenuStrip, subType, () =>
                     {
-                        node.SubType = subType;
+                        node.Data.SubType = subType;
                         mRefreshCallback?.Invoke();
                     });
                 }
@@ -139,7 +139,7 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                         {
                             contextMenuStrip.Items.Add(curLayer.CustomName, null, (sender, e) =>
                             {
-                                node.SubType = curLayer.CustomName;
+                                node.Data.SubType = curLayer.CustomName;
                                 mRefreshCallback?.Invoke();
                             });
                         }
@@ -147,11 +147,11 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                 }
 
                 //显示清除选项
-                if (!string.IsNullOrEmpty(node.SubType))
+                if (!string.IsNullOrEmpty(node.Data.SubType))
                 {
                     AddSeparatedMenuItem(contextMenuStrip, "清除", () =>
                     {
-                        node.SubType = string.Empty;
+                        node.Data.SubType = string.Empty;
                         mRefreshCallback?.Invoke();
                     });
                 }
@@ -162,10 +162,10 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
                     AddSeparatedMenuItem(contextMenuStrip, "节点备注", () =>
                     {
                         mInputForm.Title = "节点备注";
-                        mInputForm.Content = node.Comment;
+                        mInputForm.Content = node.Data.Comment;
                         if (mInputForm.ShowDialog() == DialogResult.OK)
                         {
-                            node.Comment = mInputForm.Content;
+                            node.Data.Comment = mInputForm.Content;
                             mRefreshCallback?.Invoke();
                         }
                     });
@@ -184,13 +184,18 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             }
         }
 
-        private void AddSeparatedMenuItem(ContextMenuStrip contextMenuStrip, string name, Action onAction)
+        private void AddMenuItem(ContextMenuStrip contextMenuStrip, string name, Action onAction)
         {
-            AddSeparator(contextMenuStrip);
             contextMenuStrip.Items.Add(name, null, (_sender, _e) =>
             {
                 onAction?.Invoke();
             });
+        }
+
+        private void AddSeparatedMenuItem(ContextMenuStrip contextMenuStrip, string name, Action onAction)
+        {
+            AddSeparator(contextMenuStrip);
+            AddMenuItem(contextMenuStrip, name, onAction);
         }
 
         private void ShowMenu(ContextMenuStrip contextMenuStrip)

@@ -24,8 +24,8 @@ namespace ArknightsRoguelikeRec.ViewModel.Impl
             for (int i = 0; i < layerConfig.NodeTypes.Count; i++)
             {
                 int nodeID = layerConfig.NodeTypes[i];
-                NodeConfig nodeConfig = DefineConfig.NodeConfigDict[nodeID];
-                if (nodeConfig != null && nodeConfig.Type == nodeView.Node.Type)
+                NodeConfig nodeConfig = GlobalDefine.NodeConfigDict[nodeID];
+                if (nodeConfig != null && nodeConfig.Type == nodeView.Node.Data.Type)
                 {
                     nodeView.NodeConfig = nodeConfig;
                     break;

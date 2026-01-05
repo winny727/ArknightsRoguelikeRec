@@ -110,7 +110,6 @@
   <ItemGroup>
     <Compile Include="DataModel\Config\LayerConfig.cs" />
     <Compile Include="DataModel\Config\NodeConfig.cs" />
-    <Compile Include="DataModel\Config\DefineConfig.cs" />
     <Compile Include="DataModel\Connection.cs" />
     <Compile Include="DataModel\DataAPI.cs" />
     <Compile Include="ViewModel\CanvasView\Impl\SkiaSharp\FontLoader.cs" />

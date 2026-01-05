@@ -21,7 +21,7 @@ namespace ArknightsRoguelikeRec.Helper
             };
 
             //预设，自动添加一层到五层
-            var layerList = DefineConfig.LayerConfigDict.AsList();
+            var layerList = GlobalDefine.LayerConfigDict.AsList();
             for (int i = 0; i < GlobalDefine.PRESET_LAYER_COUNT; i++)
             {
                 DataAPI.AddLayer(saveData, layerList[i].Name);

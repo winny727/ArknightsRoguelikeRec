@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArknightsRoguelikeRec.Config;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -6,7 +7,7 @@ namespace ArknightsRoguelikeRec
 {
     public static class GlobalDefine
     {
-        public const int VERSION = 1; //更改存档文件格式后，需将 Version +1
+        public const int VERSION = 2; //更改存档文件格式后，需将 Version +1
 
         public const int PRESET_LAYER_COUNT = 5; //预设，自动添加层数
 
@@ -18,5 +19,8 @@ namespace ArknightsRoguelikeRec
         public const int COLUMN_MAX_NODE = 4; //每列最多节点
 
         public static readonly Font TEXT_FONT = new Font("宋体", 12.0f, FontStyle.Bold);
+
+        public static MapList<int, LayerConfig> LayerConfigDict = new MapList<int, LayerConfig>();
+        public static MapList<int, NodeConfig> NodeConfigDict = new MapList<int, NodeConfig>();
     }
 }

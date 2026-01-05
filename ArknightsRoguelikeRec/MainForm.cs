@@ -132,7 +132,6 @@ namespace ArknightsRoguelikeRec
         2. 可标记当前游戏状态完成/未完成；
         3. 存在未连接的节点时提醒；
         4. 由密文板进行的节点转换记录（如将某节点通过板-子变成树洞）；
-        5. 连接编辑状态高亮；
          */
 
         private void Form1_Load(object sender, EventArgs e)
@@ -140,8 +139,8 @@ namespace ArknightsRoguelikeRec
             ConfigHelper.InitConfig();
 
             ////测试用
-            //string layerConfig = Newtonsoft.Json.JsonConvert.SerializeObject(DefineConfig.LayerConfigDict.AsList(), Newtonsoft.Json.Formatting.Indented);
-            //string nodeConfig = Newtonsoft.Json.JsonConvert.SerializeObject(DefineConfig.NodeConfigDict.AsList(), Newtonsoft.Json.Formatting.Indented);
+            //string layerConfig = Newtonsoft.Json.JsonConvert.SerializeObject(GlobalDefine.LayerConfigDict.AsList(), Newtonsoft.Json.Formatting.Indented);
+            //string nodeConfig = Newtonsoft.Json.JsonConvert.SerializeObject(GlobalDefine.NodeConfigDict.AsList(), Newtonsoft.Json.Formatting.Indented);
 
             //Console.WriteLine(layerConfig);
             //Console.WriteLine(nodeConfig);
@@ -346,7 +345,7 @@ namespace ArknightsRoguelikeRec
         private void btnAddLayer_Click(object sender, EventArgs e)
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-            var layerList = DefineConfig.LayerConfigDict.AsList();
+            var layerList = GlobalDefine.LayerConfigDict.AsList();
             for (int i = 0; i < layerList.Count; i++)
             {
                 LayerConfig layerConfig = layerList[i];
@@ -462,8 +461,18 @@ namespace ArknightsRoguelikeRec
         {
             if (e.KeyChar != (char)8) //8: Backspace
             {
-                if (!int.TryParse(e.KeyChar.ToString(), out int count) || count < GlobalDefine.COLUMN_MIN_NODE || count > GlobalDefine.COLUMN_MAX_NODE)
+                if (!char.IsDigit(e.KeyChar))
                 {
+                    System.Media.SystemSounds.Beep.Play();
+                    e.Handled = true;
+                    return;
+                }
+
+                int count = e.KeyChar - '0';
+                if (count < GlobalDefine.COLUMN_MIN_NODE ||
+                    count > GlobalDefine.COLUMN_MAX_NODE)
+                {
+                    System.Media.SystemSounds.Exclamation.Play();
                     e.Handled = true;
                 }
             }
@@ -491,11 +500,17 @@ namespace ArknightsRoguelikeRec
                 return;
             }
 
+            List<List<Node>> tempNodes = null;
             if (layer.Nodes.Count > 0 || layer.Connections.Count > 0)
             {
-                if (MessageBox.Show("更改节点分布将会清空当前层已选择的节点类型，是否继续？", "更改节点分布", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                var result = MessageBox.Show("更改节点分布后是否清空当前层已选择的节点类型？", "更改节点分布", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Cancel)
                 {
                     return;
+                }
+                else if (result == DialogResult.No)
+                {
+                    tempNodes = new List<List<Node>>(layer.Nodes);
                 }
             }
 
@@ -508,6 +523,19 @@ namespace ArknightsRoguelikeRec
                 for (int j = 0; j < num; j++)
                 {
                     DataAPI.AddNode(layer, i);
+                }
+            }
+
+            if (tempNodes != null)
+            {
+                for (int colIndex = 0; colIndex < layer.Nodes.Count; colIndex++)
+                {
+                    List<Node> colNodes = layer.Nodes[colIndex];
+                    List<Node> tempColNodes = tempNodes[colIndex];
+                    for (int rowIndex = 0; rowIndex < colNodes.Count && rowIndex < tempColNodes.Count; rowIndex++)
+                    {
+                        colNodes[rowIndex] = tempColNodes[rowIndex];
+                    }
                 }
             }
 

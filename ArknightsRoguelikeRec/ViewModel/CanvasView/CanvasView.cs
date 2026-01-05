@@ -275,7 +275,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
             //初始化节点类型选择按钮
             Rect rectTitle = new Rect(nodeX, nodeY, width, titleHeight);
-            ButtonView btnTitle = RegButton(CanvasLayerType.Nodes, rectTitle, titleBgColor, node.Type, titleTextColor);
+            ButtonView btnTitle = RegButton(CanvasLayerType.Nodes, rectTitle, titleBgColor, node.Data.Type, titleTextColor);
             btnTitle.Click += (button) =>
             {
                 if (IsConnecting || IsEditMode)
@@ -290,7 +290,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
             //初始化节点次级类型选择按钮
             Rect rectContent = new Rect(nodeX, nodeY + titleHeight, width, titleHeight);
-            ButtonView btnContent = RegButton(CanvasLayerType.Nodes, rectContent, contentBgColor, node.SubType, contentTextColor);
+            ButtonView btnContent = RegButton(CanvasLayerType.Nodes, rectContent, contentBgColor, node.Data.SubType, contentTextColor);
             btnContent.Click += (button) =>
             {
                 if (IsConnecting || IsEditMode)
