@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataModel;
-using ArknightsRoguelikeRec.Config;
 using ArknightsRoguelikeRec.DataStruct;
+using System;
+using System.Collections.Generic;
 
 namespace ArknightsRoguelikeRec.ViewModel
 {
@@ -11,9 +11,10 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Node Node { get; private set; }
         public int ColIndex { get; private set; }
         public int RowIndex { get; private set; }
-        public Rect Rect { get; set; }
+        public Rect Rect { get; private set; }
 
         public NodeConfig NodeConfig { get; set; }
+        public int RefreshIndex { get; set; } = -1; // TODO 更新后设置NodeConfig
 
         public NodeView(Node node, Rect rect, int colIndex, int rowIndex)
         {

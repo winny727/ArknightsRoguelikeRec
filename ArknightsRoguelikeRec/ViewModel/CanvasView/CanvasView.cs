@@ -348,6 +348,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                         }
                         else
                         {
+                            // 移除该节点及其之后的路线
                             for (int i = layer.Routes.Count - 1; i >= routeIndex; i--)
                             {
                                 layer.Routes.RemoveAt(i);
@@ -422,13 +423,13 @@ namespace ArknightsRoguelikeRec.ViewModel
 
             if (EditMode == EditModeType.Connections)
             {
-
                 NodeView nodeView = mConnectionNodeView;
                 Point mousePoint = mMouseHandler.GetMousePoint();
                 float borderWidth = 4f;
 
                 if (nodeView == null)
                 {
+                    // 绘制节点高亮
                     foreach (var targetNodeView in mNodeViews)
                     {
                         if (targetNodeView.Rect.Contains(mousePoint))
@@ -442,16 +443,19 @@ namespace ArknightsRoguelikeRec.ViewModel
                     return;
                 }
 
+                // 绘制连接预览线
                 float x1 = nodeView.Rect.X + nodeView.Rect.Width / 2;
                 float y1 = nodeView.Rect.Y + nodeView.Rect.Height / 2;
                 float x2 = mousePoint.X;
                 float y2 = mousePoint.Y;
                 DrawBezier(canvasLayer, x1, y1, x2, y2, ConnectionPreviewColor, 2f);
 
+                // 绘制已选择节点高亮
                 Rect rect = nodeView.Rect;
                 Rect nodeHighlightRect = new Rect(rect.X - borderWidth / 2, rect.Y - borderWidth / 2, rect.Width + borderWidth, rect.Height + borderWidth);
                 canvasLayer.DrawRectangle(nodeHighlightRect, EditValidNodeColor, borderWidth);
 
+                // 绘制是否可连接的节点高亮
                 foreach (var otherNodeView in mNodeViews)
                 {
                     if (otherNodeView.Rect.Contains(mousePoint) && otherNodeView != nodeView)
@@ -470,6 +474,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 Point mousePoint = mMouseHandler.GetMousePoint();
                 float borderWidth = 4f;
 
+                // 绘制是否可连接路线节点高亮
                 foreach (var targetNodeView in mNodeViews)
                 {
                     if (targetNodeView.Rect.Contains(mousePoint))
@@ -483,11 +488,36 @@ namespace ArknightsRoguelikeRec.ViewModel
                     }
                 }
 
-                if (layer.Routes != null && layer.Routes.Count > 0)
+                // 绘制预览连接线
+                if (layer.Nodes != null && layer.Routes != null && layer.Routes.Count > 0)
                 {
                     int lastIdx = layer.Routes[layer.Routes.Count - 1];
                     NodeView lastNodeView = GetNodeViewByIdx(lastIdx);
-                    if (lastNodeView != null)
+                    int colIndex = lastNodeView.ColIndex;
+                    bool hasRoute = false;
+                    if (colIndex == layer.Nodes.Count - 1)
+                    {
+                        // 检测若在最后一列且没有可连接的路线，就不显示预览连接线
+                        List<Node> colNodes = layer.Nodes[colIndex];
+                        foreach (var node in colNodes)
+                        {
+                            if (node == lastNodeView.Node)
+                            {
+                                continue;
+                            }
+                            int nodeIdx = DataAPI.GetNodeIdxByNode(layer, node);
+                            if (!layer.Routes.Contains(nodeIdx) && DataAPI.CheckRouteValid(layer, node))
+                            {
+                                hasRoute = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        hasRoute = true;
+                    }
+                    if (lastNodeView != null && hasRoute)
                     {
                         float x1 = lastNodeView.Rect.X + lastNodeView.Rect.Width / 2;
                         float y1 = lastNodeView.Rect.Y + lastNodeView.Rect.Height / 2;
