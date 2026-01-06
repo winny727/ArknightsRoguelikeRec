@@ -28,6 +28,7 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Layer CurrentLayer { get; private set; }
         public float CanvasWidth { get; private set; }
         public float CanvasHeight { get; private set; }
+        public event Action OnApplyCanvas;
 
         public Size DefaultSize { get; set; } = new Size(800f, 600f);
         public Color BackgroundColor { get; set; } = Color.White;
@@ -148,6 +149,7 @@ namespace ArknightsRoguelikeRec.ViewModel
         {
             //using CodeTimer codeTimer = new CodeTimer("ApplyCanvas");
             mCanvas.ApplyCanvas();
+            OnApplyCanvas?.Invoke();
         }
 
         public void ClearCanvas()

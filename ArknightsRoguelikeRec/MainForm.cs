@@ -102,12 +102,10 @@ namespace ArknightsRoguelikeRec
             mNodeViewControl.MouseDown += NodeViewControl_MouseDown;
             mNodeViewControl.MouseUp += NodeViewControl_MouseUp;
             mNodeViewControl.MouseMove += NodeViewControl_MouseMove;
-#if SKIA_SHARP
-            mNodeViewControl.PaintSurface += (s, e) =>
+            mCanvasView.OnApplyCanvas += () =>
             {
-                panelNodeView.Refresh();
+                panelNodeView.Invalidate();
             };
-#endif
 
 #if SKIA_SHARP
             var timer = new System.Timers.Timer(8);
@@ -565,7 +563,7 @@ namespace ArknightsRoguelikeRec
 
             if (tempNodes != null)
             {
-                for (int colIndex = 0; colIndex < layer.Nodes.Count; colIndex++)
+                for (int colIndex = 0; colIndex < layer.Nodes.Count && colIndex < tempNodes.Count; colIndex++)
                 {
                     List<Node> colNodes = layer.Nodes[colIndex];
                     List<Node> tempColNodes = tempNodes[colIndex];
