@@ -44,6 +44,7 @@ namespace ArknightsRoguelikeRec
 
         private bool mIsDragging = false;
         private Point mLastMousePos;
+        private Point mLastAutoScrollPosition;
 
         private readonly CanvasView mCanvasView;
 #if SKIA_SHARP
@@ -108,6 +109,11 @@ namespace ArknightsRoguelikeRec
                 panelNodeView.Invalidate();
             };
 //#endif
+
+            mNodeViewControl.GotFocus += (s, e) =>
+            {
+                panelNodeView.AutoScrollPosition = new Point(-mLastAutoScrollPosition.X, -mLastAutoScrollPosition.Y);
+            };
 
 #if SKIA_SHARP
             var timer = new System.Timers.Timer(8);
@@ -625,11 +631,13 @@ namespace ArknightsRoguelikeRec
 
         private void panelNodeView_Scroll(object sender, ScrollEventArgs e)
         {
+            mLastAutoScrollPosition = panelNodeView.AutoScrollPosition;
             panelNodeView.Invalidate();
         }
 
         private void panelNodeView_MouseWheel(object sender, MouseEventArgs e)
         {
+            mLastAutoScrollPosition = panelNodeView.AutoScrollPosition;
             panelNodeView.Invalidate();
         }
 
@@ -651,7 +659,7 @@ namespace ArknightsRoguelikeRec
             int deltaY = curMousePos.Y - mLastMousePos.Y;
             panelNodeView.AutoScrollPosition = new Point(-(panelNodeView.AutoScrollPosition.X + deltaX), -(panelNodeView.AutoScrollPosition.Y + deltaY));
             mLastMousePos = curMousePos;
-            panelNodeView.Refresh();
+            panelNodeView.Invalidate();
         }
 
         private void NodeViewControl_MouseUp(object sender, MouseEventArgs e)
@@ -732,13 +740,19 @@ namespace ArknightsRoguelikeRec
         private void btnEditConnection_Click(object sender, EventArgs e)
         {
             mCanvasView.EditMode = mCanvasView.EditMode == EditModeType.Connections ? EditModeType.None : EditModeType.Connections;
-            btnEditConnection.Text = mCanvasView.EditMode == EditModeType.Connections ? "退出编辑(E)" : "编辑连线(E)";
-            btnEditConnection.BackColor = mCanvasView.EditMode == EditModeType.Connections ? Color.LightGreen : SystemColors.Control;
+            UpdateEditButtonState();
         }
 
         private void btnEditRoute_Click(object sender, EventArgs e)
         {
             mCanvasView.EditMode = mCanvasView.EditMode == EditModeType.Routes ? EditModeType.None : EditModeType.Routes;
+            UpdateEditButtonState();
+        }
+
+        private void UpdateEditButtonState()
+        {
+            btnEditConnection.Text = mCanvasView.EditMode == EditModeType.Connections ? "退出编辑(E)" : "编辑连线(E)";
+            btnEditConnection.BackColor = mCanvasView.EditMode == EditModeType.Connections ? Color.LightGreen : SystemColors.Control;
             btnEditRoute.Text = mCanvasView.EditMode == EditModeType.Routes ? "退出编辑(R)" : "编辑路线(R)";
             btnEditRoute.BackColor = mCanvasView.EditMode == EditModeType.Routes ? Color.LightBlue : SystemColors.Control;
         }
