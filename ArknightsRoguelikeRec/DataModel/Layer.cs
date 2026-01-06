@@ -14,6 +14,6 @@ namespace ArknightsRoguelikeRec.DataModel
         public string Comment { get; set; }
         public List<List<Node>> Nodes { get; set; } = new List<List<Node>>();
         public List<Connection> Connections { get; set; } = new List<Connection>();
-        public List<int> Route { get; set; } = new List<int>();
+        public List<int> Routes { get; set; } = new List<int>();
     }
 }

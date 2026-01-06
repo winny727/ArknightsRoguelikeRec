@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Color = ArknightsRoguelikeRec.ViewModel.DataStruct.Color;
+using Color = ArknightsRoguelikeRec.DataStruct.Color;
 using DrawingColor = System.Drawing.Color;
 using DrawingPoint = System.Drawing.Point;
 using DrawingRect = System.Drawing.Rectangle;
 using DrawingSize = System.Drawing.Size;
-using Point = ArknightsRoguelikeRec.ViewModel.DataStruct.Point;
-using Rect = ArknightsRoguelikeRec.ViewModel.DataStruct.Rect;
-using Size = ArknightsRoguelikeRec.ViewModel.DataStruct.Size;
+using Point = ArknightsRoguelikeRec.DataStruct.Point;
+using Rect = ArknightsRoguelikeRec.DataStruct.Rect;
+using Size = ArknightsRoguelikeRec.DataStruct.Size;
 
 namespace ArknightsRoguelikeRec.ViewModel.Impl
 {

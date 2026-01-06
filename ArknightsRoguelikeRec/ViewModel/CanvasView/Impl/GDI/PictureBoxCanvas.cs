@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using ArknightsRoguelikeRec.DataStruct;
 
-using Size = ArknightsRoguelikeRec.ViewModel.DataStruct.Size;
-using Color = ArknightsRoguelikeRec.ViewModel.DataStruct.Color;
+using Size = ArknightsRoguelikeRec.DataStruct.Size;
+using Color = ArknightsRoguelikeRec.DataStruct.Color;
 
 using DrawingColor = System.Drawing.Color;
 

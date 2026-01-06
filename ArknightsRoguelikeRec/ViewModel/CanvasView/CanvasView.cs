@@ -1,18 +1,26 @@
 ﻿using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Helper;
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using ArknightsRoguelikeRec.DataStruct;
 using System;
 using System.Collections.Generic;
 
 namespace ArknightsRoguelikeRec.ViewModel
 {
+    public enum EditModeType
+    {
+        None,
+        Connections,
+        Routes,
+    }
+
     public class CanvasView : IDisposable
     {
         private enum CanvasLayerType
         {
             BackgroundGrid,
+            Routes,
             Connections,
-            ConnectionPreview,
+            EditPreview,
             Nodes,
             DeleteConnectionButtons,
             ButtonState,
@@ -40,11 +48,12 @@ namespace ArknightsRoguelikeRec.ViewModel
         public Color NodeContentTextColor { get; set; } = Color.Black;
         public Color ConnectionColor { get; set; } = Color.Black;
         public Color ConnectionPreviewColor { get; set; } = Color.Red;
-        public Color ConnectionValidNodeColor { get; set; } = Color.Green;
-        public Color ConnectionInvalidNodeColor { get; set; } = Color.Red;
+        public Color EditValidNodeColor { get; set; } = Color.Green;
+        public Color EditInvalidNodeColor { get; set; } = Color.Red;
         public Color DelBtnBorderColor { get; set; } = Color.Black;
         public Color DelBtnBackgroundColor { get; set; } = Color.LightGray;
         public Color DelBtnIconColor { get; set; } = Color.Red;
+        public Color RouteColor { get; set; } = Color.Blue;
 
         public float GridStep { get; set; } = 20f;
         public float NodeGapHorizontal { get; set; } = 120f;
@@ -63,25 +72,26 @@ namespace ArknightsRoguelikeRec.ViewModel
         private NodeView mConnectionNodeView = null;
         public bool IsConnecting => mConnectionNodeView != null;
 
-        private bool mIsEditMode = false;
-        public bool IsEditMode
+        private EditModeType mEditMode = EditModeType.None;
+        public EditModeType EditMode
         {
             get
             {
-                return mIsEditMode;
+                return mEditMode;
             }
             set
             {
-                if (mIsEditMode == value) return;
-                mIsEditMode = value;
-                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
-                canvasLayer?.Clear();
+                if (mEditMode == value) return;
+                mEditMode = value;
+                GetCanvasLayer(CanvasLayerType.ButtonState)?.Clear();
+                GetCanvasLayer(CanvasLayerType.EditPreview)?.Clear();
                 OnConnectionEnd(null);
                 UpdateDelConnectionBtns();
+                UpdateRoutes();
                 ApplyCanvas();
             }
         }
-
+        public bool IsEditing => EditMode != EditModeType.None;
 
         public CanvasView(ICanvas canvas, IMouseHandler mouseHandler, IOptionBuilder optionBuilder, INodeConfigInitializer nodeConfigInitializer = null)
         {
@@ -141,6 +151,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             UpdateNodes();
             UpdateConnections();
             UpdateDelConnectionBtns();
+            UpdateRoutes();
 
             ApplyCanvas();
         }
@@ -214,9 +225,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             }
 
             DisposeButtonViews(CanvasLayerType.Nodes);
-
-            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.Nodes);
-            canvasLayer?.Clear();
+            GetCanvasLayer(CanvasLayerType.Nodes)?.Clear();
 
             int colCount = layer.Nodes.Count;
             for (int colIndex = 0; colIndex < colCount; colIndex++)
@@ -282,13 +291,12 @@ namespace ArknightsRoguelikeRec.ViewModel
             ButtonView btnTitle = RegButton(CanvasLayerType.Nodes, rectTitle, titleBgColor, node.Data.Type, titleTextColor);
             btnTitle.Click += (button) =>
             {
-                if (IsConnecting || IsEditMode)
+                if (IsConnecting || EditMode != EditModeType.None)
                 {
                     return;
                 }
 
-                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
-                canvasLayer?.Clear();
+                GetCanvasLayer(CanvasLayerType.ButtonState)?.Clear();
                 mOptionBuilder.ShowTypeMenu(SaveData, CurrentLayer, nodeView);
             };
 
@@ -297,13 +305,12 @@ namespace ArknightsRoguelikeRec.ViewModel
             ButtonView btnContent = RegButton(CanvasLayerType.Nodes, rectContent, contentBgColor, node.Data.SubType, contentTextColor);
             btnContent.Click += (button) =>
             {
-                if (IsConnecting || IsEditMode)
+                if (IsConnecting || IsEditing)
                 {
                     return;
                 }
 
-                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
-                canvasLayer?.Clear();
+                GetCanvasLayer(CanvasLayerType.ButtonState)?.Clear();
                 mOptionBuilder.ShowSubTypeMenu(SaveData, CurrentLayer, nodeView);
             };
 
@@ -314,9 +321,42 @@ namespace ArknightsRoguelikeRec.ViewModel
                 {
                     OnConnectionEnd(nodeView);
                 }
-                else if (IsEditMode)
+                else if (EditMode == EditModeType.Connections)
                 {
                     mConnectionNodeView = nodeView;
+                }
+                else if (EditMode == EditModeType.Routes)
+                {
+                    Layer layer = CurrentLayer;
+                    if (layer == null || layer.Routes == null)
+                    {
+                        return;
+                    }
+                    int nodeIdx = DataAPI.GetNodeIdxByNode(layer, node);
+                    if (nodeIdx >= 0)
+                    {
+                        int routeIndex = layer.Routes.IndexOf(nodeIdx);
+                        if (routeIndex == -1)
+                        {
+                            if (DataAPI.CheckRouteValid(layer, node))
+                            {
+                                layer.Routes.Add(nodeIdx);
+                                SaveData.IsDirty = true;
+                                UpdateRoutes();
+                                ApplyCanvas();
+                            }
+                        }
+                        else
+                        {
+                            for (int i = layer.Routes.Count - 1; i >= routeIndex; i--)
+                            {
+                                layer.Routes.RemoveAt(i);
+                            }
+                            SaveData.IsDirty = true;
+                            UpdateRoutes();
+                            ApplyCanvas();
+                        }
+                    }
                 }
             };
 
@@ -335,8 +375,7 @@ namespace ArknightsRoguelikeRec.ViewModel
                 return;
             }
 
-            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.Connections);
-            canvasLayer?.Clear();
+            GetCanvasLayer(CanvasLayerType.Connections)?.Clear();
 
             for (int i = 0; i < layer.Connections.Count; i++)
             {
@@ -361,85 +400,113 @@ namespace ArknightsRoguelikeRec.ViewModel
             float y1 = nodeView1.Rect.Y + nodeView1.Rect.Height / 2;
             float x2 = nodeView2.Rect.X + nodeView2.Rect.Width / 2;
             float y2 = nodeView2.Rect.Y + nodeView2.Rect.Height / 2;
-
-            Point pt1 = new Point(x1, y1);
-            Point pt2 = new Point(x2 - (x2 - x1) / 4, y1);
-            Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
-            Point pt4 = new Point(x2, y2);
-
-            canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, ConnectionColor, 2f);
+            DrawBezier(canvasLayer, x1, y1, x2, y2, ConnectionColor, 2f);
         }
 
-        public void UpdateConnectionPreview()
+        public void UpdateEditPreview()
         {
             if (mDisposed) return;
 
-            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ConnectionPreview);
+            Layer layer = CurrentLayer;
+            if (layer == null)
+            {
+                return;
+            }
+
+            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.EditPreview);
             if (canvasLayer == null)
             {
                 return;
             }
             canvasLayer.Clear();
 
-            NodeView nodeView = mConnectionNodeView;
-            Point mousePoint = mMouseHandler.GetMousePoint();
-            float borderWidth = 4f;
-
-            if (nodeView == null)
+            if (EditMode == EditModeType.Connections)
             {
+
+                NodeView nodeView = mConnectionNodeView;
+                Point mousePoint = mMouseHandler.GetMousePoint();
+                float borderWidth = 4f;
+
+                if (nodeView == null)
+                {
+                    foreach (var targetNodeView in mNodeViews)
+                    {
+                        if (targetNodeView.Rect.Contains(mousePoint))
+                        {
+                            Rect targetRect = targetNodeView.Rect;
+                            Rect targetNodeHighlightRect = new Rect(targetRect.X - borderWidth / 2, targetRect.Y - borderWidth / 2, targetRect.Width + borderWidth, targetRect.Height + borderWidth);
+                            canvasLayer.DrawRectangle(targetNodeHighlightRect, EditValidNodeColor, borderWidth);
+                            break;
+                        }
+                    }
+                    return;
+                }
+
+                float x1 = nodeView.Rect.X + nodeView.Rect.Width / 2;
+                float y1 = nodeView.Rect.Y + nodeView.Rect.Height / 2;
+                float x2 = mousePoint.X;
+                float y2 = mousePoint.Y;
+                DrawBezier(canvasLayer, x1, y1, x2, y2, ConnectionPreviewColor, 2f);
+
+                Rect rect = nodeView.Rect;
+                Rect nodeHighlightRect = new Rect(rect.X - borderWidth / 2, rect.Y - borderWidth / 2, rect.Width + borderWidth, rect.Height + borderWidth);
+                canvasLayer.DrawRectangle(nodeHighlightRect, EditValidNodeColor, borderWidth);
+
+                foreach (var otherNodeView in mNodeViews)
+                {
+                    if (otherNodeView.Rect.Contains(mousePoint) && otherNodeView != nodeView)
+                    {
+                        bool isValid = DataAPI.CheckConnectionValid(layer, nodeView.Node, otherNodeView.Node);
+                        Color color = isValid ? EditValidNodeColor : EditInvalidNodeColor;
+                        Rect otherRect = otherNodeView.Rect;
+                        Rect otherNodeHighlightRect = new Rect(otherRect.X - borderWidth / 2, otherRect.Y - borderWidth / 2, otherRect.Width + borderWidth, otherRect.Height + borderWidth);
+                        canvasLayer.DrawRectangle(otherNodeHighlightRect, color, borderWidth);
+                        break;
+                    }
+                }
+            }
+            else if (EditMode == EditModeType.Routes)
+            {
+                Point mousePoint = mMouseHandler.GetMousePoint();
+                float borderWidth = 4f;
+
                 foreach (var targetNodeView in mNodeViews)
                 {
                     if (targetNodeView.Rect.Contains(mousePoint))
                     {
+                        bool isValid = DataAPI.CheckRouteValid(layer, targetNodeView.Node);
+                        Color color = isValid ? EditValidNodeColor : EditInvalidNodeColor;
                         Rect targetRect = targetNodeView.Rect;
                         Rect targetNodeHighlightRect = new Rect(targetRect.X - borderWidth / 2, targetRect.Y - borderWidth / 2, targetRect.Width + borderWidth, targetRect.Height + borderWidth);
-                        canvasLayer.DrawRectangle(targetNodeHighlightRect, ConnectionValidNodeColor, borderWidth);
+                        canvasLayer.DrawRectangle(targetNodeHighlightRect, color, borderWidth);
                         break;
                     }
                 }
-                return;
-            }
 
-            float x1 = nodeView.Rect.X + nodeView.Rect.Width / 2;
-            float y1 = nodeView.Rect.Y + nodeView.Rect.Height / 2;
-            float x2 = mousePoint.X;
-            float y2 = mousePoint.Y;
-
-            Point pt1 = new Point(x1, y1);
-            Point pt2 = new Point(x2 - (x2 - x1) / 4, y1);
-            Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
-            Point pt4 = new Point(x2, y2);
-
-            canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, ConnectionPreviewColor, 2f);
-
-            Rect rect = nodeView.Rect;
-            Rect nodeHighlightRect = new Rect(rect.X - borderWidth / 2, rect.Y - borderWidth / 2, rect.Width + borderWidth, rect.Height + borderWidth);
-            canvasLayer.DrawRectangle(nodeHighlightRect, ConnectionValidNodeColor, borderWidth);
-
-            foreach (var otherNodeView in mNodeViews)
-            {
-                if (otherNodeView.Rect.Contains(mousePoint) && otherNodeView != nodeView)
+                if (layer.Routes != null && layer.Routes.Count > 0)
                 {
-                    bool isValid = DataAPI.CheckConnectionValid(CurrentLayer, nodeView, otherNodeView);
-                    Color color = isValid ? ConnectionValidNodeColor : ConnectionInvalidNodeColor;
-                    Rect otherRect = otherNodeView.Rect;
-                    Rect otherNodeHighlightRect = new Rect(otherRect.X - borderWidth / 2, otherRect.Y - borderWidth / 2, otherRect.Width + borderWidth, otherRect.Height + borderWidth);
-                    canvasLayer.DrawRectangle(otherNodeHighlightRect, color, borderWidth);
-                    break;
+                    int lastIdx = layer.Routes[layer.Routes.Count - 1];
+                    NodeView lastNodeView = GetNodeViewByIdx(lastIdx);
+                    if (lastNodeView != null)
+                    {
+                        float x1 = lastNodeView.Rect.X + lastNodeView.Rect.Width / 2;
+                        float y1 = lastNodeView.Rect.Y + lastNodeView.Rect.Height / 2;
+                        float x2 = mousePoint.X;
+                        float y2 = mousePoint.Y;
+                        DrawBezier(canvasLayer, x1, y1, x2, y2, RouteColor, 2f);
+                    }
                 }
             }
         }
 
-        private void UpdateDelConnectionBtns()
+        public void UpdateDelConnectionBtns()
         {
             if (mDisposed) return;
 
             DisposeButtonViews(CanvasLayerType.DeleteConnectionButtons);
+            GetCanvasLayer(CanvasLayerType.DeleteConnectionButtons)?.Clear();
 
-            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.DeleteConnectionButtons);
-            canvasLayer?.Clear();
-
-            if (!mIsEditMode) return;
+            if (EditMode != EditModeType.Connections) return;
 
             Layer layer = CurrentLayer;
             if (layer == null || layer.Connections == null)
@@ -495,15 +562,71 @@ namespace ArknightsRoguelikeRec.ViewModel
             ButtonView btnDel = RegButton(CanvasLayerType.DeleteConnectionButtons, rectDel, DelBtnBackgroundColor, "X", DelBtnIconColor, 2f);
             btnDel.Click += (button) =>
             {
-                ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ButtonState);
-                canvasLayer?.Clear();
-
+                GetCanvasLayer(CanvasLayerType.ButtonState)?.Clear();
                 DataAPI.RemoveConnection(CurrentLayer, connection);
                 SaveData.IsDirty = true;
                 UpdateConnections();
                 UpdateDelConnectionBtns();
                 ApplyCanvas();
             };
+        }
+
+        public void UpdateRoutes()
+        {
+            if (mDisposed) return;
+
+            GetCanvasLayer(CanvasLayerType.Routes)?.Clear();
+
+            if (EditMode != EditModeType.Routes) return;
+
+            Layer layer = CurrentLayer;
+            if (layer == null || layer.Routes == null)
+            {
+                return;
+            }
+
+            if (layer.Routes.Count > 0)
+            {
+                for (int i = 0; i < layer.Routes.Count - 1; i++)
+                {
+                    int nodeIdx1 = layer.Routes[i];
+                    int nodeIdx2 = layer.Routes[i + 1];
+                    DrawRoutes(nodeIdx1, nodeIdx2);
+                }
+                int lastIdx = layer.Routes[layer.Routes.Count - 1];
+                DrawRoutes(lastIdx, -1);
+            }
+        }
+
+        private void DrawRoutes(int nodeIdx1, int nodeIdx2)
+        {
+            if (mDisposed) return;
+
+            NodeView nodeView1 = GetNodeViewByIdx(nodeIdx1);
+            NodeView nodeView2 = GetNodeViewByIdx(nodeIdx2);
+
+            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.Routes);
+            if (canvasLayer == null)
+            {
+                return;
+            }
+
+            float borderWidth = 4f;
+            if (nodeView1 != null)
+            {
+                Rect rect = nodeView1.Rect;
+                Rect nodeHighlightRect = new Rect(rect.X - borderWidth / 2, rect.Y - borderWidth / 2, rect.Width + borderWidth, rect.Height + borderWidth);
+                canvasLayer.DrawRectangle(nodeHighlightRect, RouteColor, borderWidth);
+
+                if (nodeView2 != null)
+                {
+                    float x1 = nodeView1.Rect.X + nodeView1.Rect.Width / 2;
+                    float y1 = nodeView1.Rect.Y + nodeView1.Rect.Height / 2;
+                    float x2 = nodeView2.Rect.X + nodeView2.Rect.Width / 2;
+                    float y2 = nodeView2.Rect.Y + nodeView2.Rect.Height / 2;
+                    DrawBezier(canvasLayer, x1, y1, x2, y2, RouteColor, borderWidth);
+                }
+            }
         }
 
         private NodeView GetNodeViewByIdx(int nodeIdx)
@@ -513,6 +636,15 @@ namespace ArknightsRoguelikeRec.ViewModel
                 return null;
             }
             return mNodeViews[nodeIdx];
+        }
+
+        private void DrawBezier(ICanvasLayer canvasLayer, float x1, float y1, float x2, float y2, Color color, float width)
+        {
+            Point pt1 = new Point(x1, y1);
+            Point pt2 = new Point(x2 - (x2 - x1) / 4, y1);
+            Point pt3 = new Point(x1 + (x2 - x1) / 4, y2);
+            Point pt4 = new Point(x2, y2);
+            canvasLayer.DrawBezier(pt1, pt2, pt3, pt4, color, width);
         }
 
         private ButtonView RegButton(CanvasLayerType type, Rect rect, Color color, string text = null, Color? textColor = null, float textScale = 1f)
@@ -641,12 +773,11 @@ namespace ArknightsRoguelikeRec.ViewModel
                 return;
             }
 
-            ICanvasLayer canvasLayer = GetCanvasLayer(CanvasLayerType.ConnectionPreview);
-            canvasLayer?.Clear();
+            GetCanvasLayer(CanvasLayerType.EditPreview)?.Clear();
 
             if (nodeView != null)
             {
-                if (DataAPI.CheckConnectionValid(CurrentLayer, nodeView, mConnectionNodeView) && 
+                if (DataAPI.CheckConnectionValid(CurrentLayer, nodeView.Node, mConnectionNodeView.Node) && 
                     DataAPI.AddConnection(CurrentLayer, nodeView.Node, mConnectionNodeView.Node))
                 {
                     SaveData.IsDirty = true;
@@ -687,9 +818,9 @@ namespace ArknightsRoguelikeRec.ViewModel
             if (mDisposed) return;
 
             // 在外部驱动Tick
-            if (IsEditMode)
+            if (EditMode != EditModeType.None)
             {
-                UpdateConnectionPreview();
+                UpdateEditPreview();
                 ApplyCanvas();
             }
         }

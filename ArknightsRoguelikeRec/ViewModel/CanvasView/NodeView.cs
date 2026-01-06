@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ArknightsRoguelikeRec.DataModel;
 using ArknightsRoguelikeRec.Config;
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using ArknightsRoguelikeRec.DataStruct;
 
 namespace ArknightsRoguelikeRec.ViewModel
 {

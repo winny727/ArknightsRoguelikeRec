@@ -1,5 +1,5 @@
 ﻿#if SKIA_SHARP
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using ArknightsRoguelikeRec.DataStruct;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;

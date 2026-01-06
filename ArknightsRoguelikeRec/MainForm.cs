@@ -96,16 +96,18 @@ namespace ArknightsRoguelikeRec
 
             panelNodeView.Controls.Add(mNodeViewControl);
 
-            mCanvasView.DefaultSize = new ViewModel.DataStruct.Size(
+            mCanvasView.DefaultSize = new DataStruct.Size(
                 mNodeViewControl.Width, mNodeViewControl.Height - 20f); // 预留部分高度给滚动条
 
             mNodeViewControl.MouseDown += NodeViewControl_MouseDown;
             mNodeViewControl.MouseUp += NodeViewControl_MouseUp;
             mNodeViewControl.MouseMove += NodeViewControl_MouseMove;
+//#if SKIA_SHARP
             mCanvasView.OnApplyCanvas += () =>
             {
                 panelNodeView.Invalidate();
             };
+//#endif
 
 #if SKIA_SHARP
             var timer = new System.Timers.Timer(8);
@@ -551,6 +553,8 @@ namespace ArknightsRoguelikeRec
 
             layer.Nodes.Clear();
             layer.Connections.Clear();
+            layer.Routes.Clear();
+            layer.IsComplete = false;
             for (int i = 0; i < textBoxNode.Text.Length; i++)
             {
                 DataAPI.AddColume(layer);
@@ -622,7 +626,12 @@ namespace ArknightsRoguelikeRec
 
         private void panelNodeView_Scroll(object sender, ScrollEventArgs e)
         {
-            panelNodeView.Refresh();
+            panelNodeView.Invalidate();
+        }
+
+        private void panelNodeView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            panelNodeView.Invalidate();
         }
 
         private void NodeViewControl_MouseDown(object sender, MouseEventArgs e)
@@ -668,9 +677,14 @@ namespace ArknightsRoguelikeRec
                 btnSave_Click(sender, e);
             }
 
-            if (e.KeyCode == Keys.E && btnEdit.Enabled)
+            if (e.KeyCode == Keys.E && btnEditConnection.Enabled)
             {
-                btnEdit_Click(sender, e);
+                btnEditConnection_Click(sender, e);
+            }
+
+            if (e.KeyCode == Keys.R && btnEditRoute.Enabled)
+            {
+                btnEditRoute_Click(sender, e);
             }
 
             if (e.KeyCode == Keys.G && btnComment.Enabled)
@@ -716,11 +730,18 @@ namespace ArknightsRoguelikeRec
             }
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void btnEditConnection_Click(object sender, EventArgs e)
         {
-            mCanvasView.IsEditMode = !mCanvasView.IsEditMode;
-            btnEdit.Text = mCanvasView.IsEditMode ? "退出编辑(E)" : "编辑连线(E)";
-            btnEdit.BackColor = mCanvasView.IsEditMode ? Color.LightGreen : SystemColors.Control;
+            mCanvasView.EditMode = mCanvasView.EditMode == EditModeType.Connections ? EditModeType.None : EditModeType.Connections;
+            btnEditConnection.Text = mCanvasView.EditMode == EditModeType.Connections ? "退出编辑(E)" : "编辑连线(E)";
+            btnEditConnection.BackColor = mCanvasView.EditMode == EditModeType.Connections ? Color.LightGreen : SystemColors.Control;
+        }
+
+        private void btnEditRoute_Click(object sender, EventArgs e)
+        {
+            mCanvasView.EditMode = mCanvasView.EditMode == EditModeType.Routes ? EditModeType.None : EditModeType.Routes;
+            btnEditRoute.Text = mCanvasView.EditMode == EditModeType.Routes ? "退出编辑(R)" : "编辑路线(R)";
+            btnEditRoute.BackColor = mCanvasView.EditMode == EditModeType.Routes ? Color.LightBlue : SystemColors.Control;
         }
 
         private void checkBoxComplete_CheckedChanged(object sender, EventArgs e)

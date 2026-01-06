@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using ArknightsRoguelikeRec.DataStruct;
 
 namespace ArknightsRoguelikeRec.ViewModel
 {

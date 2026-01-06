@@ -1,5 +1,5 @@
 ﻿using ArknightsRoguelikeRec.Config;
-using ArknightsRoguelikeRec.ViewModel.DataStruct;
+using ArknightsRoguelikeRec.DataStruct;
 using System;
 using System.Collections.Generic;
 using System.Text;

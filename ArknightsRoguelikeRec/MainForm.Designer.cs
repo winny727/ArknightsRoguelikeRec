@@ -42,7 +42,8 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
-            this.btnEdit = new System.Windows.Forms.Button();
+            this.checkBoxComplete = new System.Windows.Forms.CheckBox();
+            this.btnEditConnection = new System.Windows.Forms.Button();
             this.btnComment = new System.Windows.Forms.Button();
             this.labelNodeTips = new System.Windows.Forms.Label();
             this.comboBoxLayerType = new System.Windows.Forms.ComboBox();
@@ -55,7 +56,7 @@
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.checkBoxComplete = new System.Windows.Forms.CheckBox();
+            this.btnEditRoute = new System.Windows.Forms.Button();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelAllLayer.SuspendLayout();
@@ -179,8 +180,9 @@
             // 
             // panelCurLayer
             // 
+            this.panelCurLayer.Controls.Add(this.btnEditRoute);
             this.panelCurLayer.Controls.Add(this.checkBoxComplete);
-            this.panelCurLayer.Controls.Add(this.btnEdit);
+            this.panelCurLayer.Controls.Add(this.btnEditConnection);
             this.panelCurLayer.Controls.Add(this.btnComment);
             this.panelCurLayer.Controls.Add(this.labelNodeTips);
             this.panelCurLayer.Controls.Add(this.comboBoxLayerType);
@@ -195,15 +197,26 @@
             this.panelCurLayer.Size = new System.Drawing.Size(674, 625);
             this.panelCurLayer.TabIndex = 0;
             // 
-            // btnEdit
+            // checkBoxComplete
             // 
-            this.btnEdit.Location = new System.Drawing.Point(571, 7);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(100, 23);
-            this.btnEdit.TabIndex = 15;
-            this.btnEdit.Text = "编辑连线(E)";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            this.checkBoxComplete.AutoSize = true;
+            this.checkBoxComplete.Location = new System.Drawing.Point(505, 40);
+            this.checkBoxComplete.Name = "checkBoxComplete";
+            this.checkBoxComplete.Size = new System.Drawing.Size(60, 16);
+            this.checkBoxComplete.TabIndex = 16;
+            this.checkBoxComplete.Text = "已完成";
+            this.checkBoxComplete.UseVisualStyleBackColor = true;
+            this.checkBoxComplete.CheckedChanged += new System.EventHandler(this.checkBoxComplete_CheckedChanged);
+            // 
+            // btnEditConnection
+            // 
+            this.btnEditConnection.Location = new System.Drawing.Point(571, 7);
+            this.btnEditConnection.Name = "btnEditConnection";
+            this.btnEditConnection.Size = new System.Drawing.Size(100, 23);
+            this.btnEditConnection.TabIndex = 15;
+            this.btnEditConnection.Text = "编辑连线(E)";
+            this.btnEditConnection.UseVisualStyleBackColor = true;
+            this.btnEditConnection.Click += new System.EventHandler(this.btnEditConnection_Click);
             // 
             // btnComment
             // 
@@ -254,6 +267,7 @@
             this.panelNodeView.Size = new System.Drawing.Size(668, 557);
             this.panelNodeView.TabIndex = 9;
             this.panelNodeView.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelNodeView_Scroll);
+            this.panelNodeView.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.panelNodeView_MouseWheel);
             // 
             // btnCancel
             // 
@@ -316,16 +330,15 @@
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
             this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
             // 
-            // checkBoxComplete
+            // btnEditRoute
             // 
-            this.checkBoxComplete.AutoSize = true;
-            this.checkBoxComplete.Location = new System.Drawing.Point(505, 40);
-            this.checkBoxComplete.Name = "checkBoxComplete";
-            this.checkBoxComplete.Size = new System.Drawing.Size(60, 16);
-            this.checkBoxComplete.TabIndex = 16;
-            this.checkBoxComplete.Text = "已完成";
-            this.checkBoxComplete.UseVisualStyleBackColor = true;
-            this.checkBoxComplete.CheckedChanged += new System.EventHandler(this.checkBoxComplete_CheckedChanged);
+            this.btnEditRoute.Location = new System.Drawing.Point(465, 7);
+            this.btnEditRoute.Name = "btnEditRoute";
+            this.btnEditRoute.Size = new System.Drawing.Size(100, 23);
+            this.btnEditRoute.TabIndex = 17;
+            this.btnEditRoute.Text = "编辑路线(R)";
+            this.btnEditRoute.UseVisualStyleBackColor = true;
+            this.btnEditRoute.Click += new System.EventHandler(this.btnEditRoute_Click);
             // 
             // MainForm
             // 
@@ -387,9 +400,10 @@
         private System.Windows.Forms.Label labelLayerType;
         private System.Windows.Forms.Label labelNodeTips;
         private System.Windows.Forms.Button btnComment;
-        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnEditConnection;
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.CheckBox checkBoxComplete;
+        private System.Windows.Forms.Button btnEditRoute;
     }
 }
 
