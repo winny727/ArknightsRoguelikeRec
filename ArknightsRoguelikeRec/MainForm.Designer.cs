@@ -42,6 +42,7 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.panelCurLayer = new System.Windows.Forms.Panel();
+            this.btnEditRoute = new System.Windows.Forms.Button();
             this.checkBoxComplete = new System.Windows.Forms.CheckBox();
             this.btnEditConnection = new System.Windows.Forms.Button();
             this.btnComment = new System.Windows.Forms.Button();
@@ -56,7 +57,6 @@
             this.panelAllLayer = new System.Windows.Forms.Panel();
             this.btnRemoveLayer = new System.Windows.Forms.Button();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.btnEditRoute = new System.Windows.Forms.Button();
             this.panelInfo.SuspendLayout();
             this.panelCurLayer.SuspendLayout();
             this.panelAllLayer.SuspendLayout();
@@ -197,10 +197,20 @@
             this.panelCurLayer.Size = new System.Drawing.Size(674, 625);
             this.panelCurLayer.TabIndex = 0;
             // 
+            // btnEditRoute
+            // 
+            this.btnEditRoute.Location = new System.Drawing.Point(571, 36);
+            this.btnEditRoute.Name = "btnEditRoute";
+            this.btnEditRoute.Size = new System.Drawing.Size(100, 23);
+            this.btnEditRoute.TabIndex = 17;
+            this.btnEditRoute.Text = "编辑路线(R)";
+            this.btnEditRoute.UseVisualStyleBackColor = true;
+            this.btnEditRoute.Click += new System.EventHandler(this.btnEditRoute_Click);
+            // 
             // checkBoxComplete
             // 
             this.checkBoxComplete.AutoSize = true;
-            this.checkBoxComplete.Location = new System.Drawing.Point(505, 40);
+            this.checkBoxComplete.Location = new System.Drawing.Point(505, 11);
             this.checkBoxComplete.Name = "checkBoxComplete";
             this.checkBoxComplete.Size = new System.Drawing.Size(60, 16);
             this.checkBoxComplete.TabIndex = 16;
@@ -220,7 +230,7 @@
             // 
             // btnComment
             // 
-            this.btnComment.Location = new System.Drawing.Point(571, 36);
+            this.btnComment.Location = new System.Drawing.Point(465, 36);
             this.btnComment.Name = "btnComment";
             this.btnComment.Size = new System.Drawing.Size(100, 23);
             this.btnComment.TabIndex = 14;
@@ -329,16 +339,6 @@
             this.btnRemoveLayer.Text = "-";
             this.btnRemoveLayer.UseVisualStyleBackColor = true;
             this.btnRemoveLayer.Click += new System.EventHandler(this.btnRemoveLayer_Click);
-            // 
-            // btnEditRoute
-            // 
-            this.btnEditRoute.Location = new System.Drawing.Point(465, 7);
-            this.btnEditRoute.Name = "btnEditRoute";
-            this.btnEditRoute.Size = new System.Drawing.Size(100, 23);
-            this.btnEditRoute.TabIndex = 17;
-            this.btnEditRoute.Text = "编辑路线(R)";
-            this.btnEditRoute.UseVisualStyleBackColor = true;
-            this.btnEditRoute.Click += new System.EventHandler(this.btnEditRoute_Click);
             // 
             // MainForm
             // 
