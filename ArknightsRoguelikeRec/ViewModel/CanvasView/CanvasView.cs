@@ -147,6 +147,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
         public void ApplyCanvas()
         {
+            if (mDisposed) return;
             //using CodeTimer codeTimer = new CodeTimer("ApplyCanvas");
             mCanvas.ApplyCanvas();
             OnApplyCanvas?.Invoke();
@@ -205,6 +206,7 @@ namespace ArknightsRoguelikeRec.ViewModel
         public void UpdateNodes()
         {
             if (mDisposed) return;
+
             Layer layer = CurrentLayer;
             if (layer == null || layer.Nodes == null)
             {
@@ -453,6 +455,8 @@ namespace ArknightsRoguelikeRec.ViewModel
 
         private void DrawDelConnectionBtn(Connection connection)
         {
+            if (mDisposed) return;
+
             if (connection == null)
             {
                 return;
@@ -594,6 +598,7 @@ namespace ArknightsRoguelikeRec.ViewModel
 
         private void AddButtonView(CanvasLayerType type, ButtonView buttonView)
         {
+            if (mDisposed) return;
             if (!mButtonViews.TryGetValue(type, out var buttonViewList))
             {
                 buttonViewList = new List<ButtonView>();
@@ -622,7 +627,7 @@ namespace ArknightsRoguelikeRec.ViewModel
             foreach (var item in mButtonViews)
             {
                 var canvasLayerType = item.Key;
-                DisposeButtonViews(item.Key);
+                DisposeButtonViews(canvasLayerType);
             }
             mButtonViews.Clear();
         }
