@@ -144,9 +144,9 @@ namespace ArknightsRoguelikeRec
         /*
          TODO：
         1. 可标记走过的节点（行动路径）；
-        2. 可标记当前游戏状态完成/未完成；
-        3. 存在未连接的节点时提醒；
-        4. 由密文板进行的节点转换记录（如将某节点通过板子变成树洞）；
+        2. 由密文板进行的节点转换记录（如将某节点通过板子变成树洞）；
+        3. 可选择战斗后获得的经验/藏品/装置/招募券/生命/护盾/源石锭（是否有箱子）/（通宝/构想/密文板等）/是否无漏/是否有隐藏（鸭子/熊...）；
+        4. 层数Buff（年代等）
          */
 
         private void Form1_Load(object sender, EventArgs e)
@@ -431,6 +431,21 @@ namespace ArknightsRoguelikeRec
             if (SaveData == null)
             {
                 return;
+            }
+
+            if (SaveData.Layers != null)
+            {
+                foreach (var layer in SaveData.Layers)
+                {
+                    if (layer.IsComplete && !DataAPI.CheckLayerValid(layer, out string errMsg))
+                    {
+                        var result = MessageBox.Show($"已完成的层级[{layer.CustomName}]存在无效连接（{errMsg}），是否继续保存？", "警告", MessageBoxButtons.OKCancel);
+                        if (result == DialogResult.Cancel)
+                        {
+                            return;
+                        }
+                    }
+                }
             }
 
             string savePath = SaveCurrentData();
